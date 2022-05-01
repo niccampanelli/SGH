@@ -68,7 +68,7 @@ public class Principal extends JFrame{
         
         mainPanel = new JScrollPane(currentPanel);
         mainPanel.setBorder(null);
-        mainPanel.setBackground(new java.awt.Color(255, 255, 255));
+        mainPanel.setBackground(new Color(255, 255, 255));
         mainPanel.getVerticalScrollBar().setUnitIncrement(16);
         
         wrapPanel.add(Navbar, BorderLayout.LINE_START);

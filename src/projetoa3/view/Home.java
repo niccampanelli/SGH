@@ -16,7 +16,7 @@ public class Home extends JPanel{
         add(title);
         
         setBorder(new EmptyBorder(40, 40, 40, 40));
-        setBackground(new java.awt.Color(255, 255, 255));
+        setBackground(new Color(255, 255, 255));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
 }

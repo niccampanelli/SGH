@@ -20,8 +20,9 @@ public class Usuarios extends JPanel{
         add(new Administradores());
         
         setBorder(new EmptyBorder(40, 40, 40, 40));
-        setBackground(new java.awt.Color(255, 255, 255));
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(new Color(255, 255, 255));
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setAlignmentX(Component.LEFT_ALIGNMENT);
+        setAlignmentY(0.0f);
     }
 }

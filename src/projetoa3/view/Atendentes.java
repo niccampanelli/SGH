@@ -7,15 +7,32 @@ import javax.swing.table.*;
 
 public class Atendentes extends JPanel{
     
-    JLabel title;
-    JButton button;
+    BoxLayout titleLayout;
+    JPanel titlePanel;
+    JLabel title, subtitle;
+    JButton button, addButton;
     JScrollPane tableWrap;
     JTable table;
     
     public Atendentes(){
         
+        titlePanel = new JPanel();
+        titleLayout = new BoxLayout(titlePanel, BoxLayout.LINE_AXIS);
+        titlePanel.setLayout(titleLayout);
+        titlePanel.setAlignmentX(0.0f);
+        titlePanel.setBackground(null);
+        
         title = new JLabel("Atendentes");
         title.setFont(new Font(Font.SANS_SERIF, 1, 24));
+        
+        subtitle = new JLabel("42 atendentes cadastrados");
+        
+        addButton = new JButton("Adicionar atendente");
+        
+        titlePanel.add(title);
+        titlePanel.add(Box.createHorizontalGlue());
+        titlePanel.add(addButton);
+        
         button = new JButton("X");
         
         String[] columns = {
@@ -54,24 +71,28 @@ public class Atendentes extends JPanel{
         renderer.add(button);
         
         table = new JTable(data, columns);
+        table.setBorder(null);
         table.getColumn("Remover").setCellRenderer(new ButtonRenderer());
         table.getTableHeader().setDefaultRenderer(new HeaderRenderer(table));
         table.getTableHeader().setOpaque(true);
         table.getTableHeader().setFont(new Font(Font.SANS_SERIF, 1, 16));
-        table.getTableHeader().setBackground(new java.awt.Color(255, 255, 255));
+        table.getTableHeader().setBackground(new Color(255, 255, 255));
         
         tableWrap = new JScrollPane(table);
         tableWrap.setAlignmentX(Component.LEFT_ALIGNMENT);
         tableWrap.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
         tableWrap.setBorder(null);
         
-        add(title);
+        add(titlePanel);
+        add(subtitle);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(tableWrap);
         
         setBorder(new EmptyBorder(20, 0, 20, 0));
-        setBackground(new java.awt.Color(255, 255, 255));
+        setBackground(new Color(255, 255, 255));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.LEFT_ALIGNMENT);
+        setAlignmentY(0.0f);
     }
 }
 
