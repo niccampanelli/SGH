@@ -73,7 +73,7 @@ public class Administradores extends JPanel{
         table = new JTable(data, columns);
         table.setBorder(null);
         table.getColumn("Remover").setCellRenderer(new ButtonRenderer());
-        table.getTableHeader().setDefaultRenderer(new HeaderRenderer(table));
+        table.getTableHeader().setDefaultRenderer(new HeaderRenderer());
         table.getTableHeader().setOpaque(true);
         table.getTableHeader().setFont(new Font(Font.SANS_SERIF, 1, 16));
         table.getTableHeader().setBackground(new Color(255, 255, 255));
