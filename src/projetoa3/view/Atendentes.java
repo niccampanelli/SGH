@@ -2,6 +2,7 @@ package projetoa3.view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
@@ -28,28 +29,28 @@ public class Atendentes extends JPanel{
         };
         
         Object[][] data = {
-            {1, "486.140.698-63", "Nicholas Campanelli de Souza", "nicholasoucampanelli@hotmail.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "x"},
-            {2, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {3, "486.140.698-63", "Marcelo", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {4, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {5, "486.140.698-63", "Catarina", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {6, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {7, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {8, "486.140.698-63", "Marcelo", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {9, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {10, "486.140.698-63", "Catarina", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {11, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {12, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {13, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {14, "486.140.698-63", "Carlos", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {15, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {16, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {17, "486.140.698-63", "Carlos", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {18, "486.140.698-63", "Marcelo", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {19, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {20, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {21, "486.140.698-63", "Carlos", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {22, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1231, "486.140.698-63", "Nicholas Campanelli de Souza", "nicholasoucampanelli@hotmail.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "x"},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {3355, "486.140.698-63", "Marcelo", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {4547, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {5456, "486.140.698-63", "Catarina", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {6685, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {7563, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {8543, "486.140.698-63", "Marcelo", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {9234, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1023, "486.140.698-63", "Catarina", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1157, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1226, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1533, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1454, "486.140.698-63", "Carlos", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1523, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1641, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1357, "486.140.698-63", "Carlos", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1428, "486.140.698-63", "Marcelo", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1219, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {2401, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {2351, "486.140.698-63", "Carlos", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {2122, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
         };
         
         titlePanel = new JPanel();
@@ -97,7 +98,9 @@ public class Atendentes extends JPanel{
         table.setGridColor(new Color(230, 230, 230));
         table.setRowHeight(40);
         table.setIntercellSpacing(new Dimension(0, 0));
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.getColumn("X").setCellRenderer(new ButtonRenderer());
+        table.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         table.getColumn("ID").setMinWidth(40);
         table.getColumn("ID").setMaxWidth(40);
@@ -111,6 +114,50 @@ public class Atendentes extends JPanel{
         table.getColumn("Cadastrado em").setMaxWidth(100);
         table.getColumn("X").setMinWidth(45);
         table.getColumn("X").setMaxWidth(45);
+        
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            @Override
+            public void valueChanged(ListSelectionEvent e){
+                                
+                int viewRow = table.getSelectedRow();
+                int viewColumn = table.getSelectedColumn();
+                        
+                if (!e.getValueIsAdjusting() && viewRow != -1) {
+                                        
+                    int modelRow = table.convertRowIndexToModel(viewRow);
+                    int modelColumn = table.convertColumnIndexToModel(viewColumn);
+                    
+                    if(modelColumn == table.getColumnCount()-1){
+                        int confirmed = JOptionPane.showConfirmDialog(null, 
+                          "Tem certeza que deseja cancelar a edição deste atendente?\n"
+                          + "Os dados inseridos serão perdidos e o atendente irá permanecer com os dados anteriores.",
+                          "Cancelar",
+                          JOptionPane.YES_NO_OPTION);
+
+                        if(confirmed == JOptionPane.YES_OPTION) {
+                            table.repaint();
+                        }
+                        
+                        table.clearSelection();
+                        table.getSelectionModel().clearSelection();
+                    }
+                    else{
+                        String idValue = table.getModel().getValueAt(modelRow, 0).toString();
+                        String cpfValue = table.getModel().getValueAt(modelRow, 1).toString();
+                        String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
+                        String emailValue = table.getModel().getValueAt(modelRow, 3).toString();
+                        String telefoneValue = table.getModel().getValueAt(modelRow, 4).toString();
+                        String dataNascValue = table.getModel().getValueAt(modelRow, 5).toString();
+
+                        EditarAtendente editarAtendente = new EditarAtendente(idValue, cpfValue, nomeValue, emailValue, telefoneValue, dataNascValue);
+                        editarAtendente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        
+                        table.clearSelection();
+                        table.getSelectionModel().clearSelection();
+                    }
+                }
+            }
+        });
         
         table.getTableHeader().setDefaultRenderer(new HeaderRenderer());
         table.getTableHeader().setOpaque(true);
@@ -154,6 +201,13 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
     } else {
       setForeground(table.getForeground());
       setBackground(UIManager.getColor("Button.background"));
+      addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                NovoAtendente novoAtendente = new NovoAtendente();
+                novoAtendente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            }
+        });
     }
     setText((value == null) ? "" : value.toString());
     return this;
