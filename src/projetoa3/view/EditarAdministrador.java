@@ -6,7 +6,7 @@ import java.text.ParseException;
 import javax.swing.border.*;
 import javax.swing.text.*;
 
-public class EditarAtendente extends JFrame{
+public class EditarAdministrador extends JFrame{
     
     // Componentes da interface
     private BoxLayout canvasLayout, mainLayout, buttonLayout;
@@ -45,15 +45,15 @@ public class EditarAtendente extends JFrame{
             JOptionPane.showMessageDialog(null, "Insira uma data de nascimento válida.", "Data de nascimento inválida", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            JOptionPane.showMessageDialog(null, "Atendente modificado com sucesso!\n"
-                    + "ID do atentendente modificado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Administrador modificado com sucesso!\n"
+                    + "ID do administrador modificado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
             dispose();
         }
     }
             
-    public EditarAtendente(String id, String cpf, String nome, String email, String telefone, String dataNasc){
-        super("Editar atendente");
+    public EditarAdministrador(String id, String cpf, String nome, String email, String telefone, String dataNasc){
+        super("Editar administrador");
         
         this.cpf = cpf;
         this.nome = nome;
@@ -76,7 +76,7 @@ public class EditarAtendente extends JFrame{
         mainPanel.setAlignmentX(0.0f);
         mainPanel.setAlignmentY(0.0f);
         
-        title = new JLabel("Editar atendente");
+        title = new JLabel("Editar administrador");
         title.setFont(new Font(Font.SANS_SERIF, 1, 24));
         
         subtitle = new JLabel("#" + id);
@@ -155,8 +155,8 @@ public class EditarAtendente extends JFrame{
                     (!dataNascField.getText().equalsIgnoreCase(dataNasc))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
-                      "Tem certeza que deseja cancelar a edição deste atendente?\n"
-                      + "Os dados inseridos serão perdidos e o atendente irá permanecer com os dados anteriores.",
+                      "Tem certeza que deseja cancelar a edição deste administrador?\n"
+                      + "Os dados inseridos serão perdidos e o administrador irá permanecer com os dados anteriores.",
                       "Cancelar",
                       JOptionPane.YES_NO_OPTION);
 
@@ -224,8 +224,8 @@ public class EditarAtendente extends JFrame{
                     (!dataNascField.getText().equalsIgnoreCase(dataNasc))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
-                      "Tem certeza que deseja cancelar a edição deste atendente?\n"
-                      + "Os dados inseridos serão perdidos e o atendente irá permanecer com os dados anteriores.",
+                      "Tem certeza que deseja cancelar a edição deste administrador?\n"
+                      + "Os dados inseridos serão perdidos e o administrador irá permanecer com os dados anteriores.",
                       "Cancelar",
                       JOptionPane.YES_NO_OPTION);
 

@@ -1,10 +1,7 @@
 package projetoa3.view;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.border.*;
-import projetoa3.view.Atendentes;
-import projetoa3.view.Administradores;
 
 public class Usuarios extends JPanel{
     
@@ -19,10 +16,13 @@ public class Usuarios extends JPanel{
         add(new Atendentes());
         add(new Administradores());
         
+        
         setBorder(new EmptyBorder(40, 40, 40, 40));
         setBackground(new Color(255, 255, 255));
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        setAlignmentX(Component.LEFT_ALIGNMENT);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setAlignmentX(0.0f);
         setAlignmentY(0.0f);
+        
+        setPreferredSize(new Dimension(this.getPreferredSize().width, this.getMaximumSize().height));
     }
 }

@@ -6,13 +6,13 @@ import java.text.ParseException;
 import javax.swing.border.*;
 import javax.swing.text.*;
 
-public class EditarAtendente extends JFrame{
+public class NovoAdministrador extends JFrame{
     
     // Componentes da interface
     private BoxLayout canvasLayout, mainLayout, buttonLayout;
     private BorderLayout wrapLayout;
     private JPanel wrapPanel, mainPanel, buttonPanel;
-    private JLabel title, subtitle, cpfLabel, nomeLabel, emailLabel, telefoneLabel, dataNascLabel;
+    private JLabel title, cpfLabel, nomeLabel, emailLabel, telefoneLabel, dataNascLabel;
     private JTextField nomeField, emailField;
     private JFormattedTextField cpfField, telefoneField, dataNascField;
     private MaskFormatter cpfMask, telefoneMask, dataNascMask;
@@ -21,7 +21,7 @@ public class EditarAtendente extends JFrame{
     // Variáveis de lógica
     private String cpf, nome, email, telefone, dataNasc;
     
-    private void editar(){
+    private void adicionar(){
         
         cpf = cpfField.getText();
         nome = nomeField.getText();
@@ -32,8 +32,8 @@ public class EditarAtendente extends JFrame{
         if("".equals(cpf) || cpf.length() != 14 || cpf.endsWith("0-00")){
             JOptionPane.showMessageDialog(null, "Insira um CPF válido.", "CPF inválido", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(nome) || nome.length() < 5){
-            JOptionPane.showMessageDialog(null, "Insira um nome completo com no mínimo 5 caracteres.", "Nome inválido", JOptionPane.WARNING_MESSAGE);
+        else if("".equals(nome) || nome.length() < 10){
+            JOptionPane.showMessageDialog(null, "Insira um nome completo com no mínimo 10 caracteres.", "Nome inválido", JOptionPane.WARNING_MESSAGE);
         }
         else if("".equals(email) || email.length() < 7 || !email.contains("@") || !email.contains(".")){
             JOptionPane.showMessageDialog(null, "Insira um endereço de e-mail válido, contendo \"@\" e \".\".", "Endereço de e-mail inválido", JOptionPane.WARNING_MESSAGE);
@@ -45,21 +45,15 @@ public class EditarAtendente extends JFrame{
             JOptionPane.showMessageDialog(null, "Insira uma data de nascimento válida.", "Data de nascimento inválida", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            JOptionPane.showMessageDialog(null, "Atendente modificado com sucesso!\n"
-                    + "ID do atentendente modificado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Administrador adicionado com sucesso!\n"
+                    + "ID do atentendente adicionado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
             dispose();
         }
     }
             
-    public EditarAtendente(String id, String cpf, String nome, String email, String telefone, String dataNasc){
-        super("Editar atendente");
-        
-        this.cpf = cpf;
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.dataNasc = dataNasc;
+    public NovoAdministrador(){
+        super("Adicionar administrador");
         
         Container canvas = getContentPane();
         canvasLayout = new BoxLayout(canvas, BoxLayout.PAGE_AXIS);
@@ -76,10 +70,8 @@ public class EditarAtendente extends JFrame{
         mainPanel.setAlignmentX(0.0f);
         mainPanel.setAlignmentY(0.0f);
         
-        title = new JLabel("Editar atendente");
+        title = new JLabel("Adicionar administrador");
         title.setFont(new Font(Font.SANS_SERIF, 1, 24));
-        
-        subtitle = new JLabel("#" + id);
         
         cpfLabel = new JLabel("CPF");
         
@@ -91,13 +83,13 @@ public class EditarAtendente extends JFrame{
         
         dataNascLabel = new JLabel("Data de nascimento");
         
-        nomeField = new JTextField(nome);
+        nomeField = new JTextField("");
         nomeField.setAlignmentX(0.0f);
         nomeField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         nomeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         nomeField.setMargin(new Insets(0, 10, 0, 10));
         
-        emailField = new JTextField(email);
+        emailField = new JTextField("");
         emailField.setAlignmentX(0.0f);
         emailField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -116,21 +108,18 @@ public class EditarAtendente extends JFrame{
         }
         
         cpfField = new JFormattedTextField(cpfMask);
-        cpfField.setText(cpf);
         cpfField.setAlignmentX(0.0f);
         cpfField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMargin(new Insets(0, 10, 0, 10));
         
         telefoneField = new JFormattedTextField(telefoneMask);
-        telefoneField.setText(telefone);
         telefoneField.setAlignmentX(0.0f);
         telefoneField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         telefoneField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         telefoneField.setMargin(new Insets(0, 10, 0, 10));
         
         dataNascField = new JFormattedTextField(dataNascMask);
-        dataNascField.setText(dataNasc);
         dataNascField.setAlignmentX(0.0f);
         dataNascField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         dataNascField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -148,15 +137,15 @@ public class EditarAtendente extends JFrame{
         cancelButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                if((!cpfField.getText().equalsIgnoreCase(cpf)) || 
-                    (!nomeField.getText().equalsIgnoreCase(nome)) ||
-                    (!emailField.getText().equalsIgnoreCase(email)) ||
-                    (!telefoneField.getText().equalsIgnoreCase(telefone)) ||
-                    (!dataNascField.getText().equalsIgnoreCase(dataNasc))){
+                if((!cpfField.getText().equals("000.000.000-00")) || 
+                    (!nomeField.getText().equals("")) ||
+                    (!emailField.getText().equals("")) ||
+                    (!telefoneField.getText().equals("(00) 00000-0000")) ||
+                    (!dataNascField.getText().equals("00/00/0000"))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
-                      "Tem certeza que deseja cancelar a edição deste atendente?\n"
-                      + "Os dados inseridos serão perdidos e o atendente irá permanecer com os dados anteriores.",
+                      "Cancelar a inclusão de um novo administrador?\n"
+                      + "Os dados inseridos serão perdidos.",
                       "Cancelar",
                       JOptionPane.YES_NO_OPTION);
 
@@ -170,13 +159,13 @@ public class EditarAtendente extends JFrame{
             }
         });
         
-        addButton = new JButton("Concluido");
+        addButton = new JButton("Adicionar");
         addButton.setAlignmentX(0.0f);
         addButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         addButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                editar();
+                adicionar();
             }
         });
         
@@ -186,7 +175,6 @@ public class EditarAtendente extends JFrame{
         buttonPanel.add(addButton);
         
         mainPanel.add(title);
-        mainPanel.add(subtitle);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(cpfLabel);
         mainPanel.add(cpfField);
@@ -208,7 +196,7 @@ public class EditarAtendente extends JFrame{
         wrapPanel.add(mainPanel);
         canvas.add(wrapPanel);
         
-        setSize(400, 570);
+        setSize(400, 550);
         setLayout(canvasLayout);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -217,15 +205,15 @@ public class EditarAtendente extends JFrame{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if((!cpfField.getText().equalsIgnoreCase(cpf)) || 
-                    (!nomeField.getText().equalsIgnoreCase(nome)) ||
-                    (!emailField.getText().equalsIgnoreCase(email)) ||
-                    (!telefoneField.getText().equalsIgnoreCase(telefone)) ||
-                    (!dataNascField.getText().equalsIgnoreCase(dataNasc))){
+                if((!cpfField.getText().equals("000.000.000-00")) || 
+                    (!nomeField.getText().equals("")) ||
+                    (!emailField.getText().equals("")) ||
+                    (!telefoneField.getText().equals("(00) 00000-0000")) ||
+                    (!dataNascField.getText().equals("00/00/0000"))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
-                      "Tem certeza que deseja cancelar a edição deste atendente?\n"
-                      + "Os dados inseridos serão perdidos e o atendente irá permanecer com os dados anteriores.",
+                      "Cancelar a inclusão de um novo administrador?\n"
+                      + "Os dados inseridos serão perdidos.",
                       "Cancelar",
                       JOptionPane.YES_NO_OPTION);
 

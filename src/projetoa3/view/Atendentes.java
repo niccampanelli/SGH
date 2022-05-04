@@ -12,7 +12,7 @@ public class Atendentes extends JPanel{
     BoxLayout titleLayout;
     JPanel titlePanel;
     JLabel title, subtitle;
-    JButton button, addButton;
+    JButton deleteButton, addButton;
     JScrollPane tableWrap;
     JTable table;
     
@@ -31,9 +31,27 @@ public class Atendentes extends JPanel{
         };
         
         Object[][] data = {
-            {1231, "486.140.698-63", "Nicholas Campanelli de Souza", "nicholasoucampanelli@hotmail.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "x"},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {3355, "486.140.698-63", "Marcelo", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
+            {1231, "486.140.698-63", "Nicholas Campanelli de Souza", "nicholasoucampanelli@hotmail.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
         };
         
         // Painel que contém o título
@@ -72,10 +90,10 @@ public class Atendentes extends JPanel{
         titlePanel.add(Box.createHorizontalGlue());
         titlePanel.add(addButton);
         
-        button = new JButton("X");
+        deleteButton = new JButton("");
         
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-        renderer.add(button);
+        renderer.add(deleteButton);
         
         // Cria a tabela com os dados e colunas
         // e desabilita a edição de células
@@ -92,6 +110,7 @@ public class Atendentes extends JPanel{
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.getColumn("X").setCellRenderer(new ButtonRenderer());
         table.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        table.setAutoCreateRowSorter(true);
         
         table.getColumn("ID").setMinWidth(40);
         table.getColumn("ID").setMaxWidth(40);
@@ -103,8 +122,8 @@ public class Atendentes extends JPanel{
         table.getColumn("Data de nascimento").setMaxWidth(130);
         table.getColumn("Cadastrado em").setMinWidth(100);
         table.getColumn("Cadastrado em").setMaxWidth(100);
-        table.getColumn("X").setMinWidth(45);
-        table.getColumn("X").setMaxWidth(45);
+        table.getColumn("X").setMinWidth(40);
+        table.getColumn("X").setMaxWidth(40);
         
         // Adiciona um event listener para tornar as linhas clicáveis
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -184,6 +203,7 @@ public class Atendentes extends JPanel{
         table.getTableHeader().setOpaque(true);
         table.getTableHeader().setFont(new Font(Font.SANS_SERIF, 1, 12));
         table.getTableHeader().setBackground(new Color(255, 255, 255));
+        table.getTableHeader().setCursor(new Cursor(Cursor.HAND_CURSOR));
         table.getTableHeader().setResizingAllowed(false);
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setPreferredSize(new Dimension(0, 40));
@@ -191,7 +211,6 @@ public class Atendentes extends JPanel{
         // Painel que envolve a tabela
         tableWrap = new JScrollPane(table);
         tableWrap.setAlignmentX(Component.LEFT_ALIGNMENT);
-        tableWrap.setPreferredSize(new Dimension(Integer.MIN_VALUE, 300));
         tableWrap.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
         tableWrap.setBorder(new EmptyBorder(0, 0, 0, 0));
         tableWrap.setBackground(new Color(255, 255, 255));
@@ -220,18 +239,11 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
       boolean isSelected, boolean hasFocus, int row, int column) {
       setCursor(new Cursor(Cursor.HAND_CURSOR));
     if (isSelected) {
-      setForeground(table.getSelectionForeground());
-      setBackground(table.getSelectionBackground());
+      setBackground(new Color(240, 40, 40));
     } else {
-      setForeground(table.getForeground());
-      setBackground(UIManager.getColor("Button.background"));
-      addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                NovoAtendente novoAtendente = new NovoAtendente();
-                novoAtendente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            }
-        });
+      setBackground(new Color(255, 40, 40));
+      setIcon(new ImageIcon(new ImageIcon("trashIcon.png").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT)));
+      setBorder(null);
     }
     setText((value == null) ? "" : value.toString());
     return this;

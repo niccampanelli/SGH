@@ -137,14 +137,24 @@ public class NovoAtendente extends JFrame{
         cancelButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                int confirmed = JOptionPane.showConfirmDialog(null, 
-                  "Tem certeza que deseja cancelar a adição de um novo atendente?\n"
-                  + "Os dados inseridos serão perdidos.",
-                  "Cancelar",
-                  JOptionPane.YES_NO_OPTION);
+                if((!cpfField.getText().equals("000.000.000-00")) || 
+                    (!nomeField.getText().equals("")) ||
+                    (!emailField.getText().equals("")) ||
+                    (!telefoneField.getText().equals("(00) 00000-0000")) ||
+                    (!dataNascField.getText().equals("00/00/0000"))){
+                    
+                    int confirmed = JOptionPane.showConfirmDialog(null, 
+                      "Cancelar a inclusão de um novo atendente?\n"
+                      + "Os dados inseridos serão perdidos.",
+                      "Cancelar",
+                      JOptionPane.YES_NO_OPTION);
 
-                if(confirmed == JOptionPane.YES_OPTION) {
-                  dispose();
+                    if(confirmed == JOptionPane.YES_OPTION) {
+                      dispose();
+                    }
+                }
+                else{
+                    dispose();
                 }
             }
         });
@@ -195,15 +205,25 @@ public class NovoAtendente extends JFrame{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-              int confirmed = JOptionPane.showConfirmDialog(null, 
-                  "Tem certeza que deseja cancelar a adição de um novo atendente?\n"
-                  + "Os dados inseridos serão perdidos.",
-                  "Cancelar",
-                  JOptionPane.YES_NO_OPTION);
+                if((!cpfField.getText().equals("000.000.000-00")) || 
+                    (!nomeField.getText().equals("")) ||
+                    (!emailField.getText().equals("")) ||
+                    (!telefoneField.getText().equals("(00) 00000-0000")) ||
+                    (!dataNascField.getText().equals("00/00/0000"))){
+                    
+                    int confirmed = JOptionPane.showConfirmDialog(null, 
+                      "Cancelar a inclusão de um novo atendente?\n"
+                      + "Os dados inseridos serão perdidos.",
+                      "Cancelar",
+                      JOptionPane.YES_NO_OPTION);
 
-              if (confirmed == JOptionPane.YES_OPTION) {
-                dispose();
-              }
+                    if(confirmed == JOptionPane.YES_OPTION) {
+                      dispose();
+                    }
+                }
+                else{
+                    dispose();
+                }
             }
         });
         
