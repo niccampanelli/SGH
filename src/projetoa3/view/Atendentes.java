@@ -8,6 +8,7 @@ import javax.swing.table.*;
 
 public class Atendentes extends JPanel{
     
+    // Componentes da Tela
     BoxLayout titleLayout;
     JPanel titlePanel;
     JLabel title, subtitle;
@@ -15,6 +16,7 @@ public class Atendentes extends JPanel{
     JScrollPane tableWrap;
     JTable table;
     
+    // Construtor
     public Atendentes(){
         
         String[] columns = {
@@ -32,27 +34,9 @@ public class Atendentes extends JPanel{
             {1231, "486.140.698-63", "Nicholas Campanelli de Souza", "nicholasoucampanelli@hotmail.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "x"},
             {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
             {3355, "486.140.698-63", "Marcelo", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {4547, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {5456, "486.140.698-63", "Catarina", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {6685, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {7563, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {8543, "486.140.698-63", "Marcelo", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {9234, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {1023, "486.140.698-63", "Catarina", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {1157, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {1226, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {1533, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {1454, "486.140.698-63", "Carlos", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {1523, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {1641, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {1357, "486.140.698-63", "Carlos", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {1428, "486.140.698-63", "Marcelo", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {1219, "486.140.698-63", "Mariana", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {2401, "486.140.698-63", "Rogerio", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {2351, "486.140.698-63", "Carlos", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
-            {2122, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", "X"},
         };
         
+        // Painel que contém o título
         titlePanel = new JPanel();
         titleLayout = new BoxLayout(titlePanel, BoxLayout.LINE_AXIS);
         titlePanel.setLayout(titleLayout);
@@ -62,6 +46,7 @@ public class Atendentes extends JPanel{
         title = new JLabel("Atendentes");
         title.setFont(new Font(Font.SANS_SERIF, 1, 24));
         
+        // Verifica o plural
         if(data.length == 1){
             subtitle = new JLabel("1 atendente cadastrado");
         }
@@ -69,16 +54,20 @@ public class Atendentes extends JPanel{
             subtitle = new JLabel(data.length + " atendentes cadastrados");
         }
         
+        // Botão de adicionar atendente
         addButton = new JButton("Adicionar atendente");
         addButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         addButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
+                
+                // Instancia uma tela de adicionar atendente
                 NovoAtendente novoAtendente = new NovoAtendente();
                 novoAtendente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
         });
         
+        // Adiciona os elementos antetiores no painel do título
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
         titlePanel.add(addButton);
@@ -88,6 +77,8 @@ public class Atendentes extends JPanel{
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.add(button);
         
+        // Cria a tabela com os dados e colunas
+        // e desabilita a edição de células
         table = new JTable(data, columns){            
             @Override
             public boolean isCellEditable(int row, int column){
@@ -115,43 +106,72 @@ public class Atendentes extends JPanel{
         table.getColumn("X").setMinWidth(45);
         table.getColumn("X").setMaxWidth(45);
         
+        // Adiciona um event listener para tornar as linhas clicáveis
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e){
-                                
+                
+                // Índice da linha e da coluna selecionados
                 int viewRow = table.getSelectedRow();
                 int viewColumn = table.getSelectedColumn();
-                        
+                
+                // Previne as instruções de serem chamadas duas vezes
                 if (!e.getValueIsAdjusting() && viewRow != -1) {
-                                        
+                    
+                    // Converte o índice da tabela para um índice de modelo
+                    // previne de obter a célula errada ao ordenar a tabela
                     int modelRow = table.convertRowIndexToModel(viewRow);
                     int modelColumn = table.convertColumnIndexToModel(viewColumn);
                     
+                    // Se a coluna selecionada for a última (onde estão os botões de excluir)
                     if(modelColumn == table.getColumnCount()-1){
-                        int confirmed = JOptionPane.showConfirmDialog(null, 
-                          "Tem certeza que deseja cancelar a edição deste atendente?\n"
-                          + "Os dados inseridos serão perdidos e o atendente irá permanecer com os dados anteriores.",
-                          "Cancelar",
-                          JOptionPane.YES_NO_OPTION);
-
+                        
+                        // Pega o ID e o nome para serem mostrados
+                        String idValue = table.getModel().getValueAt(modelRow, 0).toString();
+                        String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
+                        
+                        // Opções do painel de confirmação
+                        Object[] options = {"Excluir", "Cancelar"};
+                        
+                        // Mostra um painel de confirmação, para impedir exclusões acidentais
+                        int confirmed = JOptionPane.showOptionDialog(null, 
+                          "Tem certeza que deseja excluir o atendente #"+idValue+" - "+nomeValue+"?\n"
+                          + "Esta ação não poderá ser desfeita.",
+                          "Excluir",
+                          JOptionPane.YES_NO_OPTION,
+                          JOptionPane.QUESTION_MESSAGE,
+                          null,
+                          options,
+                          options[1]
+                        );
+                        
+                        // Se a opção for "sim"
                         if(confirmed == JOptionPane.YES_OPTION) {
                             table.repaint();
                         }
                         
+                        // Limpa a seleção da tabela
+                        // Se a linha continuar selecionada, não é possível
+                        // clicá-la novamente
                         table.clearSelection();
                         table.getSelectionModel().clearSelection();
                     }
                     else{
+                        // Obtém os dados da linha selecionada
                         String idValue = table.getModel().getValueAt(modelRow, 0).toString();
                         String cpfValue = table.getModel().getValueAt(modelRow, 1).toString();
                         String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
                         String emailValue = table.getModel().getValueAt(modelRow, 3).toString();
                         String telefoneValue = table.getModel().getValueAt(modelRow, 4).toString();
                         String dataNascValue = table.getModel().getValueAt(modelRow, 5).toString();
-
+                        
+                        // Instancia uma nova tela de editar atendente
                         EditarAtendente editarAtendente = new EditarAtendente(idValue, cpfValue, nomeValue, emailValue, telefoneValue, dataNascValue);
                         editarAtendente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        
+                                                
+                        // Limpa a seleção da tabela
+                        // Se a linha continuar selecionada, não é possível
+                        // clicá-la novamente
                         table.clearSelection();
                         table.getSelectionModel().clearSelection();
                     }
@@ -159,6 +179,7 @@ public class Atendentes extends JPanel{
             }
         });
         
+        // Faz modificações no cabeçalho da tabela
         table.getTableHeader().setDefaultRenderer(new HeaderRenderer());
         table.getTableHeader().setOpaque(true);
         table.getTableHeader().setFont(new Font(Font.SANS_SERIF, 1, 12));
@@ -167,12 +188,15 @@ public class Atendentes extends JPanel{
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setPreferredSize(new Dimension(0, 40));
         
+        // Painel que envolve a tabela
         tableWrap = new JScrollPane(table);
         tableWrap.setAlignmentX(Component.LEFT_ALIGNMENT);
+        tableWrap.setPreferredSize(new Dimension(Integer.MIN_VALUE, 300));
         tableWrap.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
         tableWrap.setBorder(new EmptyBorder(0, 0, 0, 0));
         tableWrap.setBackground(new Color(255, 255, 255));
         
+        // Adiciona os elementos na tela
         add(titlePanel);
         add(subtitle);
         add(Box.createRigidArea(new Dimension(0, 20)));
@@ -229,20 +253,3 @@ class HeaderRenderer extends JLabel implements TableCellRenderer {
         return this;
     }
 }
-
-/*class HeaderRenderer implements TableCellRenderer {
-
-    DefaultTableCellRenderer renderer;
-
-    public HeaderRenderer(JTable table){
-        
-        renderer = (DefaultTableCellRenderer)
-            table.getTableHeader().getDefaultRenderer();
-        renderer.setHorizontalAlignment(JLabel.LEFT);
-    }
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
-        return renderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-    }
-}*/

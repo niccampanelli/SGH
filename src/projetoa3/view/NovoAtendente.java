@@ -208,10 +208,4 @@ public class NovoAtendente extends JFrame{
         });
         
     }
-    
-    public static void main(String[] args){
-        
-        NovoAtendente novoAtendente = new NovoAtendente();
-        novoAtendente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }
 }

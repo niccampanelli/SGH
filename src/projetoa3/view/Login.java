@@ -85,6 +85,9 @@ public class Login extends JFrame{
         senhaField.setMargin(new Insets(0, 10, 0, 10));
         
         button = new JButton("Entrar");
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setOpaque(true);
         button.setAlignmentX(0.0f);
         button.setPreferredSize(new Dimension(300, 40));
         button.setMaximumSize(new Dimension(300, 40));
@@ -120,8 +123,7 @@ public class Login extends JFrame{
         setResizable(true);
     }
     
-    public static void main(String[] args){
-        
+    public static void main(String[] args){        
         Login login = new Login();
         login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

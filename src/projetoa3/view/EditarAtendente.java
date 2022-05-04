@@ -32,8 +32,8 @@ public class EditarAtendente extends JFrame{
         if("".equals(cpf) || cpf.length() != 14 || cpf.endsWith("0-00")){
             JOptionPane.showMessageDialog(null, "Insira um CPF válido.", "CPF inválido", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(nome) || nome.length() < 10){
-            JOptionPane.showMessageDialog(null, "Insira um nome completo com no mínimo 10 caracteres.", "Nome inválido", JOptionPane.WARNING_MESSAGE);
+        else if("".equals(nome) || nome.length() < 5){
+            JOptionPane.showMessageDialog(null, "Insira um nome completo com no mínimo 5 caracteres.", "Nome inválido", JOptionPane.WARNING_MESSAGE);
         }
         else if("".equals(email) || email.length() < 7 || !email.contains("@") || !email.contains(".")){
             JOptionPane.showMessageDialog(null, "Insira um endereço de e-mail válido, contendo \"@\" e \".\".", "Endereço de e-mail inválido", JOptionPane.WARNING_MESSAGE);
@@ -45,8 +45,8 @@ public class EditarAtendente extends JFrame{
             JOptionPane.showMessageDialog(null, "Insira uma data de nascimento válida.", "Data de nascimento inválida", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            JOptionPane.showMessageDialog(null, "Atendente adicionado com sucesso!\n"
-                    + "ID do atentendente adicionado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Atendente modificado com sucesso!\n"
+                    + "ID do atentendente modificado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
             dispose();
         }
@@ -148,14 +148,24 @@ public class EditarAtendente extends JFrame{
         cancelButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                int confirmed = JOptionPane.showConfirmDialog(null, 
-                  "Tem certeza que deseja cancelar a edição deste atendente?\n"
-                  + "Os dados inseridos serão perdidos e o atendente irá permanecer com os dados anteriores.",
-                  "Cancelar",
-                  JOptionPane.YES_NO_OPTION);
+                if((!cpfField.getText().equalsIgnoreCase(cpf)) || 
+                    (!nomeField.getText().equalsIgnoreCase(nome)) ||
+                    (!emailField.getText().equalsIgnoreCase(email)) ||
+                    (!telefoneField.getText().equalsIgnoreCase(telefone)) ||
+                    (!dataNascField.getText().equalsIgnoreCase(dataNasc))){
+                    
+                    int confirmed = JOptionPane.showConfirmDialog(null, 
+                      "Tem certeza que deseja cancelar a edição deste atendente?\n"
+                      + "Os dados inseridos serão perdidos e o atendente irá permanecer com os dados anteriores.",
+                      "Cancelar",
+                      JOptionPane.YES_NO_OPTION);
 
-                if(confirmed == JOptionPane.YES_OPTION) {
-                  dispose();
+                    if(confirmed == JOptionPane.YES_OPTION) {
+                      dispose();
+                    }
+                }
+                else{
+                    dispose();
                 }
             }
         });
