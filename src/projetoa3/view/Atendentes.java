@@ -2,6 +2,11 @@ package projetoa3.view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
@@ -15,9 +20,19 @@ public class Atendentes extends JPanel{
     JButton deleteButton, addButton;
     JScrollPane tableWrap;
     JTable table;
+    DefaultTableModel tableModel;
+    Image trashIcon;
     
     // Construtor
     public Atendentes(){
+        
+        try{
+            URL url = getClass().getResource("../resources/trashIcon.png");
+            trashIcon = ImageIO.read(url);
+        }
+        catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
         
         String[] columns = {
             "ID",
@@ -26,32 +41,29 @@ public class Atendentes extends JPanel{
             "E-mail",
             "Telefone",
             "Data de nascimento",
-            "Cadastrado em",
-            "X"
+            "Cadastrado em"
         };
         
         Object[][] data = {
-            {1231, "486.140.698-63", "Nicholas Campanelli de Souza", "nicholasoucampanelli@hotmail.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
-            {2421, "486.140.698-63", "Humberto", "email@email.com", "(11) 95846-4236", "21/12/2003", "21/12/2003", ""},
+            {1231, "365.785.234-45", "Nicholas Campanelli de Souza", "nicholasoucampanelli@hotmail.com", "(11) 95846-4236", "21/12/2003", "30/05/2022"},
+            {4124, "645.754.425-53", "Charles", "Charles@email.com", "(11) 91424-3454", "20/03/1954", "12/05/2022"},
+            {4563, "453.754.578-24", "Eric", "Eric@email.com", "(11) 45363-5353", "10/05/1959", "22/05/2022"},
+            {4563, "856.453.424-54", "Gabriel", "Gabriel@email.com", "(11) 46367-4356", "03/04/1962", "13/05/2022"},
+            {4251, "235.351.231-63", "Hanna", "Hanna@email.com", "(11) 46235-5647", "17/02/1963", "23/05/2022"},
+            {3563, "647.823.555-86", "Ali", "Ali@email.com", "(11) 75674-5647", "27/09/1994", "22/05/2022"},
+            {4847, "345.142.453-23", "Beatriz", "Beatriz@email.com", "(11) 64758-6888", "10/08/1986", "23/05/2022"},
+            {2763, "867.423.252-22", "Diya", "Diya@email.com", "(11) 53678-6858", "28/07/1980", "31/05/2022"},
+            {2746, "565.998.364-35", "Fatima", "Fatima@email.com", "(11) 23412-7657", "22/09/2000", "11/05/2022"},
+            {2341, "076.657.312-48", "Eman Glass", "Eman@email.com", "(11) 66743-7657", "28/07/1980", "11/05/2022"},
+            {7463, "564.858.467-67", "Ubaid Downs", "Ubaid@email.com", "(11) 23463-4553", "15/02/2002", "22/05/2022"},
+            {2451, "234.840.453-88", "Orson Burton", "Orson@email.com", "(11) 13662-4345", "06/01/1994", "31/05/2022"},
+            {1245, "535.564.998-40", "Kirby Medina", "Kirby@email.com", "(11) 13455-5523", "08/03/1995", "31/05/2022"},
+            {9574, "323.345.564-23", "Dulcie Needham", "Dulcie@email.com", "(11) 23321-9977", "01/03/1986", "21/05/2022"},
+            {2356, "414.574.342-53", "Muhamed Guerra", "Muhamed@email.com", "(11) 44768-7655", "21/12/2000", "04/05/2022"},
+            {1746, "332.232.356-42", "Glen Hubbard", "Glen@email.com", "(11) 34577-7576", "31/12/2003", "12/05/2022"},
+            {2754, "362.216.436-67", "Hebe Stein", "Hebe@email.com", "(11) 46788-6422", "12/05/1992", "04/05/2022"},
+            {4675, "637.622.243-12", "Louie Nicholson", "Louie@email.com", "(11) 57554-4333", "04/06/1966", "04/05/2022"},
+            {6487, "132.475.518-21", "Dylon Gibson", "Dylon@email.com", "(11) 65466-1123", "15/03/1979", "04/05/2022"}
         };
         
         // Painel que contém o título
@@ -95,20 +107,23 @@ public class Atendentes extends JPanel{
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.add(deleteButton);
         
+        tableModel = new DefaultTableModel(data, columns);
+        
         // Cria a tabela com os dados e colunas
         // e desabilita a edição de células
-        table = new JTable(data, columns){            
+        table = new JTable(tableModel){
             @Override
             public boolean isCellEditable(int row, int column){
                 return false;
             }
         };
+        tableModel.addColumn("X");
         table.setShowVerticalLines(false);
         table.setGridColor(new Color(230, 230, 230));
         table.setRowHeight(40);
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.getColumn("X").setCellRenderer(new ButtonRenderer());
+        table.getColumn("X").setCellRenderer(new ButtonRenderer(trashIcon));
         table.setCursor(new Cursor(Cursor.HAND_CURSOR));
         table.setAutoCreateRowSorter(true);
         
@@ -231,8 +246,11 @@ public class Atendentes extends JPanel{
 
 class ButtonRenderer extends JButton implements TableCellRenderer {
 
-  public ButtonRenderer() {
+    Image icon;
+    
+  public ButtonRenderer(Image icon) {
     setOpaque(true);
+    this.icon = icon;
   }
 
   public Component getTableCellRendererComponent(JTable table, Object value,
@@ -242,7 +260,7 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
       setBackground(new Color(240, 40, 40));
     } else {
       setBackground(new Color(255, 40, 40));
-      setIcon(new ImageIcon(new ImageIcon("trashIcon.png").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT)));
+      setIcon(new ImageIcon(icon));
       setBorder(null);
     }
     setText((value == null) ? "" : value.toString());

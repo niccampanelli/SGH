@@ -2,6 +2,9 @@ package projetoa3.view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URL;
+import javax.imageio.ImageIO;
 import javax.swing.border.*;
 
 public class Login extends JFrame{
@@ -10,15 +13,17 @@ public class Login extends JFrame{
     private BoxLayout canvasLayout, loginLayout;
     private BorderLayout wrapLayout;
     private JPanel wrapPanel, loginPanel, otherPanel;
-    private JLabel title, loginLabel, senhaLabel;
+    private JLabel bannerLabel, title, loginLabel, senhaLabel;
     private JTextField loginField, senhaField;
     private JButton button;
+    private Image loginBanner;
     
     // Variáveis de lógica
     private String login, senha;
     
     // Lógica de login
     private void login(){
+        
         login = loginField.getText();
         senha = senhaField.getText();
         
@@ -36,6 +41,14 @@ public class Login extends JFrame{
     public Login(){
         super("Login");
         
+        try{
+            URL url = getClass().getResource("../resources/loginBanner.jpg");
+            loginBanner = ImageIO.read(url);
+        }
+        catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
         Container canvas = getContentPane();
         canvas.setBackground(new Color(255, 255, 255));
         
@@ -45,8 +58,7 @@ public class Login extends JFrame{
         wrapPanel = new JPanel();
         wrapPanel.setLayout(wrapLayout);
         
-        otherPanel = new JPanel();
-        otherPanel.setBackground(new Color(203, 238, 67));
+        otherPanel = new LoginBannerPanel(loginBanner);
         
         loginPanel = new JPanel();
         loginLayout = new BoxLayout(loginPanel, BoxLayout.Y_AXIS);
@@ -126,5 +138,21 @@ public class Login extends JFrame{
     public static void main(String[] args){        
         Login login = new Login();
         login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+}
+
+class LoginBannerPanel extends JPanel {
+
+    private Image backgroundImage;
+    
+    public LoginBannerPanel(Image img){
+      backgroundImage = img;
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+      super.paintComponent(g);
+        
+      g.drawImage(backgroundImage, 0, -200, this.getWidth(), (int) (this.getWidth()*1.5), this);
     }
 }
