@@ -12,9 +12,9 @@ import javax.swing.table.*;
 public class Administradores extends JPanel{
     
     // Componentes da Tela
-    BoxLayout titleLayout;
-    JPanel titlePanel;
-    JLabel title, subtitle;
+    BoxLayout titleLayout, descriptionLayout;
+    JPanel titlePanel, descriptionPanel;
+    JLabel title, subtitle, description;
     JButton deleteButton, addButton;
     JScrollPane tableWrap;
     JTable table;
@@ -99,6 +99,17 @@ public class Administradores extends JPanel{
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
         titlePanel.add(addButton);
+        
+        descriptionPanel = new JPanel();
+        descriptionLayout = new BoxLayout(descriptionPanel, BoxLayout.Y_AXIS);
+        descriptionPanel.setLayout(descriptionLayout);
+        descriptionPanel.setBackground(null);
+        
+        description = new JLabel("<html>Nesta lista estão todos os administradores cadastrados que gerenciam esse sistema. Apenas outros administradores como você podem ver e editar esta lista. Para editar registros de outros administradores basta clicar sobre o cadastro que deseja alterar. Para remover um administrador, clique no ícone de lixo ao final da linha.</html>");
+        setPreferredSize(descriptionPanel.getPreferredSize());
+        description.setFont(new Font(Font.SANS_SERIF, 0, 12));
+        
+        descriptionPanel.add(description);
         
         deleteButton = new JButton("");
         
@@ -232,9 +243,10 @@ public class Administradores extends JPanel{
         add(titlePanel);
         add(subtitle);
         add(Box.createRigidArea(new Dimension(0, 20)));
+        add(description);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(tableWrap);
         
-        setBorder(new EmptyBorder(20, 0, 20, 0));
         setBackground(new Color(255, 255, 255));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.LEFT_ALIGNMENT);

@@ -28,8 +28,14 @@ public class Login extends JFrame{
         senha = senhaField.getText();
         
         if(!"".equals(login) && !"".equals(senha)){
-            Principal home = new Principal();
+            if(getExtendedState() == JFrame.MAXIMIZED_BOTH || getExtendedState() == JFrame.MAXIMIZED_HORIZ || getExtendedState() == JFrame.MAXIMIZED_VERT){
+                Principal home = new Principal(getExtendedState());
             home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            }
+            else{
+                Principal home = new Principal(getSize());
+                home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            }
             dispose();
         }
         else{
@@ -103,7 +109,9 @@ public class Login extends JFrame{
         button.setAlignmentX(0.0f);
         button.setPreferredSize(new Dimension(300, 40));
         button.setMaximumSize(new Dimension(300, 40));
-        button.setBackground(new Color(250, 200, 10));
+        button.setBackground(new Color(15, 140, 190));
+        button.setForeground(new Color(255, 255, 255));
+        button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
         button.setBorder(null);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.addActionListener(new ActionListener(){
@@ -128,6 +136,7 @@ public class Login extends JFrame{
         
         canvas.add(wrapPanel);
         
+        setMinimumSize(new Dimension(854, 480));
         setSize(1280, 720);
         setLayout(canvasLayout);
         setLocationRelativeTo(null);
@@ -146,13 +155,31 @@ class LoginBannerPanel extends JPanel {
     private Image backgroundImage;
     
     public LoginBannerPanel(Image img){
-      backgroundImage = img;
+        backgroundImage = img;
     }
 
     @Override
     public void paintComponent(Graphics g) {
-      super.paintComponent(g);
+        super.paintComponent(g);
         
-      g.drawImage(backgroundImage, 0, -200, this.getWidth(), (int) (this.getWidth()*1.5), this);
+        if(this.getWidth() >= this.getHeight()){
+            g.drawImage(backgroundImage,
+                        0,
+                        -200,
+                        this.getWidth(),
+                        (int) (this.getWidth()*1.6),
+                        this
+            );
+        }
+        else{
+            g.drawImage(backgroundImage,
+                        0,
+                        -200,
+                        this.getHeight(),
+                        (int) (this.getHeight()*1.6),
+                        this
+            );
+        }
+        
     }
 }

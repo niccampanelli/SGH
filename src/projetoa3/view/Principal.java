@@ -15,6 +15,7 @@ public class Principal extends JFrame{
     JScrollPane mainPanel;
     JPanel Navbar, wrapPanel, Pessoas, Consultas;
     public JPanel currentPanel;
+    public int currentPanelIndex;
     
     public void buildGUI(){
         
@@ -31,6 +32,7 @@ public class Principal extends JFrame{
         fileChooser.setDialogTitle("Specify a file to save");
         
         menu = new JMenuBar();
+        menu.setBackground(new Color(255, 255, 255));
         arquivoMenu = new JMenu("Arquivo");
         exportarArquivoMenu = new JMenuItem("Exportar");
         exportarArquivoMenu.addActionListener(new ActionListener(){
@@ -64,7 +66,7 @@ public class Principal extends JFrame{
             currentPanel = new Home();
         }
         
-        Navbar = new Navbar(this);
+        Navbar = new Navbar(this, currentPanelIndex);
         
         mainPanel = new JScrollPane(currentPanel);
         mainPanel.setBorder(null);
@@ -85,6 +87,30 @@ public class Principal extends JFrame{
         buildGUI();
         
         setSize(1280, 720);
+        setLayout(canvasLayout);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setResizable(true);
+    }
+    
+    public Principal(int extendedState){
+        super("Inicio");
+        
+        buildGUI();
+        
+        setExtendedState(extendedState);
+        setLayout(canvasLayout);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setResizable(true);
+    }
+    
+    public Principal(Dimension size){
+        super("Inicio");
+        
+        buildGUI();
+        
+        setSize(size);
         setLayout(canvasLayout);
         setLocationRelativeTo(null);
         setVisible(true);

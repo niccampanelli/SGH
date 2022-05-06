@@ -14,9 +14,9 @@ import javax.swing.table.*;
 public class Atendentes extends JPanel{
     
     // Componentes da Tela
-    BoxLayout titleLayout;
-    JPanel titlePanel;
-    JLabel title, subtitle;
+    BoxLayout titleLayout, descriptionLayout;
+    JPanel titlePanel, descriptionPanel;
+    JLabel title, subtitle, description;
     JButton deleteButton, addButton;
     JScrollPane tableWrap;
     JTable table;
@@ -101,6 +101,17 @@ public class Atendentes extends JPanel{
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
         titlePanel.add(addButton);
+        
+        descriptionPanel = new JPanel();
+        descriptionLayout = new BoxLayout(descriptionPanel, BoxLayout.Y_AXIS);
+        descriptionPanel.setBackground(null);
+        descriptionPanel.setLayout(descriptionLayout);
+        
+        description = new JLabel("<html>Estes são os atendentes cadastrados. Os atendentes possuem um nível de acesso menor do que os administradores e não podem cadastrar outros usuários.</html>");
+        setPreferredSize(descriptionPanel.getPreferredSize());
+        description.setFont(new Font(Font.SANS_SERIF, 0, 12));
+        
+        descriptionPanel.add(description);
         
         deleteButton = new JButton("");
         
@@ -234,9 +245,10 @@ public class Atendentes extends JPanel{
         add(titlePanel);
         add(subtitle);
         add(Box.createRigidArea(new Dimension(0, 20)));
+        add(description);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(tableWrap);
         
-        setBorder(new EmptyBorder(20, 0, 20, 0));
         setBackground(new Color(255, 255, 255));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.LEFT_ALIGNMENT);

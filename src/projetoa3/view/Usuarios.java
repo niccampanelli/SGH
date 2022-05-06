@@ -13,7 +13,9 @@ public class Usuarios extends JPanel{
         title.setFont(new Font(Font.SANS_SERIF, 1, 30));
         
         add(title);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(new Atendentes());
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(new Administradores());
         
         
