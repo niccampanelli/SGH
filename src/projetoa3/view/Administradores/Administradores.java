@@ -1,4 +1,7 @@
 package projetoa3.view.Administradores;
+import projetoa3.view.Components.CustomButton;
+import projetoa3.view.Components.TableDeleteButton;
+import projetoa3.view.Components.TableHeader;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,7 +11,6 @@ import javax.imageio.ImageIO;
 import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
-import projetoa3.view.components.*;
 
 public class Administradores extends JPanel{
     
@@ -26,7 +28,7 @@ public class Administradores extends JPanel{
     public Administradores(){
         
         try{
-            URL url = getClass().getResource("/projetoa3/resources/trashIcon.png");
+            URL url = getClass().getResource("/projetoa3/util/icons/trashIcon.png");
             trashIcon = ImageIO.read(url);
         }
         catch (IOException ex) {

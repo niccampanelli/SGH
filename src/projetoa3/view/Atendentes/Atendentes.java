@@ -1,4 +1,7 @@
 package projetoa3.view.Atendentes;
+import projetoa3.view.Components.CustomButton;
+import projetoa3.view.Components.TableDeleteButton;
+import projetoa3.view.Components.TableHeader;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,7 +11,6 @@ import javax.imageio.ImageIO;
 import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
-import projetoa3.view.components.*;
 
 public class Atendentes extends JPanel{
     
@@ -26,7 +28,7 @@ public class Atendentes extends JPanel{
     public Atendentes(){
         
         try{
-            URL url = getClass().getResource("/projetoa3/resources/trashIcon.png");
+            URL url = getClass().getResource("/projetoa3/util/icons/trashIcon.png");
             trashIcon = ImageIO.read(url);
         }
         catch (IOException ex) {

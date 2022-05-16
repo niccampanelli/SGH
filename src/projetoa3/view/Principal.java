@@ -1,9 +1,9 @@
 package projetoa3.view;
+import projetoa3.view.Components.Navbar;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import projetoa3.view.components.*;
 
 public class Principal extends JFrame{
     

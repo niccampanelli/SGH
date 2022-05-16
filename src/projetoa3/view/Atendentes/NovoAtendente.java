@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.text.ParseException;
 import javax.swing.border.*;
 import javax.swing.text.*;
-import projetoa3.view.components.CustomButton;
+import projetoa3.view.Components.CustomButton;
 
 public class NovoAtendente extends JFrame{
     

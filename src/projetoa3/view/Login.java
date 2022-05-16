@@ -1,4 +1,6 @@
 package projetoa3.view;
+import projetoa3.view.Components.CustomButton;
+import projetoa3.view.Components.CustomField;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -6,7 +8,6 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.border.*;
-import projetoa3.view.components.*;
 
 /**
  * Inteface de login
@@ -68,7 +69,7 @@ public class Login extends JFrame{
         
         // Tenta pegar o banner do login
         try{
-            URL url = getClass().getResource("/projetoa3/resources/loginBanner.jpg");
+            URL url = getClass().getResource("/projetoa3/util/icons/loginBanner.jpg");
             loginBanner = ImageIO.read(url);
         }
         catch (IOException ex) {

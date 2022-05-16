@@ -1,4 +1,4 @@
-package projetoa3.view.components;
+package projetoa3.view.Components;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JLabel;

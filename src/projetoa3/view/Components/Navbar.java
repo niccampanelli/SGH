@@ -1,4 +1,4 @@
-package projetoa3.view.components;
+package projetoa3.view.Components;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -34,10 +34,10 @@ public class Navbar extends JPanel{
         
         // Tenta pegar os ícones dos botões
         try{
-            URL houseUrl = getClass().getResource("/projetoa3/resources/houseIcon.png");
-            URL calendarUrl = getClass().getResource("/projetoa3/resources/calendarIcon.png");
-            URL peopleUrl = getClass().getResource("/projetoa3/resources/peopleIcon.png");
-            URL userUrl = getClass().getResource("/projetoa3/resources/userIcon.png");
+            URL houseUrl = getClass().getResource("/projetoa3/util/icons/houseIcon.png");
+            URL calendarUrl = getClass().getResource("/projetoa3/util/icons/calendarIcon.png");
+            URL peopleUrl = getClass().getResource("/projetoa3/util/icons/peopleIcon.png");
+            URL userUrl = getClass().getResource("/projetoa3/util/icons/userIcon.png");
             houseIcon = ImageIO.read(houseUrl);
             calendarIcon = ImageIO.read(calendarUrl);
             peopleIcon = ImageIO.read(peopleUrl);

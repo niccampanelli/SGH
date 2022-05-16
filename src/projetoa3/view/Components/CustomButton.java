@@ -1,4 +1,4 @@
-package projetoa3.view.components;
+package projetoa3.view.Components;
 import java.awt.*;
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
