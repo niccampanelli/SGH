@@ -13,7 +13,7 @@ public class Principal extends JFrame{
     JMenu arquivoMenu, contaMenu;
     JMenuItem exportarArquivoMenu, nomeContaMenu, sairContaMenu;
     JScrollPane mainPanel;
-    JPanel Navbar, wrapPanel, Pessoas, Consultas;
+    JPanel Navbar, wrapPanel;
     public JPanel currentPanel;
     public int currentPanelIndex;
     

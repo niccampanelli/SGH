@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.border.*;
+import projetoa3.view.components.CustomButton;
 
 public class Login extends JFrame{
     
@@ -15,7 +16,7 @@ public class Login extends JFrame{
     private JPanel wrapPanel, loginPanel, otherPanel;
     private JLabel bannerLabel, title, loginLabel, senhaLabel;
     private JTextField loginField, senhaField;
-    private JButton button;
+    private CustomButton button;
     private Image loginBanner;
     
     // Variáveis de lógica
@@ -48,7 +49,7 @@ public class Login extends JFrame{
         super("Login");
         
         try{
-            URL url = getClass().getResource("../resources/loginBanner.jpg");
+            URL url = getClass().getResource("/projetoa3/resources/loginBanner.jpg");
             loginBanner = ImageIO.read(url);
         }
         catch (IOException ex) {
@@ -94,6 +95,11 @@ public class Login extends JFrame{
         loginField.setAlignmentX(0.0f);
         loginField.setPreferredSize(new Dimension(300, 40));
         loginField.setMaximumSize(new Dimension(300, 40));
+        loginField.setBorder(new CompoundBorder(
+                    new MatteBorder(0, 0, 2, 0, new Color(15, 140, 190)),
+                    new EmptyBorder(0, 10, 0, 10),
+                    new EmptyBorder(0, 10, 0, 10)
+        ));
         loginField.setMargin(new Insets(0, 10, 0, 10));
         
         senhaField = new JPasswordField();
@@ -102,18 +108,10 @@ public class Login extends JFrame{
         senhaField.setMaximumSize(new Dimension(300, 40));
         senhaField.setMargin(new Insets(0, 10, 0, 10));
         
-        button = new JButton("Entrar");
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setOpaque(true);
+        button = new CustomButton("Entrar");
         button.setAlignmentX(0.0f);
         button.setPreferredSize(new Dimension(300, 40));
         button.setMaximumSize(new Dimension(300, 40));
-        button.setBackground(new Color(15, 140, 190));
-        button.setForeground(new Color(255, 255, 255));
-        button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-        button.setBorder(null);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -144,7 +142,7 @@ public class Login extends JFrame{
         setResizable(true);
     }
     
-    public static void main(String[] args){        
+    public static void main(String[] args){
         Login login = new Login();
         login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

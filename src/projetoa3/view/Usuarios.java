@@ -1,4 +1,6 @@
 package projetoa3.view;
+import projetoa3.view.Atendentes.Atendentes;
+import projetoa3.view.Administradores.Administradores;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
