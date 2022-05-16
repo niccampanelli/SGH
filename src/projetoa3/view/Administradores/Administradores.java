@@ -12,21 +12,28 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+/**
+ * Painel de administradores
+ * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ */
 public class Administradores extends JPanel{
     
     // Componentes da Tela
-    BoxLayout titleLayout, descriptionLayout;
-    JPanel titlePanel, descriptionPanel;
-    JLabel title, subtitle, description;
-    CustomButton addButton;
-    JScrollPane tableWrap;
-    JTable table;
-    DefaultTableModel tableModel;
-    Image trashIcon;
+    private final BoxLayout titleLayout, descriptionLayout;
+    private final JPanel titlePanel, descriptionPanel;
+    private final JLabel title, subtitle, description;
+    private final CustomButton addButton;
+    private final JScrollPane tableWrap;
+    private final JTable table;
+    private final DefaultTableModel tableModel;
+    private Image trashIcon;
     
-    // Construtor
+    /**
+     * Construtor padrão
+     */
     public Administradores(){
         
+        // Tenta pegar o ícone de lixeira
         try{
             URL url = getClass().getResource("/projetoa3/util/icons/trashIcon.png");
             trashIcon = ImageIO.read(url);

@@ -62,8 +62,8 @@ public class Navbar extends JPanel{
             public void actionPerformed(ActionEvent e){
                 
                 callingFrame.setTitle("Cadastro de Consultas"); // Define titulo do JFrame
-                callingFrame.currentPanel = new Home(); // Instancia a tela Home e define como tela principal
-                callingFrame.currentPanelIndex = 0; // Define o índice da tela
+                callingFrame.setCurrentPanel(new Home()); // Instancia a tela Home e define como tela principal
+                callingFrame.setCurrentPanelIndex(0); // Define o índice da tela
                 callingFrame.buildGUI(); // Constrói a tela
             }
         });
@@ -82,8 +82,8 @@ public class Navbar extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e){
                 callingFrame.setTitle("Pacientes - Cadastro de Consultas"); // Define titulo do JFrame
-                callingFrame.currentPanel = new Pacientes(); // Instancia a tela Pacientes e define como tela principal
-                callingFrame.currentPanelIndex = 1; // Define o índice da tela
+                callingFrame.setCurrentPanel(new Pacientes()); // Instancia a tela Pacientes e define como tela principal
+                callingFrame.setCurrentPanelIndex(1); // Define o índice da tela
                 callingFrame.buildGUI(); // Constrói a tela
             }
         });
@@ -102,8 +102,8 @@ public class Navbar extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e){
                 callingFrame.setTitle("Consultas - Cadastro de Consultas"); // Define titulo do JFrame
-                callingFrame.currentPanel = new Consultas(); // Instancia a tela Consultas e define como tela principal
-                callingFrame.currentPanelIndex = 2; // Define o índice da tela
+                callingFrame.setCurrentPanel(new Consultas()); // Instancia a tela Consultas e define como tela principal
+                callingFrame.setCurrentPanelIndex(2); // Define o índice da tela
                 callingFrame.buildGUI(); // Constrói a tela
                 
             }
@@ -123,8 +123,8 @@ public class Navbar extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e){
                 callingFrame.setTitle("Usuários - Cadastro de Consultas"); // Define titulo do JFrame
-                callingFrame.currentPanel = new Usuarios(); // Instancia a tela Usuários e define como tela principal
-                callingFrame.currentPanelIndex = 3; // Define o índice da tela
+                callingFrame.setCurrentPanel(new Usuarios()); // Instancia a tela Usuários e define como tela principal
+                callingFrame.setCurrentPanelIndex(3); // Define o índice da tela
                 callingFrame.buildGUI(); // Constrói a tela
                 
             }

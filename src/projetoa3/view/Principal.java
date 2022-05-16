@@ -4,23 +4,50 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-
+/**
+ * Frame principal, onde são instanciadas as páginas
+ * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ */
 public class Principal extends JFrame{
     
-    BoxLayout canvasLayout;
-    BorderLayout wrapLayout;
-    JMenuBar menu;
-    JMenu arquivoMenu, contaMenu;
-    JMenuItem exportarArquivoMenu, nomeContaMenu, sairContaMenu;
-    JScrollPane mainPanel;
-    JPanel Navbar, wrapPanel;
-    public JPanel currentPanel;
-    public int currentPanelIndex;
+    // Componentes da interface
+    private BoxLayout canvasLayout;
+    private BorderLayout wrapLayout;
+    private JMenuBar menu;
+    private JMenu arquivoMenu, contaMenu;
+    private JMenuItem exportarArquivoMenu, nomeContaMenu, sairContaMenu;
+    private JScrollPane mainPanel;
+    private JPanel Navbar, wrapPanel;
     
+    // Definem o painel a ser mostrado
+    private JPanel currentPanel;
+    private int currentPanelIndex;
+    
+    // Getters e setters --------------------------------
+    public JPanel getCurrentPanel(){
+        return this.currentPanel;
+    }
+    
+    public void setCurrentPanel(JPanel currentPanel){
+        this.currentPanel = currentPanel;
+    }
+    
+    public int getCurrentPanelIndex(){
+        return this.currentPanelIndex;
+    }
+    
+    public void setCurrentPanelIndex(int currentPanelIndex){
+        this.currentPanelIndex = currentPanelIndex;
+    }
+    // ---------------------------------------------------
+    
+    /**
+     * Constrói a interface
+     */
     public void buildGUI(){
         
         Container canvas = getContentPane();
-        canvas.removeAll();
+        canvas.removeAll(); // Remove os elementos do canvas para atualizá-lo
         
         canvasLayout = new BoxLayout(canvas, BoxLayout.PAGE_AXIS);
         wrapLayout = new BorderLayout();
@@ -28,44 +55,55 @@ public class Principal extends JFrame{
         wrapPanel = new JPanel();
         wrapPanel.setLayout(wrapLayout);
         
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Specify a file to save");
-        
+        // Barra de ações do topo da tela
         menu = new JMenuBar();
         menu.setBackground(new Color(255, 255, 255));
-        arquivoMenu = new JMenu("Arquivo");
-        exportarArquivoMenu = new JMenuItem("Exportar");
-        exportarArquivoMenu.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                int userSelection = fileChooser.showSaveDialog(menu);
-            }
-        });
         
-        contaMenu = new JMenu("Conta");
-        nomeContaMenu = new JMenuItem("Fulano de Souza - Administrador");
-        sairContaMenu = new JMenuItem("Sair");
-        sairContaMenu.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                Login login = new Login();
-                login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                dispose();
-            }
-        });
+            // Menu de ações de "arquivo"
+            arquivoMenu = new JMenu("Arquivo");
+
+            // Opção de exportar arquivo
+            exportarArquivoMenu = new JMenuItem("Exportar");
+            exportarArquivoMenu.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    System.out.println("Selecionador de arquivos");
+                }
+            });
         
+            // Menu de ações de "conta"
+            contaMenu = new JMenu("Conta");
+            
+            // Exemplos, vão ser modificados depois
+            nomeContaMenu = new JMenuItem("Fulano de Souza - Administrador");
+            sairContaMenu = new JMenuItem("Sair");
+            sairContaMenu.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    Login login = new Login();
+                    login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    dispose();
+                }
+            });
+        
+        // Adiciona os menus no menu superior principal
         arquivoMenu.add(exportarArquivoMenu);
         contaMenu.add(nomeContaMenu);
         contaMenu.add(sairContaMenu);
         menu.add(arquivoMenu);
         menu.add(contaMenu);
         
+        // Define o menu do programa como o menu criado
         setJMenuBar(menu);
         
+        
+        // Se o painel a ser exibido não estiver definido
+        // define como "home".
         if(currentPanel == null){
             currentPanel = new Home();
         }
         
+        // Instancia a barra de navegação lateral
         Navbar = new Navbar(this, currentPanelIndex);
         
         mainPanel = new JScrollPane(currentPanel);
@@ -78,9 +116,13 @@ public class Principal extends JFrame{
         
         canvas.add(wrapPanel);
         
+        // Atualiza o layout para acomodar os componentes
         validate();
     }
     
+    /**
+     * Construtor padrão
+     */
     public Principal(){
         super("Inicio");
         
@@ -93,6 +135,10 @@ public class Principal extends JFrame{
         setResizable(true);
     }
     
+    /**
+     * Construtor para tela maximizada
+     * @param extendedState - Estado de maximização da tela
+     */
     public Principal(int extendedState){
         super("Inicio");
         
@@ -105,6 +151,10 @@ public class Principal extends JFrame{
         setResizable(true);
     }
     
+    /**
+     * Construtor para tela com tamanho modificado
+     * @param size - Tamanho para definir a tela
+     */
     public Principal(Dimension size){
         super("Inicio");
         
@@ -117,6 +167,7 @@ public class Principal extends JFrame{
         setResizable(true);
     }
     
+    // Método principal
     public static void main(String[] args){
         
         Principal home = new Principal();
