@@ -6,37 +6,53 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.border.*;
-import projetoa3.view.components.CustomButton;
+import projetoa3.view.components.*;
 
+/**
+ * Inteface de login
+ * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ */
 public class Login extends JFrame{
     
-    // Componentes da tela
-    private BoxLayout canvasLayout, loginLayout;
-    private BorderLayout wrapLayout;
-    private JPanel wrapPanel, loginPanel, otherPanel;
-    private JLabel bannerLabel, title, loginLabel, senhaLabel;
-    private JTextField loginField, senhaField;
-    private CustomButton button;
+    // Componentes da interface
+    private final BoxLayout canvasLayout, loginLayout;
+    private final BorderLayout wrapLayout;
+    private final JPanel wrapPanel, loginPanel, otherPanel;
+    private final JLabel title, loginLabel, senhaLabel;
+    private final JTextField loginField, senhaField;
+    private final CustomButton button;
     private Image loginBanner;
     
     // Variáveis de lógica
     private String login, senha;
     
-    // Lógica de login
+    /**
+     * Lógica de verificação login (pode ser substituida depois)
+     */
     private void login(){
         
+        // Pega o texto dos campos
         login = loginField.getText();
         senha = senhaField.getText();
         
+        // Verifica se os valores existem
         if(!"".equals(login) && !"".equals(senha)){
+            
+            // Verifica se a tela está maximizada (questão de estética)
             if(getExtendedState() == JFrame.MAXIMIZED_BOTH || getExtendedState() == JFrame.MAXIMIZED_HORIZ || getExtendedState() == JFrame.MAXIMIZED_VERT){
-                Principal home = new Principal(getExtendedState());
-            home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                
+                // Instancia a tela principal e passa como parâmetro se a tela está maximizada
+                Principal principal = new Principal(getExtendedState());
+                principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
             else{
-                Principal home = new Principal(getSize());
-                home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                
+                // Instancia a tela principal e passa como parâmetro o tamanho da tela
+                Principal principal = new Principal(getSize());
+                principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
+            
+            // Fecha a tela de login
             dispose();
         }
         else{
@@ -44,10 +60,13 @@ public class Login extends JFrame{
         }
     }
     
-    // Construtor
+    /**
+     * Construtor padrão
+     */
     public Login(){
         super("Login");
         
+        // Tenta pegar o banner do login
         try{
             URL url = getClass().getResource("/projetoa3/resources/loginBanner.jpg");
             loginBanner = ImageIO.read(url);
@@ -91,22 +110,15 @@ public class Login extends JFrame{
         senhaLabel.setPreferredSize(new Dimension(300, 20));
         senhaLabel.setMaximumSize(new Dimension(300, 20));
         
-        loginField = new JTextField();
+        loginField = new CustomField();
         loginField.setAlignmentX(0.0f);
         loginField.setPreferredSize(new Dimension(300, 40));
         loginField.setMaximumSize(new Dimension(300, 40));
-        loginField.setBorder(new CompoundBorder(
-                    new MatteBorder(0, 0, 2, 0, new Color(15, 140, 190)),
-                    new EmptyBorder(0, 10, 0, 10),
-                    new EmptyBorder(0, 10, 0, 10)
-        ));
-        loginField.setMargin(new Insets(0, 10, 0, 10));
         
-        senhaField = new JPasswordField();
+        senhaField = new CustomField("Insira sua senha");
         senhaField.setAlignmentX(0.0f);
         senhaField.setPreferredSize(new Dimension(300, 40));
         senhaField.setMaximumSize(new Dimension(300, 40));
-        senhaField.setMargin(new Insets(0, 10, 0, 10));
         
         button = new CustomButton("Entrar");
         button.setAlignmentX(0.0f);

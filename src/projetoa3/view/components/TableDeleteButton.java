@@ -8,20 +8,31 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
+/**
+ * Botão de deletar para as tabelas
+ * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ */
 public class TableDeleteButton extends JButton implements TableCellRenderer {
     
-    Image icon;
+    // Ícone da lixeira
+    private final Image icon;
     
+    /**
+     * Construtor que recebe o ícone de lixeira
+     * @param icon - Ícone pro botão de excluir
+     */
     public TableDeleteButton(Image icon){
         setOpaque(true);
         this.icon = icon;
     }
     
+    // Sobrescreve o método que renderiza a célula da tabela.
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column){
         
         setCursor(new Cursor(Cursor.HAND_CURSOR));
         
+        // Muda a cor do botão quando a linha for selecionada
         if (isSelected){
             setBackground(new Color(240, 240, 240));
         }
@@ -31,6 +42,7 @@ public class TableDeleteButton extends JButton implements TableCellRenderer {
             setBorder(null);
         }
         
+        // Verifica se a célula recebe algum valor
         setText((value == null) ? "" : value.toString());
         return this;
     }

@@ -3,12 +3,25 @@ import java.awt.*;
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Botão com aparência personalizada
+ * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ */
+
+// Classe de botão customizado herdando o JButton original
 public class CustomButton extends JButton {
     
+    /**
+     * Construtor padrão
+     */
     public CustomButton(){
         this(null);
     }
     
+    /**
+     * Construtor com texto no botão
+     * @param label 
+     */
     public CustomButton(String label){
         super(label.toUpperCase());
         super.setContentAreaFilled(false);
@@ -21,16 +34,27 @@ public class CustomButton extends JButton {
         setBorder(new EmptyBorder(10, 15, 10, 15));
     }
     
+    // Sobrescreve o método do swing que renderiza
+    // o componente a fim de aplicar um efeito de
+    // hover e focus
     @Override
-    public void paintComponent(Graphics g) {
-        if (getModel().isPressed()) {
-            g.setColor(new Color(5, 130, 180));
-        } else if (getModel().isRollover()) {
-            g.setColor(new Color(25, 150, 200));
-        } else {
-            g.setColor(new Color(15, 140, 190));
+    public void paintComponent(Graphics graphic) {
+        
+        // Se pressionado
+        if(getModel().isPressed()){
+            graphic.setColor(new Color(5, 130, 180));
         }
-        g.fillRect(0, 0, getWidth(), getHeight());
-        super.paintComponent(g);
+        // Ao passar o mouse
+        else if(getModel().isRollover()){
+            graphic.setColor(new Color(25, 150, 200));
+        }
+        // Padrão
+        else{
+            graphic.setColor(new Color(15, 140, 190));
+        }
+        
+        // Define o tamanho do componente como o tamanho do botão
+        graphic.fillRect(0, 0, getWidth(), getHeight());
+        super.paintComponent(graphic);
     }
 }
