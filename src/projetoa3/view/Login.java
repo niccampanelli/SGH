@@ -1,6 +1,7 @@
 package projetoa3.view;
 import projetoa3.view.Components.CustomButton;
 import projetoa3.view.Components.CustomField;
+import projetoa3.view.Components.CustomPasswordField;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.border.*;
+import projetoa3.controller.sessionController;
 
 /**
  * Inteface de login
@@ -20,7 +22,8 @@ public class Login extends JFrame{
     private final BorderLayout wrapLayout;
     private final JPanel wrapPanel, loginPanel, otherPanel;
     private final JLabel title, loginLabel, senhaLabel;
-    private final JTextField loginField, senhaField;
+    private final JTextField loginField;
+    private final JPasswordField senhaField;
     private final CustomButton button;
     private Image loginBanner;
     
@@ -111,12 +114,12 @@ public class Login extends JFrame{
         senhaLabel.setPreferredSize(new Dimension(300, 20));
         senhaLabel.setMaximumSize(new Dimension(300, 20));
         
-        loginField = new CustomField();
+        loginField = new CustomField("Insira seu login");
         loginField.setAlignmentX(0.0f);
         loginField.setPreferredSize(new Dimension(300, 40));
         loginField.setMaximumSize(new Dimension(300, 40));
         
-        senhaField = new CustomField("Insira sua senha");
+        senhaField = new CustomPasswordField("Insira sua senha");
         senhaField.setAlignmentX(0.0f);
         senhaField.setPreferredSize(new Dimension(300, 40));
         senhaField.setMaximumSize(new Dimension(300, 40));
@@ -156,6 +159,8 @@ public class Login extends JFrame{
     }
     
     public static void main(String[] args){
+        sessionController.create("nicholas@email.com", "senha123");
+        
         Login login = new Login();
         login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

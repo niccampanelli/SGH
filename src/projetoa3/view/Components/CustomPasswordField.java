@@ -2,8 +2,7 @@ package projetoa3.view.Components;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import javax.swing.FocusManager;
-import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -14,12 +13,12 @@ import javax.swing.border.MatteBorder;
  */
 
 // Classe de field customizado herdando o JTextField original
-public class CustomField extends JTextField {
+public class CustomPasswordField extends JPasswordField {
     
     /**
      * Construtor padrão
      */
-    public CustomField(){
+    public CustomPasswordField(){
         super();
         
         // Define o visual do field
@@ -53,7 +52,7 @@ public class CustomField extends JTextField {
      * Construtor com tamanho
      * @param size - Constrói o o text field com a largura necessária para o tamanho de texto especificado
      */
-    public CustomField(int size){
+    public CustomPasswordField(int size){
         super(size); // Passa para a superclasse o tamanho
         
         // Define o visual do field
@@ -87,7 +86,7 @@ public class CustomField extends JTextField {
      * Construtor com placeholder definido
      * @param placeholder - Exibe uma dica de valor no text field
      */
-    public CustomField(String placeholder){
+    public CustomPasswordField(String placeholder){
         super(placeholder); // Passa para a superclasse o placeholder
         
         setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
@@ -109,7 +108,7 @@ public class CustomField extends JTextField {
             public void focusGained(FocusEvent e){
                 setBackground(new Color(255, 255, 255));
                 if(getText().equals(placeholder)){
-                    //setText("");
+                    setText("");
                     setForeground(new Color(100, 100, 100));
                 }
             }  
@@ -118,23 +117,10 @@ public class CustomField extends JTextField {
             public void focusLost(FocusEvent e){
                 setBackground(new Color(250, 250, 250));
                 if(getText().isEmpty()){
-                    //setText(placeholder);
+                    setText(placeholder);
                     setForeground(new Color(180, 180, 180));
                 }
             }
         });
-    }
-    
-    @Override
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-
-        if(getText().isEmpty() && !(FocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == this)){
-            Graphics2D g2 = (Graphics2D)g.create();
-            g2.setBackground(Color.gray);
-            System.out.println(this.getHeight()/2);
-            g2.drawString("zip", 10, 20); //figure out x, y from font's FontMetrics and size of component.
-            g2.dispose();
-        }
     }
 }
