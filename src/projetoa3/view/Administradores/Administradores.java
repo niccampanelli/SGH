@@ -14,7 +14,7 @@ import javax.swing.table.*;
 
 /**
  * Painel de administradores
- * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ * @author Nicholas Campanelli
  */
 public class Administradores extends JPanel{
     

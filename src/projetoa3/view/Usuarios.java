@@ -7,7 +7,7 @@ import javax.swing.border.*;
 
 /**
  * Tela de usuários onde serão acomodadas as diferentes tabelas dos usuários
- * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ * @author Nicholas Campanelli
  */
 public class Usuarios extends JPanel{
     

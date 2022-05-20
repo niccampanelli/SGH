@@ -8,7 +8,7 @@ import javax.swing.table.TableCellRenderer;
 
 /**
  * Cabeçalho customizado para as tabelas
- * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ * @author Nicholas Campanelli
  */
 public class TableHeader extends JLabel implements TableCellRenderer {
     

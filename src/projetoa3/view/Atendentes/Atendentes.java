@@ -12,6 +12,10 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+/**
+ * Painel de atendentes
+ * @author Nicholas Campanelli
+ */
 public class Atendentes extends JPanel{
     
     // Componentes da Tela

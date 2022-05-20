@@ -7,6 +7,10 @@ import javax.swing.border.*;
 import javax.swing.text.*;
 import projetoa3.view.Components.CustomButton;
 
+/**
+ * Tela de edição de administradores
+ * @author Nicholas Campanelli
+ */
 public class EditarAdministrador extends JFrame{
     
     // Componentes da interface

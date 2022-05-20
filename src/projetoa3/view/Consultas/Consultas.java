@@ -12,6 +12,10 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
+/**
+ * Painel de consultas
+ * @author Nicholas Campanelli
+ */
 public class Consultas extends JPanel{
     
     BoxLayout titleLayout, descriptionLayout;

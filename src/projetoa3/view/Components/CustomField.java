@@ -10,7 +10,7 @@ import javax.swing.border.MatteBorder;
 
 /**
  * Text Field com aparência personalizada
- * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ * @author Nicholas Campanelli
  */
 
 // Classe de field customizado herdando o JTextField original

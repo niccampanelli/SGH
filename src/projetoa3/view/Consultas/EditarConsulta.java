@@ -7,6 +7,10 @@ import javax.swing.border.*;
 import javax.swing.text.*;
 import projetoa3.view.Components.CustomButton;
 
+/**
+ * Tela de edição de consultas
+ * @author Nicholas Campanelli
+ */
 public class EditarConsulta extends JFrame{
     
     // Componentes da interface

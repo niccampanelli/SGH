@@ -7,6 +7,10 @@ import javax.swing.border.*;
 import javax.swing.text.*;
 import projetoa3.view.Components.CustomButton;
 
+/**
+ * Tela de criação de administradores
+ * @author Nicholas Campanelli
+ */
 public class NovoAdministrador extends JFrame{
     
     // Componentes da interface

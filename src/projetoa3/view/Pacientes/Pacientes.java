@@ -12,6 +12,10 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
+/**
+ * Painel de pacientes
+ * @author Nicholas Campanelli
+ */
 public class Pacientes extends JPanel{
     
     BoxLayout titleLayout, descriptionLayout;

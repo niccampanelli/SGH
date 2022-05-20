@@ -5,7 +5,7 @@ import javax.swing.border.EmptyBorder;
 
 /**
  * Botão com aparência personalizada
- * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ * @author Nicholas Campanelli
  */
 
 // Classe de botão customizado herdando o JButton original

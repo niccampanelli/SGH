@@ -5,7 +5,7 @@ import javax.swing.border.*;
 
 /**
  * Inteface de início
- * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ * @author Nicholas Campanelli
  */
 public class Home extends JPanel{
     

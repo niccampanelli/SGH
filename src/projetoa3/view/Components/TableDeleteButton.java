@@ -10,7 +10,7 @@ import javax.swing.table.TableCellRenderer;
 
 /**
  * Botão de deletar para as tabelas
- * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ * @author Nicholas Campanelli
  */
 public class TableDeleteButton extends JButton implements TableCellRenderer {
     

@@ -16,7 +16,7 @@ import projetoa3.view.Usuarios;
 
 /**
  * Barra de navegação lateral
- * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ * @author Nicholas Campanelli
  */
 public class Navbar extends JPanel{
     

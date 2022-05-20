@@ -13,7 +13,7 @@ import projetoa3.controller.sessionController;
 
 /**
  * Inteface de login
- * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ * @author Nicholas Campanelli
  */
 public class Login extends JFrame{
     

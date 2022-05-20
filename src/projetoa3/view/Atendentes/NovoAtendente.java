@@ -7,6 +7,10 @@ import javax.swing.border.*;
 import javax.swing.text.*;
 import projetoa3.view.Components.CustomButton;
 
+/**
+ * Tela de criação de atendentes
+ * @author Nicholas Campanelli
+ */
 public class NovoAtendente extends JFrame{
     
     // Componentes da interface
