@@ -3,6 +3,8 @@ import projetoa3.view.Components.Navbar;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileWriter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Frame principal, onde são instanciadas as páginas
@@ -18,6 +20,7 @@ public class Principal extends JFrame{
     private JMenuItem exportarArquivoMenu, nomeContaMenu, sairContaMenu;
     private JScrollPane mainPanel;
     private JPanel Navbar, wrapPanel;
+    private JFileChooser fileChooser;
     
     // Definem o painel a ser mostrado
     private JPanel currentPanel;
@@ -67,7 +70,19 @@ public class Principal extends JFrame{
             exportarArquivoMenu.addActionListener(new ActionListener(){
                 @Override
                 public void actionPerformed(ActionEvent e){
-                    System.out.println("Selecionador de arquivos");
+                    fileChooser = new JFileChooser();
+                    fileChooser.setMultiSelectionEnabled(false);
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivo de texto", "txt", "text"));
+                    int option = fileChooser.showSaveDialog(null);
+                    if (option == JFileChooser.APPROVE_OPTION) {
+                        try {
+                            FileWriter writer = new FileWriter(fileChooser.getSelectedFile());
+                            writer.write("123dfsdf");
+                            writer.close();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
                 }
             });
         

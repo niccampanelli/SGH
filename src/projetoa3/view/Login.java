@@ -160,6 +160,8 @@ public class Login extends JFrame{
     
     public static void main(String[] args){
         sessionController.create("nicholas@email.com", "senha123");
+        System.out.println(sessionController.read()[0]);
+        System.out.println(sessionController.read()[1]);
         
         Login login = new Login();
         login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
