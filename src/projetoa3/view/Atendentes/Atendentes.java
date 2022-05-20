@@ -19,14 +19,14 @@ import javax.swing.table.*;
 public class Atendentes extends JPanel{
     
     // Componentes da Tela
-    BoxLayout titleLayout, descriptionLayout;
-    JPanel titlePanel, descriptionPanel;
-    JLabel title, subtitle, description;
-    CustomButton addButton;
-    JScrollPane tableWrap;
-    JTable table;
-    DefaultTableModel tableModel;
-    Image trashIcon;
+    private final BoxLayout titleLayout, descriptionLayout;
+    private final JPanel titlePanel, descriptionPanel;
+    private final JLabel title, subtitle, description;
+    private final CustomButton addButton;
+    private final JScrollPane tableWrap;
+    private final JTable table;
+    private final DefaultTableModel tableModel;
+    private Image trashIcon;
     
     // Construtor
     public Atendentes(){

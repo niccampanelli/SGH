@@ -14,14 +14,14 @@ import projetoa3.view.Components.CustomButton;
 public class EditarAdministrador extends JFrame{
     
     // Componentes da interface
-    private BoxLayout canvasLayout, mainLayout, buttonLayout;
-    private BorderLayout wrapLayout;
-    private JPanel wrapPanel, mainPanel, buttonPanel;
-    private JLabel title, subtitle, cpfLabel, nomeLabel, emailLabel, telefoneLabel, dataNascLabel;
-    private JTextField nomeField, emailField;
-    private JFormattedTextField cpfField, telefoneField, dataNascField;
+    private final BoxLayout canvasLayout, mainLayout, buttonLayout;
+    private final BorderLayout wrapLayout;
+    private final JPanel wrapPanel, mainPanel, buttonPanel;
+    private final JLabel title, subtitle, cpfLabel, nomeLabel, emailLabel, telefoneLabel, dataNascLabel;
+    private final JTextField nomeField, emailField;
+    private final JFormattedTextField cpfField, telefoneField, dataNascField;
     private MaskFormatter cpfMask, telefoneMask, dataNascMask;
-    private CustomButton cancelButton, addButton;
+    private final CustomButton cancelButton, addButton;
     
     // Variáveis de lógica
     private String cpf, nome, email, telefone, dataNasc;
