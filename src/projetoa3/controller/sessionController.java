@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 /**
  * Controla e armazena sessões
- * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
+ * @author Nicholas Campanelli
  */
 public class sessionController {
     

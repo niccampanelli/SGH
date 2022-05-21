@@ -6,6 +6,8 @@ import java.text.ParseException;
 import javax.swing.border.*;
 import javax.swing.text.*;
 import projetoa3.view.Components.CustomButton;
+import projetoa3.view.Components.CustomField;
+import projetoa3.view.Components.CustomFormatted;
 
 /**
  * Tela de edição de atendentes
@@ -18,8 +20,8 @@ public class EditarAtendente extends JFrame{
     private final BorderLayout wrapLayout;
     private final JPanel wrapPanel, mainPanel, buttonPanel;
     private final JLabel title, subtitle, cpfLabel, nomeLabel, emailLabel, telefoneLabel, dataNascLabel;
-    private final JTextField nomeField, emailField;
-    private final JFormattedTextField cpfField, telefoneField, dataNascField;
+    private final CustomField nomeField, emailField;
+    private final CustomFormatted cpfField, telefoneField, dataNascField;
     private MaskFormatter cpfMask, telefoneMask, dataNascMask;
     private final CustomButton cancelButton, addButton;
     
@@ -96,13 +98,13 @@ public class EditarAtendente extends JFrame{
         
         dataNascLabel = new JLabel("Data de nascimento");
         
-        nomeField = new JTextField(nome);
+        nomeField = new CustomField(nome);
         nomeField.setAlignmentX(0.0f);
         nomeField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         nomeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         nomeField.setMargin(new Insets(0, 10, 0, 10));
         
-        emailField = new JTextField(email);
+        emailField = new CustomField(email);
         emailField.setAlignmentX(0.0f);
         emailField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -120,21 +122,21 @@ public class EditarAtendente extends JFrame{
             System.out.println("Erro na máscara");
         }
         
-        cpfField = new JFormattedTextField(cpfMask);
+        cpfField = new CustomFormatted(cpfMask);
         cpfField.setText(cpf);
         cpfField.setAlignmentX(0.0f);
         cpfField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMargin(new Insets(0, 10, 0, 10));
         
-        telefoneField = new JFormattedTextField(telefoneMask);
+        telefoneField = new CustomFormatted(telefoneMask);
         telefoneField.setText(telefone);
         telefoneField.setAlignmentX(0.0f);
         telefoneField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         telefoneField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         telefoneField.setMargin(new Insets(0, 10, 0, 10));
         
-        dataNascField = new JFormattedTextField(dataNascMask);
+        dataNascField = new CustomFormatted(dataNascMask);
         dataNascField.setText(dataNasc);
         dataNascField.setAlignmentX(0.0f);
         dataNascField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));

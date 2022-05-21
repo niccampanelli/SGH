@@ -6,6 +6,8 @@ import java.text.ParseException;
 import javax.swing.border.*;
 import javax.swing.text.*;
 import projetoa3.view.Components.CustomButton;
+import projetoa3.view.Components.CustomField;
+import projetoa3.view.Components.CustomFormatted;
 
 /**
  * Tela de criação de consultas
@@ -17,37 +19,37 @@ public class NovoConsulta extends JFrame{
     private final BoxLayout canvasLayout, mainLayout, buttonLayout;
     private final BorderLayout wrapLayout;
     private final JPanel wrapPanel, mainPanel, buttonPanel;
-    private final JLabel title, cpfLabel, nomeLabel, emailLabel, telefoneLabel, dataNascLabel;
-    private final JTextField nomeField, emailField;
-    private final JFormattedTextField cpfField, telefoneField, dataNascField;
-    private MaskFormatter cpfMask, telefoneMask, dataNascMask;
+    private final JLabel title, pacienteLabel, especialidadeLabel, medicoLabel, dataLabel, horaLabel;
+    private final JComboBox pacienteField, especialidadeField, medicoField;
+    private final CustomFormatted dataField, horaField;
+    private MaskFormatter dataMask, horaMask;
     private final CustomButton cancelButton, addButton;
     
     // Variáveis de lógica
-    private String cpf, nome, email, telefone, dataNasc;
+    private String paciente, especialidade, medico, data, hora;
     
     private void adicionar(){
         
-        cpf = cpfField.getText();
-        nome = nomeField.getText();
-        email = emailField.getText();
-        telefone = telefoneField.getText();
-        dataNasc = dataNascField.getText();
+        paciente = (String) pacienteField.getSelectedItem();
+        especialidade = (String) especialidadeField.getSelectedItem();
+        medico = (String) medicoField.getSelectedItem();
+        data = dataField.getText();
+        hora = horaField.getText();
         
-        if("".equals(cpf) || cpf.length() != 14 || cpf.endsWith("0-00")){
-            JOptionPane.showMessageDialog(null, "Insira um CPF válido.", "CPF inválido", JOptionPane.WARNING_MESSAGE);
+        if("".equals(paciente) || paciente.length() < 10){
+            JOptionPane.showMessageDialog(null, "Escolha um paciente válido.", "Paciente inválido", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(nome) || nome.length() < 10){
-            JOptionPane.showMessageDialog(null, "Insira um nome completo com no mínimo 10 caracteres.", "Nome inválido", JOptionPane.WARNING_MESSAGE);
+        else if("".equals(especialidade)){
+            JOptionPane.showMessageDialog(null, "Escolha uma especialidade válida.", "Especialidade inválida", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(email) || email.length() < 7 || !email.contains("@") || !email.contains(".")){
-            JOptionPane.showMessageDialog(null, "Insira um endereço de e-mail válido, contendo \"@\" e \".\".", "Endereço de e-mail inválido", JOptionPane.WARNING_MESSAGE);
+        else if("".equals(medico)){
+            JOptionPane.showMessageDialog(null, "Escolha um médico válido.", "Médico inválido", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(telefone) || telefone.length() != 15 || telefone.startsWith("(00)") || telefone.endsWith("0000")){
-            JOptionPane.showMessageDialog(null, "Insira um telefone válido.", "Telefone inválido", JOptionPane.WARNING_MESSAGE);
+        else if("".equals(data) || data.length() != 10 || data.indexOf('/') == -1 || data.endsWith("0000")){
+            JOptionPane.showMessageDialog(null, "Insira uma data da consulta válida.", "Data inválida", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(dataNasc) || dataNasc.length() != 10 || dataNasc.endsWith("0000")){
-            JOptionPane.showMessageDialog(null, "Insira uma data de nascimento válida.", "Data de nascimento inválida", JOptionPane.WARNING_MESSAGE);
+        else if("".equals(hora) || hora.length() != 5 || hora.indexOf(':') == -1){
+            JOptionPane.showMessageDialog(null, "Insira uma hora da consulta válida.", "Hora da consulta inválida", JOptionPane.WARNING_MESSAGE);
         }
         else{
             JOptionPane.showMessageDialog(null, "Consulta cadastrada com sucesso!\n"
@@ -78,57 +80,55 @@ public class NovoConsulta extends JFrame{
         title = new JLabel("Abrir consulta");
         title.setFont(new Font(Font.SANS_SERIF, 1, 24));
         
-        cpfLabel = new JLabel("CPF");
+        pacienteLabel = new JLabel("Escolha um paciente");
         
-        nomeLabel = new JLabel("Nome completo");
+        especialidadeLabel = new JLabel("Especialidade");
         
-        emailLabel = new JLabel("Endereço de e-mail");
+        medicoLabel = new JLabel("Médico da consulta");
         
-        telefoneLabel = new JLabel("Telefone");
+        dataLabel = new JLabel("Data");
         
-        dataNascLabel = new JLabel("Data de nascimento");
+        horaLabel = new JLabel("Hora");
         
-        nomeField = new JTextField("");
-        nomeField.setAlignmentX(0.0f);
-        nomeField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        nomeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        nomeField.setMargin(new Insets(0, 10, 0, 10));
+        pacienteField = new JComboBox();
+        pacienteField.setAlignmentX(0.0f);
+        pacienteField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        pacienteField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        pacienteField.setEditable(false);
         
-        emailField = new JTextField("");
-        emailField.setAlignmentX(0.0f);
-        emailField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        emailField.setMargin(new Insets(0, 10, 0, 10));
+        especialidadeField = new JComboBox();
+        especialidadeField.setAlignmentX(0.0f);
+        especialidadeField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        especialidadeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        especialidadeField.setEditable(false);
+        
+        medicoField = new JComboBox();
+        medicoField.setAlignmentX(0.0f);
+        medicoField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        medicoField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        medicoField.setEditable(false);
         
         try{
-            cpfMask = new MaskFormatter("###.###.###-##");
-            cpfMask.setPlaceholderCharacter('0');
-            telefoneMask = new MaskFormatter("(##) #####-####");
-            telefoneMask.setPlaceholderCharacter('0');
-            dataNascMask = new MaskFormatter("##/##/####");
-            dataNascMask.setPlaceholderCharacter('0');
+            dataMask = new MaskFormatter("##/##/####");
+            dataMask.setPlaceholderCharacter('0');
+            horaMask = new MaskFormatter("##:##");
+            horaMask.setPlaceholderCharacter('0');
         }
         catch(ParseException ex){
             System.out.println("Erro na máscara");
         }
         
-        cpfField = new JFormattedTextField(cpfMask);
-        cpfField.setAlignmentX(0.0f);
-        cpfField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        cpfField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        cpfField.setMargin(new Insets(0, 10, 0, 10));
+        dataField = new CustomFormatted(dataMask);
+        dataField.setAlignmentX(0.0f);
+        dataField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        dataField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        dataField.setMargin(new Insets(0, 10, 0, 10));
         
-        telefoneField = new JFormattedTextField(telefoneMask);
-        telefoneField.setAlignmentX(0.0f);
-        telefoneField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        telefoneField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        telefoneField.setMargin(new Insets(0, 10, 0, 10));
-        
-        dataNascField = new JFormattedTextField(dataNascMask);
-        dataNascField.setAlignmentX(0.0f);
-        dataNascField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        dataNascField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        dataNascField.setMargin(new Insets(0, 10, 0, 10));
+        horaField = new CustomFormatted(horaMask);
+        horaField.setAlignmentX(0.0f);
+        horaField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        horaField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        horaField.setMargin(new Insets(0, 10, 0, 10));
         
         buttonPanel = new JPanel();
         buttonPanel.setAlignmentX(0.0f);
@@ -142,11 +142,11 @@ public class NovoConsulta extends JFrame{
         cancelButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                if((!cpfField.getText().equals("000.000.000-00")) || 
-                    (!nomeField.getText().equals("")) ||
-                    (!emailField.getText().equals("")) ||
-                    (!telefoneField.getText().equals("(00) 00000-0000")) ||
-                    (!dataNascField.getText().equals("00/00/0000"))){
+                if((!pacienteField.getSelectedItem().toString().equals("")) || 
+                    (!especialidadeField.getSelectedItem().toString().equals("")) ||
+                    (!medicoField.getSelectedItem().toString().equals("")) ||
+                    (!dataField.getText().equals("00/00/0000")) ||
+                    (!horaField.getText().equals("00:00"))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
                       "Cancelar a abertura de uma nova consulta?\n"
@@ -181,20 +181,20 @@ public class NovoConsulta extends JFrame{
         
         mainPanel.add(title);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        mainPanel.add(cpfLabel);
-        mainPanel.add(cpfField);
+        mainPanel.add(pacienteLabel);
+        mainPanel.add(pacienteField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(nomeLabel);
-        mainPanel.add(nomeField);
+        mainPanel.add(especialidadeLabel);
+        mainPanel.add(especialidadeField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(emailLabel);
-        mainPanel.add(emailField);
+        mainPanel.add(medicoLabel);
+        mainPanel.add(medicoField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(telefoneLabel);
-        mainPanel.add(telefoneField);
+        mainPanel.add(dataLabel);
+        mainPanel.add(dataField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(dataNascLabel);
-        mainPanel.add(dataNascField);
+        mainPanel.add(horaLabel);
+        mainPanel.add(horaField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
         mainPanel.add(buttonPanel);
         
@@ -210,11 +210,11 @@ public class NovoConsulta extends JFrame{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if((!cpfField.getText().equals("000.000.000-00")) || 
-                    (!nomeField.getText().equals("")) ||
-                    (!emailField.getText().equals("")) ||
-                    (!telefoneField.getText().equals("(00) 00000-0000")) ||
-                    (!dataNascField.getText().equals("00/00/0000"))){
+                if((!pacienteField.getSelectedItem().toString().equals("")) || 
+                    (!especialidadeField.getSelectedItem().toString().equals("")) ||
+                    (!medicoField.getSelectedItem().toString().equals("")) ||
+                    (!dataField.getText().equals("00/00/0000")) ||
+                    (!horaField.getText().equals("00:00"))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
                       "Cancelar a abertura de uma nova consulta?\n"

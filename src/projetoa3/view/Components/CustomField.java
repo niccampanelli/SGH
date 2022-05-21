@@ -124,17 +124,4 @@ public class CustomField extends JTextField {
             }
         });
     }
-    
-    @Override
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-
-        if(getText().isEmpty() && !(FocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == this)){
-            Graphics2D g2 = (Graphics2D)g.create();
-            g2.setBackground(Color.gray);
-            System.out.println(this.getHeight()/2);
-            g2.drawString("zip", 10, 20); //figure out x, y from font's FontMetrics and size of component.
-            g2.dispose();
-        }
-    }
 }

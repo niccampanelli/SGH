@@ -1,4 +1,5 @@
 package projetoa3.view;
+import projetoa3.view.Medicos.Medicos;
 import projetoa3.view.Atendentes.Atendentes;
 import projetoa3.view.Administradores.Administradores;
 import javax.swing.*;
@@ -23,6 +24,8 @@ public class Usuarios extends JPanel{
         title.setFont(new Font(Font.SANS_SERIF, 1, 30));
         
         add(title);
+        add(Box.createRigidArea(new Dimension(0, 20))); // Cria um espaçamento entre os elementos
+        add(new Medicos());
         add(Box.createRigidArea(new Dimension(0, 20))); // Cria um espaçamento entre os elementos
         add(new Atendentes());
         add(Box.createRigidArea(new Dimension(0, 20))); // Cria um espaçamento entre os elementos
