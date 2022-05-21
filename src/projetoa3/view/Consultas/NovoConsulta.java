@@ -36,7 +36,7 @@ public class NovoConsulta extends JFrame{
         data = dataField.getText();
         hora = horaField.getText();
         
-        if("".equals(paciente) || paciente.length() < 10){
+        if("".equals(paciente)){
             JOptionPane.showMessageDialog(null, "Escolha um paciente válido.", "Paciente inválido", JOptionPane.WARNING_MESSAGE);
         }
         else if("".equals(especialidade)){
@@ -142,9 +142,9 @@ public class NovoConsulta extends JFrame{
         cancelButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                if((!pacienteField.getSelectedItem().toString().equals("")) || 
-                    (!especialidadeField.getSelectedItem().toString().equals("")) ||
-                    (!medicoField.getSelectedItem().toString().equals("")) ||
+                if((pacienteField.getSelectedItem() != null || (pacienteField.getSelectedItem() != null && pacienteField.getSelectedItem() != "")) || 
+                    (especialidadeField.getSelectedItem() != null || (especialidadeField.getSelectedItem() != null && especialidadeField.getSelectedItem() != "")) ||
+                    (medicoField.getSelectedItem() != null || (medicoField.getSelectedItem() != null && medicoField.getSelectedItem() != "")) ||
                     (!dataField.getText().equals("00/00/0000")) ||
                     (!horaField.getText().equals("00:00"))){
                     
@@ -209,10 +209,13 @@ public class NovoConsulta extends JFrame{
         
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {
-                if((!pacienteField.getSelectedItem().toString().equals("")) || 
-                    (!especialidadeField.getSelectedItem().toString().equals("")) ||
-                    (!medicoField.getSelectedItem().toString().equals("")) ||
+            public void windowClosing(WindowEvent e){
+                
+                setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                
+                if((pacienteField.getSelectedItem() != null || (pacienteField.getSelectedItem() != null && pacienteField.getSelectedItem() != "")) || 
+                    (especialidadeField.getSelectedItem() != null || (especialidadeField.getSelectedItem() != null && especialidadeField.getSelectedItem() != "")) ||
+                    (medicoField.getSelectedItem() != null || (medicoField.getSelectedItem() != null && medicoField.getSelectedItem() != "")) ||
                     (!dataField.getText().equals("00/00/0000")) ||
                     (!horaField.getText().equals("00:00"))){
                     
@@ -221,7 +224,7 @@ public class NovoConsulta extends JFrame{
                       + "Os dados inseridos serão perdidos.",
                       "Cancelar",
                       JOptionPane.YES_NO_OPTION);
-
+                                        
                     if(confirmed == JOptionPane.YES_OPTION) {
                       dispose();
                     }

@@ -325,6 +325,9 @@ public class EditarMedico extends JFrame{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                
+                setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                
                 if((!cpfField.getText().equalsIgnoreCase(cpf)) || 
                     (!nomeField.getText().equalsIgnoreCase(nome)) ||
                     (!crmField.getText().equalsIgnoreCase(crm)) ||

@@ -212,6 +212,9 @@ public class NovoAdministrador extends JFrame{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                
+                setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                
                 if((!cpfField.getText().equals("000.000.000-00")) || 
                     (!nomeField.getText().equals("")) ||
                     (!emailField.getText().equals("")) ||
