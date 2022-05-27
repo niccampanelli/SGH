@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import javax.imageio.ImageIO;
 import javax.swing.border.*;
 import projetoa3.controller.SessionController;
@@ -161,7 +162,7 @@ public class Login extends JFrame{
     }
     
     public static void main(String[] args){
-        ConnectionClass.connect();
+        
         
         System.out.println(SessionController.read()[0]);
         System.out.println(SessionController.read()[1]);
