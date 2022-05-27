@@ -9,7 +9,8 @@ import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.border.*;
-import projetoa3.controller.sessionController;
+import projetoa3.controller.SessionController;
+import projetoa3.util.database.ConnectionClass;
 
 /**
  * Inteface de login
@@ -28,7 +29,8 @@ public class Login extends JFrame{
     private Image loginBanner;
     
     // Variáveis de lógica
-    private String login, senha;
+    private String login;
+    private char[] senha;
     
     /**
      * Lógica de verificação login (pode ser substituida depois)
@@ -37,10 +39,10 @@ public class Login extends JFrame{
         
         // Pega o texto dos campos
         login = loginField.getText();
-        senha = senhaField.getText();
+        senha = senhaField.getPassword();
         
         // Verifica se os valores existem
-        if(!"".equals(login) && !"".equals(senha)){
+        if(!"".equals(login) && senha != null && senha.length != 0){
             
             // Verifica se a tela está maximizada (questão de estética)
             if(getExtendedState() == JFrame.MAXIMIZED_BOTH || getExtendedState() == JFrame.MAXIMIZED_HORIZ || getExtendedState() == JFrame.MAXIMIZED_VERT){
@@ -159,9 +161,10 @@ public class Login extends JFrame{
     }
     
     public static void main(String[] args){
-        sessionController.create("nicholas@email.com", "senha123");
-        System.out.println(sessionController.read()[0]);
-        System.out.println(sessionController.read()[1]);
+        ConnectionClass.connect();
+        
+        System.out.println(SessionController.read()[0]);
+        System.out.println(SessionController.read()[1]);
         
         Login login = new Login();
         login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

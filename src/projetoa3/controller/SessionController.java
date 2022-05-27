@@ -10,7 +10,7 @@ import java.util.Scanner;
  * Controla e armazena sessões
  * @author Nicholas Campanelli
  */
-public class sessionController {
+public class SessionController {
     
     public static void create(String address, String key){
         

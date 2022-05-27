@@ -36,13 +36,13 @@ public class NovoConsulta extends JFrame{
         data = dataField.getText();
         hora = horaField.getText();
         
-        if("".equals(paciente)){
+        if("".equals(paciente) || paciente == null){
             JOptionPane.showMessageDialog(null, "Escolha um paciente válido.", "Paciente inválido", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(especialidade)){
+        else if("".equals(especialidade) || especialidade == null){
             JOptionPane.showMessageDialog(null, "Escolha uma especialidade válida.", "Especialidade inválida", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(medico)){
+        else if("".equals(medico) || medico == null){
             JOptionPane.showMessageDialog(null, "Escolha um médico válido.", "Médico inválido", JOptionPane.WARNING_MESSAGE);
         }
         else if("".equals(data) || data.length() != 10 || data.indexOf('/') == -1 || data.endsWith("0000")){

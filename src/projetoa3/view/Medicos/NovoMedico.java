@@ -49,7 +49,7 @@ public class NovoMedico extends JFrame{
         else if("".equals(crm) || crm.length() != 8){
             JOptionPane.showMessageDialog(null, "Insira um CRM válido.", "CRM inválido", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(especialidade)){
+        else if("".equals(especialidade) || especialidade == null){
             JOptionPane.showMessageDialog(null, "Indique uma especialidade válida. Se a especialidade desejada não constar na lista, digite-a no campo.", "Especialidade inválida", JOptionPane.WARNING_MESSAGE);
         }
         else if("".equals(email) || email.length() < 7 || !email.contains("@") || !email.contains(".")){
@@ -58,7 +58,7 @@ public class NovoMedico extends JFrame{
         else if("".equals(telefone) || telefone.length() != 15 || telefone.startsWith("(00)") || telefone.endsWith("0000")){
             JOptionPane.showMessageDialog(null, "Insira um telefone válido.", "Telefone inválido", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(sexo) || !"Masculino".equals(sexo) || !"Feminino".equals(sexo)){
+        else if("".equals(sexo) || (!"Masculino".equals(sexo) && !"Feminino".equals(sexo)) || sexo == null){
             JOptionPane.showMessageDialog(null, "Escolha um sexo válido.", "Sexo inválido", JOptionPane.WARNING_MESSAGE);
         }
         else if("".equals(dataNasc) || dataNasc.length() != 10 || dataNasc.endsWith("0000")){
@@ -66,7 +66,7 @@ public class NovoMedico extends JFrame{
         }
         else{
             JOptionPane.showMessageDialog(null, "Médico adicionado com sucesso!\n"
-                    + "ID do atentendente adicionado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    + "ID do médico adicionado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
             dispose();
         }
@@ -233,9 +233,12 @@ public class NovoMedico extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
                 if((!cpfField.getText().equals("000.000.000-00")) || 
-                    (!nomeField.getText().equals("")) ||
-                    (!emailField.getText().equals("")) ||
+                    (!crmField.getText().equals("")) || 
+                    (especialidadeField.getSelectedItem() != null || (especialidadeField.getSelectedItem() != null && especialidadeField.getSelectedItem() != "")) ||
+                    (!nomeField.getText().equals("")) || 
+                    (!emailField.getText().equals("")) || 
                     (!telefoneField.getText().equals("(00) 00000-0000")) ||
+                    (sexoField.getSelectedItem() != null || (sexoField.getSelectedItem() != null && sexoField.getSelectedItem() != "")) ||
                     (!dataNascField.getText().equals("00/00/0000"))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
@@ -313,9 +316,12 @@ public class NovoMedico extends JFrame{
                 setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 
                 if((!cpfField.getText().equals("000.000.000-00")) || 
-                    (!nomeField.getText().equals("")) ||
-                    (!emailField.getText().equals("")) ||
+                    (!crmField.getText().equals("")) || 
+                    (especialidadeField.getSelectedItem() != null || (especialidadeField.getSelectedItem() != null && especialidadeField.getSelectedItem() != "")) ||
+                    (!nomeField.getText().equals("")) || 
+                    (!emailField.getText().equals("")) || 
                     (!telefoneField.getText().equals("(00) 00000-0000")) ||
+                    (sexoField.getSelectedItem() != null || (sexoField.getSelectedItem() != null && sexoField.getSelectedItem() != "")) ||
                     (!dataNascField.getText().equals("00/00/0000"))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
