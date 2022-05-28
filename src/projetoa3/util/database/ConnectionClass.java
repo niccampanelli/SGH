@@ -22,11 +22,11 @@ public class ConnectionClass {
     public static void connect(){
         
         // Define o endereço do servidor com os atributos necessários
-        url = "jdbc:mysql://"+host+":"+port+"/"+dbname;
+        ConnectionClass.url = "jdbc:mysql://"+host+":"+port+"/"+dbname;
         
         try{
             // Tenta pegar uma conexão por meio do driver JDBC
-            conn = DriverManager.getConnection(url, user, password);
+            ConnectionClass.conn = DriverManager.getConnection(url, user, password);
             System.out.println("Servidor do banco de dados conectado com sucesso!");
         }
         catch(SQLException e){
@@ -42,9 +42,9 @@ public class ConnectionClass {
         
         try{
             // Se a conexão existir
-            if(conn != null){
+            if(ConnectionClass.conn != null){
                 // Fecha a conexão
-                conn.close();
+                ConnectionClass.conn.close();
                 System.out.println("Servidor do banco de dados desconectado.");
             }
             else{
@@ -58,7 +58,7 @@ public class ConnectionClass {
     
     public static Statement getStatement(){
         try{
-            Statement stmt = conn.createStatement();
+            Statement stmt = ConnectionClass.conn.createStatement();
             return stmt;
         }
         catch(SQLException e){
@@ -67,10 +67,20 @@ public class ConnectionClass {
         }
     }
     
-    
     public static PreparedStatement getPreparedStatement(String sql){
         try{
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            PreparedStatement pstmt = ConnectionClass.conn.prepareStatement(sql);
+            return pstmt;
+        }
+        catch(SQLException e){
+            System.err.println("Não foi possível criar uma PreparedStatement: "+ e.getMessage());
+            return null;
+        }
+    }
+    
+    public static PreparedStatement getPreparedStatement(String sql, int getGeneratedKeys){
+        try{
+            PreparedStatement pstmt = ConnectionClass.conn.prepareStatement(sql, getGeneratedKeys);
             return pstmt;
         }
         catch(SQLException e){

@@ -11,6 +11,7 @@ import java.sql.Connection;
 import javax.imageio.ImageIO;
 import javax.swing.border.*;
 import projetoa3.controller.SessionController;
+import projetoa3.controller.UserController;
 import projetoa3.util.database.ConnectionClass;
 
 /**
@@ -162,7 +163,8 @@ public class Login extends JFrame{
     }
     
     public static void main(String[] args){
-        
+        ConnectionClass.connect();
+        UserController.create(3, "Jair Bolsonaro", "02814312858", "20/03/1958", "11958034321", "jairbolso@email.com", "12345678", "12345678", "M", "Odontologista");
         
         System.out.println(SessionController.read()[0]);
         System.out.println(SessionController.read()[1]);

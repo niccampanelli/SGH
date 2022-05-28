@@ -6,15 +6,15 @@ package projetoa3.model;
  */
 public class UserModel {
     
-    private int id;
-    private int tipo;
-    private String nome;
-    private String cpf;
-    private String dataNasc;
-    private String telefone;
-    private String email;
-    private String senha;
-    private String dataCad;
+    protected int id;
+    protected int tipo;
+    protected String nome;
+    protected String cpf;
+    protected String dataNasc;
+    protected String telefone;
+    protected String email;
+    protected String senha;
+    protected String dataCad;
 
     public int getId() {
         return id;

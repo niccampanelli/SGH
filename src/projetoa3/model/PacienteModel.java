@@ -8,7 +8,7 @@ public class PacienteModel {
     
     private int id;
     private String nome;
-    private char sexo;
+    private String sexo;
     private String dataNasc;
     private String cpf;
     private String telefone;
@@ -31,11 +31,11 @@ public class PacienteModel {
             this.nome = nome;
     }
 
-    public char getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
-    public void setSexo(char sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 
