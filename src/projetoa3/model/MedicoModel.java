@@ -40,6 +40,7 @@ public class MedicoModel extends UserModel {
         this.setSenha(senha);
         this.setSexo(sexo);
         this.setEspecialidade(especialidade);
+        this.setDataCad(Timestamp.from(Instant.now()));
     }
     
     public String getCadastro() {
@@ -67,7 +68,8 @@ public class MedicoModel extends UserModel {
         this.especialidade = especialidade;
     }
     
-    public void create(){
+    @Override
+    public int create(){
         try{
             String insertMedicSql = "INSERT INTO usuarios (tipo, nome, cpf, data_nascimento, "
                     + "telefone, email, cadastro, senha, data_cadastro, sexo, especialidade) "
@@ -85,7 +87,7 @@ public class MedicoModel extends UserModel {
             insertMedicStatement.setString(6, email);
             insertMedicStatement.setString(7, cadastro);
             insertMedicStatement.setString(8, senha);
-            insertMedicStatement.setTimestamp(9, Timestamp.from(Instant.now()));
+            insertMedicStatement.setTimestamp(9, dataCad);
             insertMedicStatement.setString(10, sexo);
             insertMedicStatement.setInt(11, especialidade);
             
@@ -96,9 +98,11 @@ public class MedicoModel extends UserModel {
             
             int key = insertMedicResult.getInt(1);
             insertMedicStatement.close();
+            return key;
         }
         catch(SQLException e){
             System.err.println("Não foi possível criar um médico: "+ e.getMessage());
+            return 0;
         }
     }
 }

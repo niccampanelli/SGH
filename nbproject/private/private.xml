@@ -3,9 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/model/ExameModel.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/controller/SessionController.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/model/PacienteModel.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/controller/UserController.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/model/UserModel.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/model/EspecialidadeModel.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/view/Medicos/NovoMedico.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/model/ConsultaModel.java</file>
             <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/view/Atendentes/NovoAtendente.java</file>
             <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/view/Consultas/NovoConsulta.java</file>
-            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/view/Medicos/NovoMedico.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/model/TipoModel.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/view/Login.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/util/database/ConnectionClass.java</file>
+            <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/model/MedicoModel.java</file>
             <file>file:/C:/Users/nicho/Documents/NetBeansProjects/ProjetoA3/src/projetoa3/view/Consultas/EditarConsulta.java</file>
         </group>
     </open-files>

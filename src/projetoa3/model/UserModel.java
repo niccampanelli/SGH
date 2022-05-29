@@ -1,5 +1,14 @@
 package projetoa3.model;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.Instant;
+import projetoa3.util.database.ConnectionClass;
+
 /**
  * Classe modelo de usuário
  * @author Nicholas Campanelli
@@ -14,8 +23,26 @@ public class UserModel {
     protected String telefone;
     protected String email;
     protected String senha;
-    protected String dataCad;
+    protected Timestamp dataCad;
 
+    public UserModel(){
+        
+    }
+    
+    public UserModel(
+            int tipo, String nome,
+            String dataNasc, String telefone,
+            String email, String senha
+    ){
+        this.setTipo(tipo);
+        this.setNome(nome);
+        this.setDataNasc(dataNasc);
+        this.setTelefone(telefone);
+        this.setEmail(email);
+        this.setSenha(senha);
+        this.setDataCad(Timestamp.from(Instant.now()));
+    }
+    
     public int getId() {
         return id;
     }
@@ -86,12 +113,45 @@ public class UserModel {
             this.senha = senha;
     }
 
-    public String getDataCad() {
+    public Timestamp getDataCad() {
         return dataCad;
     }
 
-    public void setDataCad(String dataCad) {
-        if(dataCad.length() == 10)
-            this.dataCad = dataCad;
+    public void setDataCad(Timestamp dataCad) {
+        this.dataCad = dataCad;
+    }
+    
+    public int create(){
+        try{
+            String insertUserSql = "INSERT INTO usuarios (tipo, nome, cpf, data_nascimento, "
+                    + "telefone, email, senha, data_cadastro) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement insertUserStatement = ConnectionClass.getPreparedStatement(insertUserSql, Statement.RETURN_GENERATED_KEYS);
+            
+            String[] dataNascPieces = dataNasc.split("/");
+            String newDate = dataNascPieces[2]+"-"+dataNascPieces[1]+"-"+dataNascPieces[0];
+            
+            insertUserStatement.setInt(1, tipo);
+            insertUserStatement.setString(2, nome);
+            insertUserStatement.setString(3, cpf);
+            insertUserStatement.setDate(4, Date.valueOf(newDate));
+            insertUserStatement.setString(5, telefone);
+            insertUserStatement.setString(6, email);
+            insertUserStatement.setString(7, senha);
+            insertUserStatement.setTimestamp(8, dataCad);
+            
+            insertUserStatement.execute();
+            
+            ResultSet insertUserResult = insertUserStatement.getGeneratedKeys();
+            insertUserResult.next();
+            
+            int key = insertUserResult.getInt(1);
+            insertUserStatement.close();
+            return key;
+        }
+        catch(SQLException e){
+            System.err.println("Não foi possível criar um usuário: "+ e.getMessage());
+            return 0;
+        }
     }
 }
