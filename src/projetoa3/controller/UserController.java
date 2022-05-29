@@ -80,11 +80,13 @@ public class UserController {
                             if(key > 0){
 
                                 // Seção de criptografia da senha
+                                BigInteger senharaw = BigInteger.ONE;
                                 BigInteger cripsenha = BigInteger.ONE;
 
                                 try{
                                     MessageDigest md = MessageDigest.getInstance("MD5");
-                                    cripsenha = new BigInteger(1, md.digest((senha + "segredo").getBytes()));
+                                    senharaw = new BigInteger(1, md.digest(senha.getBytes()));
+                                    cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes()));
                                 }
                                 catch(NoSuchAlgorithmException e){
                                     System.err.println("Erro na criptografia da senha: "+e.getMessage());
@@ -96,7 +98,7 @@ public class UserController {
                                         tipo, nome,
                                         cpf, dataNasc,
                                         telefone, email,
-                                        cadastro, cripsenha.toString(),
+                                        cadastro, cripsenha.toString(16),
                                         sexo, key
                                 );
                                 // Adiciona o médico

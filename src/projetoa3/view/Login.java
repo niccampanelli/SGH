@@ -46,22 +46,24 @@ public class Login extends JFrame{
         // Verifica se os valores existem
         if(!"".equals(login) && senha != null && senha.length != 0){
             
-            // Verifica se a tela está maximizada (questão de estética)
-            if(getExtendedState() == JFrame.MAXIMIZED_BOTH || getExtendedState() == JFrame.MAXIMIZED_HORIZ || getExtendedState() == JFrame.MAXIMIZED_VERT){
+            if(!"erro".equals(SessionController.create(login, String.valueOf(senha)))){
+                // Verifica se a tela está maximizada (questão de estética)
+                if(getExtendedState() == JFrame.MAXIMIZED_BOTH || getExtendedState() == JFrame.MAXIMIZED_HORIZ || getExtendedState() == JFrame.MAXIMIZED_VERT){
+
+                    // Instancia a tela principal e passa como parâmetro se a tela está maximizada
+                    Principal principal = new Principal(getExtendedState());
+                    principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                }
+                else{
+
+                    // Instancia a tela principal e passa como parâmetro o tamanho da tela
+                    Principal principal = new Principal(getSize());
+                    principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                }
                 
-                // Instancia a tela principal e passa como parâmetro se a tela está maximizada
-                Principal principal = new Principal(getExtendedState());
-                principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                // Fecha a tela de login
+                dispose();
             }
-            else{
-                
-                // Instancia a tela principal e passa como parâmetro o tamanho da tela
-                Principal principal = new Principal(getSize());
-                principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            }
-            
-            // Fecha a tela de login
-            dispose();
         }
         else{
             System.out.println("Erro");
@@ -163,14 +165,17 @@ public class Login extends JFrame{
     }
     
     public static void main(String[] args){
+        // Inicia a conexão com o banco de dados
         ConnectionClass.connect();
-        UserController.create(3, "Jair Bolsonaro", "02814312858", "20/03/1958", "11958034321", "jairbolso@email.com", "12345678", "12345678", "M", "Odontologista");
         
-        System.out.println(SessionController.read()[0]);
-        System.out.println(SessionController.read()[1]);
-        
-        Login login = new Login();
-        login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if(!"erro".equals(SessionController.validateTemp())){
+            Principal principal = new Principal();
+            principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
+        else{
+            Login login = new Login();
+            login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
     }
 }
 
