@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.border.*;
 import projetoa3.controller.SessionController;
 import projetoa3.controller.UserController;
+import projetoa3.util.Resultado;
 import projetoa3.util.database.ConnectionClass;
 
 /**
@@ -24,7 +25,7 @@ public class Login extends JFrame{
     private final BoxLayout canvasLayout, loginLayout;
     private final BorderLayout wrapLayout;
     private final JPanel wrapPanel, loginPanel, otherPanel;
-    private final JLabel title, loginLabel, senhaLabel;
+    private final JLabel title, loginLabel, senhaLabel, erroLabel;
     private final JTextField loginField;
     private final JPasswordField senhaField;
     private final CustomButton button;
@@ -39,6 +40,8 @@ public class Login extends JFrame{
      */
     private void login(){
         
+        erroLabel.setText("");
+        
         // Pega o texto dos campos
         login = loginField.getText();
         senha = senhaField.getPassword();
@@ -46,7 +49,9 @@ public class Login extends JFrame{
         // Verifica se os valores existem
         if(!"".equals(login) && senha != null && senha.length != 0){
             
-            if(!"erro".equals(SessionController.create(login, String.valueOf(senha)))){
+            Resultado res = SessionController.create(login, String.valueOf(senha));
+            
+            if(res.isSucesso() == true){
                 // Verifica se a tela está maximizada (questão de estética)
                 if(getExtendedState() == JFrame.MAXIMIZED_BOTH || getExtendedState() == JFrame.MAXIMIZED_HORIZ || getExtendedState() == JFrame.MAXIMIZED_VERT){
 
@@ -64,9 +69,12 @@ public class Login extends JFrame{
                 // Fecha a tela de login
                 dispose();
             }
+            else{
+                erroLabel.setText(res.getMensagem());
+            }
         }
         else{
-            System.out.println("Erro");
+            erroLabel.setText("E-mail senha devem ser preenchidos.");
         }
     }
     
@@ -110,6 +118,11 @@ public class Login extends JFrame{
         title.setHorizontalAlignment(JLabel.LEFT);
         title.setFont(new Font(Font.SANS_SERIF, 1, 30));
         
+        erroLabel = new JLabel("");
+        erroLabel.setAlignmentX(0.0f);
+        erroLabel.setHorizontalAlignment(JLabel.LEFT);
+        erroLabel.setForeground(new Color(255, 110, 130));
+        
         loginLabel = new JLabel("Login");
         loginLabel.setAlignmentX(0.0f);
         loginLabel.setPreferredSize(new Dimension(300, 20));
@@ -142,6 +155,8 @@ public class Login extends JFrame{
         });
         
         loginPanel.add(title);
+        loginPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        loginPanel.add(erroLabel);
         loginPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         loginPanel.add(loginLabel);
         loginPanel.add(loginField);

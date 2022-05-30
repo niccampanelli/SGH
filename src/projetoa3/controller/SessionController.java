@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Scanner;
+import projetoa3.util.Resultado;
 import projetoa3.util.database.ConnectionClass;
 
 /**
@@ -15,9 +16,8 @@ import projetoa3.util.database.ConnectionClass;
  */
 public class SessionController {
     
-    public static String create(String address, String key){
+    public static Resultado create(String address, String key){
         
-        String returnValue = "";
         String filebody = "null;null";
                 
         try{
@@ -53,7 +53,7 @@ public class SessionController {
                     catch(Exception e){
                         System.out.println("Erro na criptografia:");
                         e.printStackTrace();
-                        returnValue = "erro";
+                        return new Resultado(false, "Erro interno. Tente novamente.", e);
                     }
                     
                     if(salted.toString(16).equals(passwordResult)){
@@ -75,26 +75,27 @@ public class SessionController {
                         writer.close();
                         
                         System.out.println("Arquivo config salvo");
-                        returnValue = Integer.toString(tipoResult);
+                        return new Resultado(true, "Sucesso");
                     }
                     else{
                         System.err.println("Erro ao realizar login: Senha inválida.");
-                        returnValue = "erro";
+                        return new Resultado(false, "Senha inválida.");
                     }
                 }
                 else{
                     System.err.println("Erro ao realizar login: Email não cadastrado.");
-                    returnValue = "erro";
+                    return new Resultado(false, "E-mail não cadastrado.");
                 }
+            }
+            else{
+                return new Resultado(false, "E-mail senha devem ser preenchidos.");
             }
         }
         catch(Exception e){
             System.out.println("Erro no arquivo:");
             e.printStackTrace();
-            returnValue = "erro";
+            return new Resultado(false, "Erro ao criar arquivo temp. Tente novamente.", e);
         }
-        
-        return returnValue;
     }
     
     public static String validateTemp(){
@@ -103,7 +104,7 @@ public class SessionController {
         String[] data = new String[2];
         
         try{
-            data = SessionController.read();            
+            data = SessionController.read();
             
             if(data.length == 2 && (data[0] != null && !"".equals(data[0])) && (data[1] != null && !"".equals(data[1]))){
                 
@@ -189,4 +190,23 @@ public class SessionController {
         return data;
     }
     
+    public static boolean delete(){
+                
+        try{
+            File file = new File(".config\\temp.config");
+            if(file.delete()){
+                System.out.println("Sessão encerrada com sucesso.");
+                return true;
+            }
+            else{
+                System.err.println("Falha ao encerrar sessão.");
+                return false;
+            }
+        }
+        catch(Exception e){
+            System.out.println("Não foi possível excluir o arquivo config:");
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

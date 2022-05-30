@@ -34,10 +34,10 @@ public class NovoMedico extends JFrame{
         cpf = cpfField.getText();
         nome = nomeField.getText();
         crm = crmField.getText();
-        especialidade = (String) especialidadeField.getSelectedItem();
+        especialidade = especialidadeField.getSelectedItem().toString();
         email = emailField.getText();
         telefone = telefoneField.getText();
-        sexo = (String) sexoField.getSelectedItem();
+        sexo = sexoField.getSelectedItem().toString();
         dataNasc = dataNascField.getText();
         
         if("".equals(cpf) || cpf.length() != 14 || cpf.endsWith("0-00")){
@@ -65,6 +65,9 @@ public class NovoMedico extends JFrame{
             JOptionPane.showMessageDialog(null, "Insira uma data de nascimento válida.", "Data de nascimento inválida", JOptionPane.WARNING_MESSAGE);
         }
         else{
+            
+            
+            
             JOptionPane.showMessageDialog(null, "Médico adicionado com sucesso!\n"
                     + "ID do médico adicionado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             

@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.FileWriter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import projetoa3.controller.SessionController;
 
 /**
  * Frame principal, onde são instanciadas as páginas
@@ -95,9 +96,15 @@ public class Principal extends JFrame{
             sairContaMenu.addActionListener(new ActionListener(){
                 @Override
                 public void actionPerformed(ActionEvent e){
-                    Login login = new Login();
-                    login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    dispose();
+                    
+                    if(SessionController.delete()){
+                        Login login = new Login();
+                        login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        dispose();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Não foi possível encerrar a sessão. Tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             });
         
