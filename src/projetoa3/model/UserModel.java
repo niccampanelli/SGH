@@ -31,12 +31,13 @@ public class UserModel {
     }
     
     public UserModel(
-            int tipo, String nome,
+            int tipo, String nome, String cpf,
             String dataNasc, String telefone,
             String email, String senha
     ){
         this.setTipo(tipo);
         this.setNome(nome);
+        this.setCpf(cpf);
         this.setDataNasc(dataNasc);
         this.setTelefone(telefone);
         this.setEmail(email);

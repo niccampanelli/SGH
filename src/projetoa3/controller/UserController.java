@@ -40,9 +40,10 @@ public class UserController {
     ){
         // Tratativa de erro
         try{
+            
             // Verifica se os campos não estão vazios ou com valores inválidos
             if((tipo >= 1 && tipo <= 3) && (!"".equals(nome)) && (!"".equals(cpf)) && (!"".equals(dataNasc))
-                    && (!"".equals(telefone)) && (!"".equals(email)) && (!"".equals(senha)) && (!"".equals(sexo))){
+                    && (!"".equals(telefone)) && (!"".equals(email)) && (!"".equals(senha))){
                 
                 String checkCpfSql = "SELECT COUNT(*) FROM usuarios WHERE cpf = '"+cpf+"';";
                 Statement checkCpfStatement = ConnectionClass.getStatement();
@@ -216,7 +217,7 @@ public class UserController {
 
                             // Cria um modelo de usuário
                             UserModel usuario = new UserModel(
-                                    tipo, nome, 
+                                    tipo, nome, cpf,
                                     dataNasc, telefone, 
                                     email, senha
                             );

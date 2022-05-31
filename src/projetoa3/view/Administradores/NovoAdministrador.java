@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.text.ParseException;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import projetoa3.controller.UserController;
+import projetoa3.util.Resultado;
 import projetoa3.view.Components.CustomButton;
 import projetoa3.view.Components.CustomField;
 import projetoa3.view.Components.CustomFormatted;
@@ -52,10 +54,25 @@ public class NovoAdministrador extends JFrame{
             JOptionPane.showMessageDialog(null, "Insira uma data de nascimento válida.", "Data de nascimento inválida", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            JOptionPane.showMessageDialog(null, "Administrador adicionado com sucesso!\n"
-                    + "ID do atentendente adicionado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
-            dispose();
+            String cleanCpf = cpf.replaceAll("[^a-zA-Z0-9]", "");
+            String cleanTelefone = telefone.replaceAll("[^a-zA-Z0-9]", "");
+            String cleanDataNasc = dataNasc.replaceAll("[^a-zA-Z0-9]", "");
+            
+            Resultado res = UserController.create(
+                    1, nome, cleanCpf, dataNasc, cleanTelefone, email, "", cleanDataNasc, "", ""
+            );
+            
+            if(res.isSucesso()){
+            
+                JOptionPane.showMessageDialog(null, "Administrador adicionado com sucesso!\n"
+                        + "ID do administrador adicionado: "+ res.getCorpo().toString(), "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
             
