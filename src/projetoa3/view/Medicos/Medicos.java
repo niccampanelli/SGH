@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+import projetoa3.controller.UserController;
 
 /**
  * Painel de médicos
@@ -21,11 +22,12 @@ public class Medicos extends JPanel{
     // Componentes da Tela
     private final BoxLayout titleLayout, descriptionLayout;
     private final JPanel titlePanel, descriptionPanel;
-    private final JLabel title, subtitle, description;
+    private final JLabel title, description;
+    private JLabel subtitle;
     private final CustomButton addButton;
     private final JScrollPane tableWrap;
     private final JTable table;
-    private final DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
     private Image trashIcon;
     
     // Construtor
@@ -39,42 +41,6 @@ public class Medicos extends JPanel{
             System.out.println(ex.getMessage());
         }
         
-        String[] columns = {
-            "ID",
-            "CRM",
-            "Nome",
-            "Especialidade",
-            "E-mail",
-            "Telefone",
-            "Cadastrado em"
-        };
-        
-        Object[][] data = {
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-            {1513, "26584945", "Jerônimo", "Clínico Geral", "Jerônimo@email.com", "(11) 95836-2548", "16/03/2005"},
-        };
-        
         // Painel que contém o título
         titlePanel = new JPanel();
         titleLayout = new BoxLayout(titlePanel, BoxLayout.LINE_AXIS);
@@ -84,14 +50,7 @@ public class Medicos extends JPanel{
         
         title = new JLabel("Medicos");
         title.setFont(new Font(Font.SANS_SERIF, 1, 24));
-        
-        // Verifica o plural
-        if(data.length == 1){
-            subtitle = new JLabel("1 médico cadastrado");
-        }
-        else{
-            subtitle = new JLabel(data.length + " médicos cadastrados");
-        }
+        subtitle = new JLabel("1 médico cadastrado");
         
         // Botão de adicionar médico
         addButton = new CustomButton("Adicionar médico");
@@ -102,6 +61,12 @@ public class Medicos extends JPanel{
                 
                 // Instancia uma tela de adicionar médico
                 NovoMedico novoMedico = new NovoMedico();
+                novoMedico.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e){
+                        atualizarTabela();
+                    }
+                });
                 novoMedico.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
         });
@@ -122,7 +87,7 @@ public class Medicos extends JPanel{
         
         descriptionPanel.add(description);
         
-        tableModel = new DefaultTableModel(data, columns);
+        tableModel = new DefaultTableModel(0, 0);
         
         // Cria a tabela com os dados e colunas
         // e desabilita a edição de células
@@ -132,30 +97,7 @@ public class Medicos extends JPanel{
                 return false;
             }
         };
-        tableModel.addColumn("X");
-        table.setShowVerticalLines(false);
-        table.setGridColor(new Color(230, 230, 230));
-        table.setRowHeight(40);
-        table.setIntercellSpacing(new Dimension(0, 0));
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.getColumn("X").setCellRenderer(new TableDeleteButton(trashIcon));
-        table.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        table.setAutoCreateRowSorter(true);
-        
-        table.getColumn("ID").setMinWidth(40);
-        table.getColumn("ID").setMaxWidth(40);
-        table.getColumn("CRM").setMinWidth(80);
-        table.getColumn("CRM").setMaxWidth(80);
-        table.getColumn("Especialidade").setMinWidth(130);
-        table.getColumn("Especialidade").setMaxWidth(130);
-        table.getColumn("E-mail").setMinWidth(180);
-        table.getColumn("E-mail").setMaxWidth(180);
-        table.getColumn("Telefone").setMinWidth(100);
-        table.getColumn("Telefone").setMaxWidth(100);
-        table.getColumn("Cadastrado em").setMinWidth(100);
-        table.getColumn("Cadastrado em").setMaxWidth(100);
-        table.getColumn("X").setMinWidth(40);
-        table.getColumn("X").setMaxWidth(40);
+        atualizarTabela();
         
         // Adiciona um event listener para tornar as linhas clicáveis
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -198,7 +140,7 @@ public class Medicos extends JPanel{
                         
                         // Se a opção for "sim"
                         if(confirmed == JOptionPane.YES_OPTION) {
-                            table.repaint();
+                            atualizarTabela();
                         }
                         
                         // Limpa a seleção da tabela
@@ -222,7 +164,7 @@ public class Medicos extends JPanel{
                         // Instancia uma nova tela de editar médico
                         EditarMedico editarMedico = new EditarMedico(idValue, cpfValue, nomeValue, crmValue, especialidadeValue, emailValue, telefoneValue, sexoValue, dataNascValue);
                         editarMedico.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                                            
+                        
                         // Limpa a seleção da tabela
                         // Se a linha continuar selecionada, não é possível
                         // clicá-la novamente
@@ -262,5 +204,44 @@ public class Medicos extends JPanel{
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.LEFT_ALIGNMENT);
         setAlignmentY(0.0f);
+    }
+    
+    public void atualizarTabela(){
+        tableModel = UserController.read(3);
+        tableModel.fireTableDataChanged();
+        tableModel.addColumn("X");
+        
+        // Verifica o plural
+        if(tableModel.getRowCount() == 1){
+            subtitle.setText("1 médico cadastrado");
+        }
+        else{
+            subtitle.setText(tableModel.getRowCount() + " médicos cadastrados");
+        }
+        
+        table.setModel(tableModel);
+        table.setShowVerticalLines(false);
+        table.setGridColor(new Color(230, 230, 230));
+        table.setRowHeight(40);
+        table.setIntercellSpacing(new Dimension(0, 0));
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.getColumn("X").setCellRenderer(new TableDeleteButton(trashIcon));
+        table.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        table.setAutoCreateRowSorter(true);
+        
+        table.getColumn("ID").setMinWidth(40);
+        table.getColumn("ID").setMaxWidth(40);
+        table.getColumn("CRM").setMinWidth(80);
+        table.getColumn("CRM").setMaxWidth(80);
+        table.getColumn("Especialidade").setMinWidth(130);
+        table.getColumn("Especialidade").setMaxWidth(130);
+        table.getColumn("E-mail").setMinWidth(180);
+        table.getColumn("E-mail").setMaxWidth(180);
+        table.getColumn("Telefone").setMinWidth(100);
+        table.getColumn("Telefone").setMaxWidth(100);
+        table.getColumn("Cadastrado em").setMinWidth(100);
+        table.getColumn("Cadastrado em").setMaxWidth(100);
+        table.getColumn("X").setMinWidth(40);
+        table.getColumn("X").setMaxWidth(40);
     }
 }

@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.TimeZone;
+import javax.swing.table.DefaultTableModel;
 import projetoa3.model.MedicoModel;
 import projetoa3.model.UserModel;
 import projetoa3.util.Resultado;
@@ -246,6 +249,89 @@ public class UserController {
             System.err.println("Não foi possível cadastrar um usuário: "+ e.getMessage());
             return new Resultado(false, "Erro inesperado ao cadastrar usuário. Tente novamente.");
         }
+    }
+    
+    public static DefaultTableModel read(int tipo){
+        
+        DefaultTableModel model = new DefaultTableModel(0, 0);
+        String[] columns;
+        
+        try{
+            if(tipo == 3){
+                columns = new String[]{
+                  "ID",
+                  "CPF",
+                  "CRM",
+                  "Nome",
+                  "Especialidade",
+                  "E-mail",
+                  "Telefone",
+                  "Cadastrado em"
+                };
+
+                model = new DefaultTableModel(columns, 0);
+                String getMedicSql = "SELECT b.id, b.cpf, b.cadastro, b.nome, a.nome as especialidade, b.email, b.telefone, b.data_cadastro "
+                        + "FROM especialidades a INNER JOIN usuarios b ON a.id = b.especialidade;";
+                Statement getMedicStatement = ConnectionClass.getStatement();
+
+                ResultSet getMedicResult = getMedicStatement.executeQuery(getMedicSql);
+
+                while(getMedicResult.next()){
+                    model.addRow(new Object[]{
+                        getMedicResult.getInt("id"),
+                        getMedicResult.getString("cpf"),
+                        getMedicResult.getString("cadastro"),
+                        getMedicResult.getString("nome"),
+                        getMedicResult.getString("especialidade"),
+                        getMedicResult.getString("email"),
+                        getMedicResult.getString("telefone"),
+                        getMedicResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())),
+                    });
+                }
+                
+                getMedicResult.close();
+            }
+            else{
+                columns = new String[]{
+                  "ID",
+                  "CPF",
+                  "CRM",
+                  "Nome",
+                  "Especialidade",
+                  "E-mail",
+                  "Telefone",
+                  "Cadastrado em"
+                };
+
+                model = new DefaultTableModel(columns, 0);
+                String getMedicSql = "SELECT b.id, b.cpf, b.cadastro, b.nome, a.nome as especialidade, b.email, b.telefone, b.data_cadastro "
+                        + "FROM especialidades a INNER JOIN usuarios b ON a.id = b.especialidade;";
+                Statement getMedicStatement = ConnectionClass.getStatement();
+
+                ResultSet getMedicResult = getMedicStatement.executeQuery(getMedicSql);
+
+                while(getMedicResult.next()){
+                    model.addRow(new Object[]{
+                        getMedicResult.getInt("id"),
+                        getMedicResult.getString("cpf"),
+                        getMedicResult.getString("cadastro"),
+                        getMedicResult.getString("nome"),
+                        getMedicResult.getString("especialidade"),
+                        getMedicResult.getString("email"),
+                        getMedicResult.getString("telefone"),
+                        getMedicResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())),
+                    });
+                }
+                
+                getMedicResult.close();
+            }
+        }
+        catch(SQLException e){
+            System.err.println("Erro ao obter usuários: ");
+            e.printStackTrace();
+        }
+        
+        return model;
     }
     
     /**
