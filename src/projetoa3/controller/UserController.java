@@ -38,7 +38,6 @@ public class UserController {
             String cadastro, String senha,
             String sexo, String especialidade
     ){
-        
         // Tratativa de erro
         try{
             // Verifica se os campos não estão vazios ou com valores inválidos
