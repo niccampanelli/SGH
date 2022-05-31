@@ -167,7 +167,7 @@ public class NovoMedico extends JFrame{
         especialidadePanel.setLayout(especialidadeLayout);
         especialidadePanel.setBackground(null);
         
-        especialidadeField = new JComboBox();
+        especialidadeField = new JComboBox(UserController.readEspecialidades().toArray());
         especialidadeField.setAlignmentX(0.0f);
         especialidadeField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         especialidadeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));

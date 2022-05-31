@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import projetoa3.model.MedicoModel;
 import projetoa3.model.UserModel;
 import projetoa3.util.Resultado;
@@ -30,6 +31,7 @@ public class UserController {
      * @param senha
      * @param sexo
      * @param especialidade 
+     * @return Resultado - objeto do tipo Resultado definindo se o resultado foi sucesso ou não
      */
     public static Resultado create(
             int tipo, String nome,
@@ -246,4 +248,32 @@ public class UserController {
         }
     }
     
+    /**
+     * Método para obter especialidades cadastradas no banco de dados
+     * @return ArrayList<String> - Array com as especialidades cadastradas.
+     */
+    public static ArrayList<String> readEspecialidades(){
+        
+        try{
+            
+            String getSpecsSql = "SELECT nome FROM especialidades WHERE 1 = 1";
+            Statement getSpecsStatement = ConnectionClass.getStatement();
+            
+            ResultSet getSpecsResult = getSpecsStatement.executeQuery(getSpecsSql);
+            ArrayList<String> especialidades = new ArrayList<>();
+            
+            while(getSpecsResult.next()){
+                especialidades.add(getSpecsResult.getString("nome"));
+            }
+            
+            getSpecsStatement.close();
+            return especialidades;
+        }
+        catch(Exception e){
+            System.err.println("Falha ao obter especialidades: "+ e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
+
