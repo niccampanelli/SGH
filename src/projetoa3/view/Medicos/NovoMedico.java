@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.text.ParseException;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import projetoa3.controller.UserController;
+import projetoa3.util.Resultado;
 import projetoa3.view.Components.CustomButton;
 import projetoa3.view.Components.CustomField;
 import projetoa3.view.Components.CustomFormatted;
@@ -66,12 +68,32 @@ public class NovoMedico extends JFrame{
         }
         else{
             
+            String cleanCpf = cpf.replaceAll("[^a-zA-Z0-9]", "");
+            String cleanTelefone = telefone.replaceAll("[^a-zA-Z0-9]", "");
+            String cleanDataNasc = dataNasc.replaceAll("[^a-zA-Z0-9]", "");
+            String charSexo = "m";
             
+            if(sexo.equals("Masculino")){
+                charSexo = "m";
+            }
+            else{
+                charSexo = "f";
+            }
             
-            JOptionPane.showMessageDialog(null, "Médico adicionado com sucesso!\n"
-                    + "ID do médico adicionado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            Resultado res = UserController.create(
+                    3, nome, cleanCpf, dataNasc, cleanTelefone, email, crm, cleanDataNasc, charSexo, especialidade
+            );
             
-            dispose();
+            if(res.isSucesso()){
+            
+                JOptionPane.showMessageDialog(null, "Médico adicionado com sucesso!\n"
+                        + "ID do médico adicionado: "+ res.getCorpo().toString(), "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
             

@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.Instant;
+import projetoa3.util.Resultado;
 import projetoa3.util.database.ConnectionClass;
 
 /**
@@ -69,7 +70,7 @@ public class MedicoModel extends UserModel {
     }
     
     @Override
-    public int create(){
+    public Resultado create(){
         try{
             String insertMedicSql = "INSERT INTO usuarios (tipo, nome, cpf, data_nascimento, "
                     + "telefone, email, cadastro, senha, data_cadastro, sexo, especialidade) "
@@ -98,11 +99,11 @@ public class MedicoModel extends UserModel {
             
             int key = insertMedicResult.getInt(1);
             insertMedicStatement.close();
-            return key;
+            return new Resultado(true, "Sucesso", key);
         }
         catch(SQLException e){
             System.err.println("Não foi possível criar um médico: "+ e.getMessage());
-            return 0;
+            return new Resultado(false, "Não foi possível criar um médico. Tente novamente.\n "+ e.getMessage());
         }
     }
 }

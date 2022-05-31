@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import projetoa3.model.MedicoModel;
 import projetoa3.model.UserModel;
+import projetoa3.util.Resultado;
 import projetoa3.util.database.ConnectionClass;
 
 /**
@@ -30,7 +31,7 @@ public class UserController {
      * @param sexo
      * @param especialidade 
      */
-    public static void create(
+    public static Resultado create(
             int tipo, String nome,
             String cpf, String dataNasc,
             String telefone, String email,
@@ -78,34 +79,54 @@ public class UserController {
                             // Se a chave primária da especialidade adicionada for maior que zero
                             // significa que criou com sucesso
                             if(key > 0){
+                    
+                                // Verifica se o email informado já está em uso por outro registro
+                                String checkEmailSql = "SELECT COUNT(*) FROM usuarios WHERE email = '"+email+"';";
+                                Statement checkEmailStatement = ConnectionClass.getStatement();
 
-                                // Seção de criptografia da senha
-                                BigInteger senharaw = BigInteger.ONE;
-                                BigInteger cripsenha = BigInteger.ONE;
+                                ResultSet checkEmailResult = checkEmailStatement.executeQuery(checkEmailSql);
+                                checkEmailResult.next();
+                                int emailCount = checkEmailResult.getInt("COUNT(*)");
+                                checkEmailStatement.close();
 
-                                try{
-                                    MessageDigest md = MessageDigest.getInstance("MD5");
-                                    senharaw = new BigInteger(1, md.digest(senha.getBytes()));
-                                    cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes()));
+                                // Se a quantidade de registros for zero
+                                // significa que o email está disponível para uso
+                                if(emailCount == 0){
+
+                                    // Seção de criptografia da senha
+                                    BigInteger senharaw = BigInteger.ONE;
+                                    BigInteger cripsenha = BigInteger.ONE;
+
+                                    try{
+                                        MessageDigest md = MessageDigest.getInstance("MD5");
+                                        senharaw = new BigInteger(1, md.digest(senha.getBytes()));
+                                        cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes()));
+                                    }
+                                    catch(NoSuchAlgorithmException e){
+                                        System.err.println("Erro na criptografia da senha: "+e.getMessage());
+                                        e.printStackTrace();
+                                        return new Resultado(false, "Erro inesperado na criação de médico. Tente novamente.");
+                                    }
+
+                                    // Cria um modelo de médico
+                                    MedicoModel medico = new MedicoModel(
+                                            tipo, nome,
+                                            cpf, dataNasc,
+                                            telefone, email,
+                                            cadastro, cripsenha.toString(16),
+                                            sexo, key
+                                    );
+                                    // Adiciona o médico
+                                    return medico.create();
                                 }
-                                catch(NoSuchAlgorithmException e){
-                                    System.err.println("Erro na criptografia da senha: "+e.getMessage());
-                                    e.printStackTrace();
+                                else{
+                                    System.err.println("Erro na criação de médico: Email em uso.");
+                                    return new Resultado(false, "Erro ao criar médico: E-mail em uso.");
                                 }
-
-                                // Cria um modelo de médico
-                                MedicoModel medico = new MedicoModel(
-                                        tipo, nome,
-                                        cpf, dataNasc,
-                                        telefone, email,
-                                        cadastro, cripsenha.toString(16),
-                                        sexo, key
-                                );
-                                // Adiciona o médico
-                                medico.create();
                             }
                             else{
                                 System.err.println("Erro inesperado ao criar médico: Especialidade não foi criada corretamente no banco de dados.");
+                                return new Resultado(false, "Erro inesperado ao criar médico: Especialidade não foi criada corretamente no banco de dados.");
                             }
                         }
                         else{
@@ -146,6 +167,7 @@ public class UserController {
                                     catch(NoSuchAlgorithmException e){
                                         System.err.println("Erro na criptografia da senha: "+e.getMessage());
                                         e.printStackTrace();
+                                        return new Resultado(false, "Erro inesperado na criação de médico. Tente novamente.");
                                     }
 
                                     // Cria um modelo de médico
@@ -157,19 +179,22 @@ public class UserController {
                                             sexo, specId
                                     );
                                     // Adiciona o médico
-                                    medico.create();
+                                    return medico.create();
                                 }
                                 else{
-                                    System.err.println("Erro na criação de usuário: Email em uso.");
+                                    System.err.println("Erro na criação de médico: Email em uso.");
+                                    return new Resultado(false, "Erro ao criar médico: E-mail em uso.");
                                 }
                             }
                             else{
-                                System.err.println("Erro ao obter especialidade: A especialidade não foi enconrada.");
+                                System.err.println("Erro ao obter especialidade: A especialidade não foi encontrada.");
+                                return new Resultado(false, "Erro ao obter especialidade: A especialidade não foi encontrada.");
                             }
                         }
                     }
                     else{
                         System.err.println("Erro ao cadastrar médico: Cadastro e/ou especialidade faltando.");
+                        return new Resultado(false, "Erro ao cadastrar médico: o CRM e/ou especialidade está faltando.");
                     }
                 }
                 else{
@@ -197,6 +222,7 @@ public class UserController {
                         catch(NoSuchAlgorithmException e){
                             System.err.println("Erro na criptografia da senha: "+e.getMessage());
                             e.printStackTrace();
+                            return new Resultado(false, "Erro inesperado ao criar o usuário. Tente novamente.");
                         }
 
                         // Cria um modelo de usuário
@@ -206,19 +232,22 @@ public class UserController {
                                 email, senha
                         );
                         // Adiciona o usuário
-                        usuario.create();
+                        return usuario.create();
                     }
                     else{
                         System.err.println("Erro na criação de usuário: Email em uso.");
+                        return new Resultado(false, "Erro ao criar usuário: E-mail em uso.");
                     }
                 }
             }
             else{
                 System.err.println("Erro ao cadastrar usuário: Campos obrigatórios faltando.");
+                return new Resultado(false, "Erro ao criar usuário: Campos obrigatórios faltando.");
             }
         }
         catch(SQLException e){
             System.err.println("Não foi possível cadastrar um usuário: "+ e.getMessage());
+            return new Resultado(false, "Erro inesperado ao cadastrar usuário. Tente novamente.");
         }
     }
     

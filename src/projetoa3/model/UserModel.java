@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.Instant;
+import projetoa3.util.Resultado;
 import projetoa3.util.database.ConnectionClass;
 
 /**
@@ -121,7 +122,7 @@ public class UserModel {
         this.dataCad = dataCad;
     }
     
-    public int create(){
+    public Resultado create(){
         try{
             String insertUserSql = "INSERT INTO usuarios (tipo, nome, cpf, data_nascimento, "
                     + "telefone, email, senha, data_cadastro) "
@@ -147,11 +148,11 @@ public class UserModel {
             
             int key = insertUserResult.getInt(1);
             insertUserStatement.close();
-            return key;
+            return new Resultado(true, "Sucesso", key);
         }
         catch(SQLException e){
             System.err.println("Não foi possível criar um usuário: "+ e.getMessage());
-            return 0;
+            return new Resultado(false, "Não foi possível criar um usuário. Tente novamente.\n" + e.getMessage());
         }
     }
 }
