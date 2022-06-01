@@ -22,10 +22,10 @@ public class NovoMedico extends JFrame{
     private final BorderLayout wrapLayout;
     private final JPanel wrapPanel, mainPanel, doubleField1, crmPanel, especialidadePanel, doubleField2, sexoPanel, dataNascPanel, buttonPanel;
     private final JLabel title, cpfLabel, nomeLabel, crmLabel, especialidadeLabel, emailLabel, telefoneLabel, sexoLabel, dataNascLabel;
-    private final CustomField nomeField, crmField, emailField;
-    private final CustomFormatted cpfField, telefoneField, dataNascField;
+    private final CustomField nomeField, emailField;
+    private final CustomFormatted cpfField, crmField, telefoneField, dataNascField;
     private final JComboBox especialidadeField, sexoField;
-    private MaskFormatter cpfMask, telefoneMask, dataNascMask;
+    private MaskFormatter cpfMask, crmMask, telefoneMask, dataNascMask;
     private final CustomButton cancelButton, addButton;
     
     // Variáveis de lógica
@@ -146,21 +146,6 @@ public class NovoMedico extends JFrame{
         doubleField1.setLayout(doubleFieldLayout1);
         doubleField1.setBackground(null);
         
-        crmPanel = new JPanel();
-        crmPanel.setAlignmentX(0.0f);
-        crmLayout = new BoxLayout(crmPanel, BoxLayout.Y_AXIS);
-        crmPanel.setLayout(crmLayout);
-        crmPanel.setBackground(null);
-        
-        crmField = new CustomField("");
-        crmField.setAlignmentX(0.0f);
-        crmField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        crmField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        crmField.setMargin(new Insets(0, 10, 0, 10));
-        
-        crmPanel.add(crmLabel);
-        crmPanel.add(crmField);
-        
         especialidadePanel = new JPanel();
         especialidadePanel.setAlignmentX(0.0f);
         especialidadeLayout = new BoxLayout(especialidadePanel, BoxLayout.Y_AXIS);
@@ -185,6 +170,8 @@ public class NovoMedico extends JFrame{
         try{
             cpfMask = new MaskFormatter("###.###.###-##");
             cpfMask.setPlaceholderCharacter('0');
+            crmMask = new MaskFormatter("########AA");
+            crmMask.setPlaceholderCharacter('0');
             telefoneMask = new MaskFormatter("(##) #####-####");
             telefoneMask.setPlaceholderCharacter('0');
             dataNascMask = new MaskFormatter("##/##/####");
@@ -199,6 +186,21 @@ public class NovoMedico extends JFrame{
         cpfField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMargin(new Insets(0, 10, 0, 10));
+        
+        crmPanel = new JPanel();
+        crmPanel.setAlignmentX(0.0f);
+        crmLayout = new BoxLayout(crmPanel, BoxLayout.Y_AXIS);
+        crmPanel.setLayout(crmLayout);
+        crmPanel.setBackground(null);
+        
+        crmField = new CustomFormatted(crmMask);
+        crmField.setAlignmentX(0.0f);
+        crmField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        crmField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        crmField.setMargin(new Insets(0, 10, 0, 10));
+        
+        crmPanel.add(crmLabel);
+        crmPanel.add(crmField);
         
         telefoneField = new CustomFormatted(telefoneMask);
         telefoneField.setAlignmentX(0.0f);

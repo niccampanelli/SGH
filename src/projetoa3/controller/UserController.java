@@ -289,41 +289,69 @@ public class UserController {
                     });
                 }
                 
-                getMedicResult.close();
+                getMedicStatement.close();
             }
-            else{
+            else if(tipo == 2){
                 columns = new String[]{
                   "ID",
                   "CPF",
-                  "CRM",
                   "Nome",
-                  "Especialidade",
                   "E-mail",
                   "Telefone",
+                  "Data de nascimento",
                   "Cadastrado em"
                 };
 
                 model = new DefaultTableModel(columns, 0);
-                String getMedicSql = "SELECT b.id, b.cpf, b.cadastro, b.nome, a.nome as especialidade, b.email, b.telefone, b.data_cadastro "
-                        + "FROM especialidades a INNER JOIN usuarios b ON a.id = b.especialidade;";
-                Statement getMedicStatement = ConnectionClass.getStatement();
+                String getAtendenteSql = "SELECT id, cpf, nome, email, telefone, data_nascimento, data_cadastro FROM usuarios WHERE tipo = 2;";
+                Statement getAtendenteStatement = ConnectionClass.getStatement();
 
-                ResultSet getMedicResult = getMedicStatement.executeQuery(getMedicSql);
+                ResultSet getAtendenteResult = getAtendenteStatement.executeQuery(getAtendenteSql);
 
-                while(getMedicResult.next()){
+                while(getAtendenteResult.next()){
                     model.addRow(new Object[]{
-                        getMedicResult.getInt("id"),
-                        getMedicResult.getString("cpf"),
-                        getMedicResult.getString("cadastro"),
-                        getMedicResult.getString("nome"),
-                        getMedicResult.getString("especialidade"),
-                        getMedicResult.getString("email"),
-                        getMedicResult.getString("telefone"),
-                        getMedicResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())),
+                        getAtendenteResult.getInt("id"),
+                        getAtendenteResult.getString("cpf"),
+                        getAtendenteResult.getString("nome"),
+                        getAtendenteResult.getString("email"),
+                        getAtendenteResult.getString("telefone"),
+                        getAtendenteResult.getDate("data_nascimento", Calendar.getInstance(TimeZone.getDefault())),
+                        getAtendenteResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())),
                     });
                 }
                 
-                getMedicResult.close();
+                getAtendenteStatement.close();
+            }
+            else if(tipo == 1){
+                columns = new String[]{
+                  "ID",
+                  "CPF",
+                  "Nome",
+                  "E-mail",
+                  "Telefone",
+                  "Data de nascimento",
+                  "Cadastrado em"
+                };
+
+                model = new DefaultTableModel(columns, 0);
+                String getAdminSql = "SELECT id, cpf, nome, email, telefone, data_nascimento, data_cadastro FROM usuarios WHERE tipo = 1;";
+                Statement getAdminStatement = ConnectionClass.getStatement();
+
+                ResultSet getAdminResult = getAdminStatement.executeQuery(getAdminSql);
+
+                while(getAdminResult.next()){
+                    model.addRow(new Object[]{
+                        getAdminResult.getInt("id"),
+                        getAdminResult.getString("cpf"),
+                        getAdminResult.getString("nome"),
+                        getAdminResult.getString("email"),
+                        getAdminResult.getString("telefone"),
+                        getAdminResult.getDate("data_nascimento", Calendar.getInstance(TimeZone.getDefault())),
+                        getAdminResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())),
+                    });
+                }
+                
+                getAdminStatement.close();
             }
         }
         catch(SQLException e){
@@ -333,6 +361,35 @@ public class UserController {
         
         return model;
     }
+    
+    /*public static Resultado readUser(int id){
+        
+        Object[] obj;
+        
+        try{
+            
+            String getUserSql = "SELECT * FROM usuarios WHERE id = '"+id+"';";
+            Statement getUserStatement = ConnectionClass.getStatement();
+            
+            ResultSet getUserResult = getUserStatement.executeQuery(getUserSql);
+            
+            while(getUserResult.next()){
+                if(getUserResult.getInt("tipo") == 3){
+                    
+                    String getSpecSql = "SELECT nome FROM especialidades WHERE id = '"+getUserResult.getInt("especialidade")+"';";
+                    Statement getSpecStatement = ConnectionClass.getStatement();
+                    
+                    ResultSet getSpecResult = getSpecStatement.executeQuery(getSpecSql);
+                    getSpecResult.next();
+                    String specNome = getSpecResult.getString("nome");
+                }
+            }
+        }
+        catch(SQLException e){
+            System.err.println("Ocorreu um erro ao obter o usuário: ");
+            e.printStackTrace();
+        }
+    }*/
     
     /**
      * Método para obter especialidades cadastradas no banco de dados
@@ -360,6 +417,25 @@ public class UserController {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    public static Resultado delete(int id){
+        
+        try{
+            String deleteUserSql = "DELETE FROM usuarios WHERE id = '"+id+"'";
+            Statement deleteUserStatement = ConnectionClass.getStatement();
+            
+            deleteUserStatement.execute(deleteUserSql);
+            ResultSet deleteUserResult = deleteUserStatement.getResultSet();
+                        
+            return new Resultado(true, "Sucesso");
+            
+        }
+        catch(SQLException e){
+            System.err.println("Erro ao excluir usuário: "+e.getMessage());
+            return new Resultado(false, "Erro ao excluir usuário: "+e.getMessage());
+        }
+        
     }
 }
 

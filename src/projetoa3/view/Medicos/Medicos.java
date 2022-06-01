@@ -12,6 +12,7 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 import projetoa3.controller.UserController;
+import projetoa3.util.Resultado;
 
 /**
  * Painel de médicos
@@ -121,7 +122,7 @@ public class Medicos extends JPanel{
                         
                         // Pega o ID e o nome para serem mostrados
                         String idValue = table.getModel().getValueAt(modelRow, 0).toString();
-                        String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
+                        String nomeValue = table.getModel().getValueAt(modelRow, 3).toString();
                         
                         // Opções do painel de confirmação
                         Object[] options = {"Excluir", "Cancelar"};
@@ -140,7 +141,16 @@ public class Medicos extends JPanel{
                         
                         // Se a opção for "sim"
                         if(confirmed == JOptionPane.YES_OPTION) {
-                            atualizarTabela();
+                            Resultado res = UserController.delete(Integer.parseInt(idValue));
+                            
+                            if(res.isSucesso()){
+                                JOptionPane.showMessageDialog(null, "Médico #"+idValue+" excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                                
+                                atualizarTabela();
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
+                            }
                         }
                         
                         // Limpa a seleção da tabela
@@ -152,12 +162,12 @@ public class Medicos extends JPanel{
                     else{
                         // Obtém os dados da linha selecionada
                         String idValue = table.getModel().getValueAt(modelRow, 0).toString();
-                        String cpfValue = "486.140.234-23";
-                        String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
-                        String crmValue = table.getModel().getValueAt(modelRow, 1).toString();
-                        String especialidadeValue = table.getModel().getValueAt(modelRow, 3).toString();
-                        String emailValue = table.getModel().getValueAt(modelRow, 4).toString();
-                        String telefoneValue = table.getModel().getValueAt(modelRow, 5).toString();
+                        String cpfValue = table.getModel().getValueAt(modelRow, 1).toString();
+                        String crmValue = table.getModel().getValueAt(modelRow, 2).toString();
+                        String nomeValue = table.getModel().getValueAt(modelRow, 3).toString();
+                        String especialidadeValue = table.getModel().getValueAt(modelRow, 4).toString();
+                        String emailValue = table.getModel().getValueAt(modelRow, 5).toString();
+                        String telefoneValue = table.getModel().getValueAt(modelRow, 6).toString();
                         String sexoValue = "Masculino";
                         String dataNascValue = "21/12/2003";
                         
