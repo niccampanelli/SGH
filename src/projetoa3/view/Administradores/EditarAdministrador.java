@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.text.ParseException;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import projetoa3.controller.UserController;
+import projetoa3.util.Resultado;
 import projetoa3.view.Components.CustomButton;
 import projetoa3.view.Components.CustomField;
 import projetoa3.view.Components.CustomFormatted;
@@ -26,7 +28,7 @@ public class EditarAdministrador extends JFrame{
     private final CustomButton cancelButton, addButton;
     
     // Variáveis de lógica
-    private String cpf, nome, email, telefone, dataNasc;
+    private String id, cpf, nome, email, telefone, dataNasc;
     
     private void editar(){
         
@@ -52,16 +54,28 @@ public class EditarAdministrador extends JFrame{
             JOptionPane.showMessageDialog(null, "Insira uma data de nascimento válida.", "Data de nascimento inválida", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            JOptionPane.showMessageDialog(null, "Administrador modificado com sucesso!\n"
-                    + "ID do administrador modificado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
-            dispose();
+            String cleanTelefone = telefone.replaceAll("[^a-zA-Z0-9]", "");
+            Resultado res = UserController.update(Integer.parseInt(id), 1, nome, dataNasc, cleanTelefone, "", "");
+            
+            if(res.isSucesso()){
+            
+                JOptionPane.showMessageDialog(null, "Atendente atualizado com sucesso!\n"
+                        + "ID do atendente atualizado: "+id, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+            
         }
     }
             
     public EditarAdministrador(String id, String cpf, String nome, String email, String telefone, String dataNasc){
         super("Editar administrador");
         
+        this.id = id;
         this.cpf = cpf;
         this.nome = nome;
         this.email = email;
@@ -109,6 +123,7 @@ public class EditarAdministrador extends JFrame{
         emailField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         emailField.setMargin(new Insets(0, 10, 0, 10));
+        emailField.setEnabled(false);
         
         try{
             cpfMask = new MaskFormatter("###.###.###-##");
@@ -128,6 +143,7 @@ public class EditarAdministrador extends JFrame{
         cpfField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMargin(new Insets(0, 10, 0, 10));
+        cpfField.setEnabled(false);
         
         telefoneField = new CustomFormatted(telefoneMask);
         telefoneField.setText(telefone);

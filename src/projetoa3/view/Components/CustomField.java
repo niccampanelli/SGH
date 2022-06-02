@@ -25,6 +25,7 @@ public class CustomField extends JTextField {
         // Define o visual do field
         setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
         setForeground(new Color(100, 100, 100));
+        setDisabledTextColor(new Color(100, 100, 100));
         setBackground(new Color(250, 250, 250));
         // Borda com linha na base, sombra e padding
         setBorder(new CompoundBorder(
@@ -59,6 +60,7 @@ public class CustomField extends JTextField {
         // Define o visual do field
         setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
         setForeground(new Color(100, 100, 100));
+        setDisabledTextColor(new Color(100, 100, 100));
         setBackground(new Color(250, 250, 250));
         // Borda com linha na base, sombra e padding
         setBorder(new CompoundBorder(
@@ -92,6 +94,7 @@ public class CustomField extends JTextField {
         
         setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
         setForeground(new Color(180, 180, 180));
+        setDisabledTextColor(new Color(100, 100, 100));
         setBackground(new Color(250, 250, 250));
         // Borda com linha na base, sombra e padding
         setBorder(new CompoundBorder(

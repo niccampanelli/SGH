@@ -172,6 +172,12 @@ public class Administradores extends JPanel{
                         
                         // Instancia uma nova tela de editar administrador
                         EditarAdministrador editarAdministrador = new EditarAdministrador(idValue, cpfValue, nomeValue, emailValue, telefoneValue, dataNascValue);
+                        editarAdministrador.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e){
+                                atualizarTabela();
+                            }
+                        });
                         editarAdministrador.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                                                 
                         // Limpa a seleção da tabela

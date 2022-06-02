@@ -190,6 +190,12 @@ public class Medicos extends JPanel{
                         
                         // Instancia uma nova tela de editar médico
                         EditarMedico editarMedico = new EditarMedico(idValue, cpfValue, nomeValue, crmValue, especialidadeValue, emailValue, telefoneValue, sexoValue, dataNascValue);
+                        editarMedico.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e){
+                                atualizarTabela();
+                            }
+                        });
                         editarMedico.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                         
                         // Limpa a seleção da tabela

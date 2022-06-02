@@ -169,6 +169,12 @@ public class Atendentes extends JPanel{
                         
                         // Instancia uma nova tela de editar atendente
                         EditarAtendente editarAtendente = new EditarAtendente(idValue, cpfValue, nomeValue, emailValue, telefoneValue, dataNascValue);
+                        editarAtendente.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e){
+                                atualizarTabela();
+                            }
+                        });
                         editarAtendente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                                                 
                         // Limpa a seleção da tabela

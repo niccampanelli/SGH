@@ -385,6 +385,147 @@ public class UserController {
     }
     
     /**
+     * Método para atualizar dados dos usuários
+     * @param tipo
+     * @param nome
+     * @param cpf
+     * @param dataNasc
+     * @param telefone
+     * @param email
+     * @param cadastro
+     * @param senha
+     * @param sexo
+     * @param especialidade 
+     * @return Resultado - objeto do tipo Resultado definindo se o resultado foi sucesso ou não
+     */
+    public static Resultado update(
+            int id, int tipo,
+            String nome, String dataNasc,
+            String telefone, String sexo, 
+            String especialidade
+    ){
+        // Tratativa de erro
+        try{
+            
+            // Verifica se os campos não estão vazios ou com valores inválidos
+            if((tipo >= 1 && tipo <= 3) && (!"".equals(nome)) && (!"".equals(dataNasc))
+                    && (!"".equals(telefone))){
+
+                // Quando o tipo do usuário a ser cadastrado for 3
+                // significa que ele é do tipo "médico"
+                if(tipo == 3){
+
+                    // Verifica se o cadastro e a especialidade não estão vazios
+                    if(!"".equals(especialidade)){
+
+                        // Verifica a existência da especialidade indicada
+                        String checkSpecSql = "SELECT COUNT(*) FROM especialidades WHERE nome LIKE '%"+especialidade+"%';";
+                        Statement checkSpecStatement = ConnectionClass.getStatement();
+
+                        ResultSet checkSpecResult = checkSpecStatement.executeQuery(checkSpecSql);
+                        checkSpecResult.next();
+                        int specCount = checkSpecResult.getInt("COUNT(*)");
+                        checkSpecStatement.close();
+
+                        // Se a especialidade indicada não existe
+                        if(specCount == 0){
+                            // Insere a especialidade
+                            String insertSpecSql = "INSERT INTO especialidades (nome) VALUES"
+                                    + "(?);";
+                            PreparedStatement insertSpecStatement = ConnectionClass.getPreparedStatement(insertSpecSql, Statement.RETURN_GENERATED_KEYS);
+                            insertSpecStatement.setString(1, especialidade);
+                            insertSpecStatement.execute();
+
+                            ResultSet insertSpecResult = insertSpecStatement.getGeneratedKeys();
+                            insertSpecResult.next();
+
+                            int key = insertSpecResult.getInt(1);
+                            insertSpecStatement.close();
+
+                            // Se a chave primária da especialidade adicionada for maior que zero
+                            // significa que criou com sucesso
+                            if(key > 0){
+                                
+                                // Cria um modelo de médico
+                                MedicoModel medico = new MedicoModel(
+                                        id,
+                                        tipo, nome,
+                                        "00000000000", dataNasc,
+                                        telefone, "e@e.com",
+                                        "00000000", "",
+                                        sexo, key
+                                );
+                                // Adiciona o médico
+                                return medico.update();
+                            }
+                            else{
+                                System.err.println("Erro inesperado ao atualizar médico: Especialidade não foi criada corretamente no banco de dados.");
+                                return new Resultado(false, "Erro inesperado ao atualizar médico: Especialidade não foi criada corretamente no banco de dados.");
+                            }
+                        }
+                        else{
+
+                            // Pega o id da especialidade com o nome informado pelo usuário
+                            String getSpecSql = "SELECT id FROM especialidades WHERE nome LIKE '%"+especialidade+"%' LIMIT 1;";
+                            Statement getSpecStatement = ConnectionClass.getStatement();
+
+                            ResultSet getSpecResult = getSpecStatement.executeQuery(getSpecSql);
+                            getSpecResult.next();
+                            int specId = getSpecResult.getInt("id");
+                            getSpecStatement.close();
+
+                            // Se o id retornado da consulta for maior que zero
+                            // significa que a especialidade foi obtida com sucesso
+                            if(specId > 0){
+                                
+                                // Cria um modelo de médico
+                                MedicoModel medico = new MedicoModel(
+                                        id,
+                                        tipo, nome,
+                                        "00000000000", dataNasc,
+                                        telefone, "e@e.com",
+                                        "00000000", "",
+                                        sexo, specId
+                                );
+                                // Adiciona o médico
+                                return medico.update();
+                            }
+                            else{
+                                System.err.println("Erro ao obter especialidade: A especialidade não foi encontrada.");
+                                return new Resultado(false, "Erro ao obter especialidade: A especialidade não foi encontrada.");
+                            }
+                        }
+                    }
+                    else{
+                        System.err.println("Erro ao atualizar médico: Especialidade faltando.");
+                        return new Resultado(false, "Erro ao atualizar médico: Especialidade está faltando.");
+                    }
+                }
+                else{
+                    
+                    // Cria um modelo de usuário
+                    UserModel usuario = new UserModel(
+                            id,
+                            tipo, nome, "00000000000",
+                            dataNasc, telefone, 
+                            "e@e.com", ""
+                    );
+                    // Adiciona o usuário
+                    return usuario.update();
+                }
+            }
+            else{
+                System.err.println("Erro ao atualizar usuário: Campos obrigatórios faltando.");
+                return new Resultado(false, "Erro ao atualizar usuário: Campos obrigatórios faltando.");
+            }
+        }
+        catch(SQLException e){
+            System.err.println("Não foi possível atualizar um usuário: "+ e.getMessage());
+            return new Resultado(false, "Erro inesperado ao atualizar usuário. Tente novamente.");
+        }
+    }
+    
+    /**
      * Método para obter dados específicos de um usuário
      * @param id - id do usuário escolhido para obter os campos
      * @param fieldName - nome do campo a ser obtido da forma em que ele aparece no banco de dados

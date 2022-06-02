@@ -44,6 +44,28 @@ public class MedicoModel extends UserModel {
         this.setDataCad(Timestamp.from(Instant.now()));
     }
     
+    public MedicoModel(
+            int id,
+            int tipo, String nome,
+            String cpf, String dataNasc,
+            String telefone, String email,
+            String cadastro, String senha,
+            String sexo, int especialidade
+    ){
+        this.setId(id);
+        this.setTipo(tipo);
+        this.setNome(nome);
+        this.setCpf(cpf);
+        this.setDataNasc(dataNasc);
+        this.setTelefone(telefone);
+        this.setEmail(email);
+        this.setCadastro(cadastro);
+        this.setSenha(senha);
+        this.setSexo(sexo);
+        this.setEspecialidade(especialidade);
+        this.setDataCad(Timestamp.from(Instant.now()));
+    }
+    
     public String getCadastro() {
         return cadastro;
     }
@@ -104,6 +126,35 @@ public class MedicoModel extends UserModel {
         catch(SQLException e){
             System.err.println("Não foi possível criar um médico: "+ e.getMessage());
             return new Resultado(false, "Não foi possível criar um médico. Tente novamente.\n "+ e.getMessage());
+        }
+    }
+    
+    @Override
+    public Resultado update(){
+        try{
+            String updateUserSql = "UPDATE usuarios SET nome = ?, data_nascimento = ?, telefone = ?, sexo = ?, especialidade = ? WHERE id = '"+this.getId()+"'";
+            PreparedStatement updateUserStatement = ConnectionClass.getPreparedStatement(updateUserSql);
+            
+            String[] dataNascPieces = this.getDataNasc().split("/");
+            String newDate = dataNascPieces[2]+"-"+dataNascPieces[1]+"-"+dataNascPieces[0];
+            
+            updateUserStatement.setString(1, this.getNome());
+            updateUserStatement.setDate(2, Date.valueOf(newDate));
+            updateUserStatement.setString(3, this.getTelefone());
+            updateUserStatement.setString(4, this.getSexo());
+            updateUserStatement.setInt(5, this.getEspecialidade());
+            
+            if(updateUserStatement.executeUpdate() == 0){
+                return new Resultado(false, "Não foi possivel atualizar o médico. Tente novamente.");
+            }
+            
+            updateUserStatement.close();
+            
+            return new Resultado(true, "Sucesso");
+        }
+        catch(SQLException e){
+            System.err.println("Não foi possível atualizar o médico: "+ e.getMessage());
+            return new Resultado(false, "Não foi possivel atualizar o médico. Tente novamente. \n"+ e.getMessage());
         }
     }
 }

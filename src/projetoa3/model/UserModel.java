@@ -45,6 +45,22 @@ public class UserModel {
         this.setDataCad(Timestamp.from(Instant.now()));
     }
     
+    public UserModel(
+            int id, int tipo, String nome, String cpf,
+            String dataNasc, String telefone,
+            String email, String senha
+    ){
+        this.setId(id);
+        this.setTipo(tipo);
+        this.setNome(nome);
+        this.setCpf(cpf);
+        this.setDataNasc(dataNasc);
+        this.setTelefone(telefone);
+        this.setEmail(email);
+        this.setSenha(senha);
+        this.setDataCad(Timestamp.from(Instant.now()));
+    }
+    
     public int getId() {
         return id;
     }
@@ -130,17 +146,17 @@ public class UserModel {
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement insertUserStatement = ConnectionClass.getPreparedStatement(insertUserSql, Statement.RETURN_GENERATED_KEYS);
             
-            String[] dataNascPieces = dataNasc.split("/");
+            String[] dataNascPieces = this.getDataNasc().split("/");
             String newDate = dataNascPieces[2]+"-"+dataNascPieces[1]+"-"+dataNascPieces[0];
             
-            insertUserStatement.setInt(1, tipo);
-            insertUserStatement.setString(2, nome);
-            insertUserStatement.setString(3, cpf);
+            insertUserStatement.setInt(1, this.getTipo());
+            insertUserStatement.setString(2, this.getNome());
+            insertUserStatement.setString(3, this.getCpf());
             insertUserStatement.setDate(4, Date.valueOf(newDate));
-            insertUserStatement.setString(5, telefone);
-            insertUserStatement.setString(6, email);
-            insertUserStatement.setString(7, senha);
-            insertUserStatement.setTimestamp(8, dataCad);
+            insertUserStatement.setString(5, this.getTelefone());
+            insertUserStatement.setString(6, this.getEmail());
+            insertUserStatement.setString(7, this.getSenha());
+            insertUserStatement.setTimestamp(8, this.getDataCad());
             
             insertUserStatement.execute();
             
@@ -154,6 +170,29 @@ public class UserModel {
         catch(SQLException e){
             System.err.println("Não foi possível criar um usuário: "+ e.getMessage());
             return new Resultado(false, "Não foi possível criar um usuário. Tente novamente.\n" + e.getMessage());
+        }
+    }
+    
+    public Resultado update(){
+        try{
+            String updateUserSql = "UPDATE usuarios SET nome = ?, data_nascimento = ?, telefone = ? WHERE id = '"+this.getId()+"'";
+            PreparedStatement updateUserStatement = ConnectionClass.getPreparedStatement(updateUserSql);
+            
+            String[] dataNascPieces = this.getDataNasc().split("/");
+            String newDate = dataNascPieces[2]+"-"+dataNascPieces[1]+"-"+dataNascPieces[0];
+            
+            updateUserStatement.setString(1, this.getNome());
+            updateUserStatement.setDate(2, Date.valueOf(newDate));
+            updateUserStatement.setString(3, this.getTelefone());
+            
+            updateUserStatement.execute();
+            updateUserStatement.close();
+            
+            return new Resultado(true, "Sucesso");
+        }
+        catch(SQLException e){
+            System.err.println("Não foi possível atualizar o usuário: "+ e.getMessage());
+            return new Resultado(false, "Não foi possivel atualizar o usuário. Tente novamente. \n"+ e.getMessage());
         }
     }
 }

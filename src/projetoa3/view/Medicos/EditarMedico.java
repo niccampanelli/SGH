@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.text.ParseException;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import projetoa3.controller.UserController;
+import projetoa3.util.Resultado;
 import projetoa3.view.Components.CustomButton;
 import projetoa3.view.Components.CustomField;
 import projetoa3.view.Components.CustomFormatted;
@@ -27,7 +29,7 @@ public class EditarMedico extends JFrame{
     private final CustomButton cancelButton, addButton;
     
     // Variáveis de lógica
-    private String cpf, nome, crm, especialidade, email, telefone, sexo, dataNasc;
+    private String id, cpf, nome, crm, especialidade, email, telefone, sexo, dataNasc;
     
     private void editar(){
         
@@ -58,23 +60,44 @@ public class EditarMedico extends JFrame{
         else if("".equals(telefone) || telefone.length() != 15 || telefone.startsWith("(00)") || telefone.endsWith("0000")){
             JOptionPane.showMessageDialog(null, "Insira um telefone válido.", "Telefone inválido", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(sexo) || !"Masculino".equals(sexo) || !"Feminino".equals(sexo)){
+        else if("".equals(sexo) || (!"Masculino".equals(sexo) && !"Feminino".equals(sexo)) || sexo == null){
             JOptionPane.showMessageDialog(null, "Escolha um sexo válido.", "Sexo inválido", JOptionPane.WARNING_MESSAGE);
         }
         else if("".equals(dataNasc) || dataNasc.length() != 10 || dataNasc.endsWith("0000")){
             JOptionPane.showMessageDialog(null, "Insira uma data de nascimento válida.", "Data de nascimento inválida", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            JOptionPane.showMessageDialog(null, "Médico modificado com sucesso!\n"
-                    + "ID do atentendente adicionado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
-            dispose();
+            String cleanTelefone = telefone.replaceAll("[^a-zA-Z0-9]", "");
+            String charSexo = "m";
+            
+            if(sexo.equals("Masculino")){
+                charSexo = "m";
+            }
+            else{
+                charSexo = "f";
+            }
+            
+            Resultado res = UserController.update(Integer.parseInt(id), 3, nome, dataNasc, cleanTelefone, charSexo, especialidade);
+            
+            if(res.isSucesso()){
+            
+                JOptionPane.showMessageDialog(null, "Médico atualizado com sucesso!\n"
+                        + "ID do médico atualizado: "+id, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+            
         }
     }
             
     public EditarMedico(String id, String cpf, String nome, String crm, String especialidade, String email, String telefone, String sexo, String dataNasc){
         super("Editar médico");
         
+        this.id = id;
         this.cpf = cpf;
         this.nome = nome;
         this.crm = crm;
@@ -141,6 +164,7 @@ public class EditarMedico extends JFrame{
         crmField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         crmField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         crmField.setMargin(new Insets(0, 10, 0, 10));
+        crmField.setEnabled(false);
         
         crmPanel.add(crmLabel);
         crmPanel.add(crmField);
@@ -165,6 +189,7 @@ public class EditarMedico extends JFrame{
         emailField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         emailField.setMargin(new Insets(0, 10, 0, 10));
+        emailField.setEnabled(false);
         
         try{
             cpfMask = new MaskFormatter("###.###.###-##");
@@ -184,6 +209,7 @@ public class EditarMedico extends JFrame{
         cpfField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMargin(new Insets(0, 10, 0, 10));
+        cpfField.setEnabled(false);
         
         telefoneField = new CustomFormatted(telefoneMask);
         telefoneField.setText(telefone);
