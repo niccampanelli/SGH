@@ -56,6 +56,9 @@ public class SessionController {
                         return new Resultado(false, "Erro interno. Tente novamente.", e);
                     }
                     
+                    System.out.println(passwordResult);
+                    System.out.println(salted.toString(16));
+                    
                     if(salted.toString(16).equals(passwordResult)){
                         
                         File directory = new File(".config/");

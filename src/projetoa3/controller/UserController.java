@@ -166,11 +166,13 @@ public class UserController {
                                         if(specId > 0){
 
                                             // Seção de criptografia da senha
+                                            BigInteger senharaw = BigInteger.ONE;
                                             BigInteger cripsenha = BigInteger.ONE;
 
                                             try{
                                                 MessageDigest md = MessageDigest.getInstance("MD5");
-                                                cripsenha = new BigInteger(1, md.digest((senha + "segredo").getBytes()));
+                                                senharaw = new BigInteger(1, md.digest(senha.getBytes()));
+                                                cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes()));
                                             }
                                             catch(NoSuchAlgorithmException e){
                                                 System.err.println("Erro na criptografia da senha: "+e.getMessage());
@@ -183,7 +185,7 @@ public class UserController {
                                                     tipo, nome,
                                                     cpf, dataNasc,
                                                     telefone, email,
-                                                    cadastro, cripsenha.toString(),
+                                                    cadastro, cripsenha.toString(16),
                                                     sexo, specId
                                             );
                                             // Adiciona o médico
@@ -208,11 +210,13 @@ public class UserController {
                         else{
 
                             // Seção de criptografia da senha
+                            BigInteger senharaw = BigInteger.ONE;
                             BigInteger cripsenha = BigInteger.ONE;
 
                             try{
                                 MessageDigest md = MessageDigest.getInstance("MD5");
-                                cripsenha = new BigInteger(1, md.digest((senha + "segredo").getBytes()));
+                                senharaw = new BigInteger(1, md.digest(senha.getBytes()));
+                                cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes()));
                             }
                             catch(NoSuchAlgorithmException e){
                                 System.err.println("Erro na criptografia da senha: "+e.getMessage());
@@ -224,7 +228,7 @@ public class UserController {
                             UserModel usuario = new UserModel(
                                     tipo, nome, cpf,
                                     dataNasc, telefone, 
-                                    email, senha
+                                    email, cripsenha.toString(16)
                             );
                             // Adiciona o usuário
                             return usuario.create();
@@ -277,6 +281,10 @@ public class UserController {
                 ResultSet getMedicResult = getMedicStatement.executeQuery(getMedicSql);
 
                 while(getMedicResult.next()){
+                    
+                    String[] dataCadSplit = getMedicResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                    String newDataCad = dataCadSplit[2] + "/" + dataCadSplit[1] + "/" + dataCadSplit[0];
+                    
                     model.addRow(new Object[]{
                         getMedicResult.getInt("id"),
                         getMedicResult.getString("cpf"),
@@ -285,7 +293,7 @@ public class UserController {
                         getMedicResult.getString("especialidade"),
                         getMedicResult.getString("email"),
                         getMedicResult.getString("telefone"),
-                        getMedicResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())),
+                        newDataCad,
                     });
                 }
                 
@@ -309,14 +317,21 @@ public class UserController {
                 ResultSet getAtendenteResult = getAtendenteStatement.executeQuery(getAtendenteSql);
 
                 while(getAtendenteResult.next()){
+                    
+                    String[] dataNascSplit = getAtendenteResult.getDate("data_nascimento", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                    String[] dataCadSplit = getAtendenteResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                    
+                    String newDataNasc = dataNascSplit[2] + "/" + dataNascSplit[1] + "/" + dataNascSplit[0];
+                    String newDataCad = dataCadSplit[2] + "/" + dataCadSplit[1] + "/" + dataCadSplit[0];
+                    
                     model.addRow(new Object[]{
                         getAtendenteResult.getInt("id"),
                         getAtendenteResult.getString("cpf"),
                         getAtendenteResult.getString("nome"),
                         getAtendenteResult.getString("email"),
                         getAtendenteResult.getString("telefone"),
-                        getAtendenteResult.getDate("data_nascimento", Calendar.getInstance(TimeZone.getDefault())),
-                        getAtendenteResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())),
+                        newDataNasc,
+                        newDataCad,
                     });
                 }
                 
@@ -340,14 +355,21 @@ public class UserController {
                 ResultSet getAdminResult = getAdminStatement.executeQuery(getAdminSql);
 
                 while(getAdminResult.next()){
+                    
+                    String[] dataNascSplit = getAdminResult.getDate("data_nascimento", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                    String[] dataCadSplit = getAdminResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                    
+                    String newDataNasc = dataNascSplit[2] + "/" + dataNascSplit[1] + "/" + dataNascSplit[0];
+                    String newDataCad = dataCadSplit[2] + "/" + dataCadSplit[1] + "/" + dataCadSplit[0];
+                    
                     model.addRow(new Object[]{
                         getAdminResult.getInt("id"),
                         getAdminResult.getString("cpf"),
                         getAdminResult.getString("nome"),
                         getAdminResult.getString("email"),
                         getAdminResult.getString("telefone"),
-                        getAdminResult.getDate("data_nascimento", Calendar.getInstance(TimeZone.getDefault())),
-                        getAdminResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())),
+                        newDataNasc,
+                        newDataCad,
                     });
                 }
                 
@@ -362,34 +384,48 @@ public class UserController {
         return model;
     }
     
-    /*public static Resultado readUser(int id){
-        
-        Object[] obj;
+    /**
+     * Método para obter dados específicos de um usuário
+     * @param id - id do usuário escolhido para obter os campos
+     * @param fieldName - nome do campo a ser obtido da forma em que ele aparece no banco de dados
+     * @return Resultado - objeto de resultado. É possível obter o campo desejado com o método <code>Resultado.getCorpo()</code>
+     */
+    public static Resultado readUser(int id, String fieldName){
         
         try{
             
-            String getUserSql = "SELECT * FROM usuarios WHERE id = '"+id+"';";
-            Statement getUserStatement = ConnectionClass.getStatement();
+            if(!fieldName.equals("tipo") &&
+                    !fieldName.equals("nome") &&
+                    !fieldName.equals("cpf") &&
+                    !fieldName.equals("data_nascimento") &&
+                    !fieldName.equals("telefone") &&
+                    !fieldName.equals("email") &&
+                    !fieldName.equals("cadastro") &&
+                    !fieldName.equals("data_cadastro") &&
+                    !fieldName.equals("sexo") &&
+                    !fieldName.equals("especialidade")){
+                
+                return new Resultado(false, "Campo especificado não existe no banco de dados.");
+            }
+            else{
             
-            ResultSet getUserResult = getUserStatement.executeQuery(getUserSql);
-            
-            while(getUserResult.next()){
-                if(getUserResult.getInt("tipo") == 3){
-                    
-                    String getSpecSql = "SELECT nome FROM especialidades WHERE id = '"+getUserResult.getInt("especialidade")+"';";
-                    Statement getSpecStatement = ConnectionClass.getStatement();
-                    
-                    ResultSet getSpecResult = getSpecStatement.executeQuery(getSpecSql);
-                    getSpecResult.next();
-                    String specNome = getSpecResult.getString("nome");
-                }
+                String getUserSql = "SELECT "+fieldName+" FROM usuarios WHERE id = '"+id+"';";
+                Statement getUserStatement = ConnectionClass.getStatement();
+
+                ResultSet getUserResult = getUserStatement.executeQuery(getUserSql);
+                getUserResult.next();
+                Object obj = getUserResult.getObject(fieldName);
+                getUserResult.close();
+                
+                return new Resultado(true, "Sucesso", obj);
             }
         }
         catch(SQLException e){
-            System.err.println("Ocorreu um erro ao obter o usuário: ");
+            System.err.println("Ocorreu um erro ao obter o campo: ");
             e.printStackTrace();
+            return new Resultado(false, "Ocorreu um erro ao obter o campo: "+ e.getMessage());
         }
-    }*/
+    }
     
     /**
      * Método para obter especialidades cadastradas no banco de dados

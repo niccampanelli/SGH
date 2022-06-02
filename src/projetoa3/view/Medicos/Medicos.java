@@ -24,7 +24,7 @@ public class Medicos extends JPanel{
     private final BoxLayout titleLayout, descriptionLayout;
     private final JPanel titlePanel, descriptionPanel;
     private final JLabel title, description;
-    private JLabel subtitle;
+    private final JLabel subtitle;
     private final CustomButton addButton;
     private final JScrollPane tableWrap;
     private final JTable table;
@@ -171,6 +171,23 @@ public class Medicos extends JPanel{
                         String sexoValue = "Masculino";
                         String dataNascValue = "21/12/2003";
                         
+                        Resultado sexoRes =  UserController.readUser(Integer.parseInt(idValue), "sexo");
+                        Resultado dataNascRes =  UserController.readUser(Integer.parseInt(idValue), "data_nascimento");
+                        
+                        if(sexoRes.isSucesso()){
+                            if(sexoRes.getCorpo().equals("m")){
+                                sexoValue = "Masculino";
+                            }
+                            else if(sexoRes.getCorpo().equals("f")){
+                                sexoValue = "Feminino";
+                            }
+                        }
+                        
+                        if(dataNascRes.isSucesso()){
+                            String[] dataNascSplit = dataNascRes.getCorpo().toString().split("-");
+                            dataNascValue = dataNascSplit[2] + "/" + dataNascSplit[1] + "/" + dataNascSplit[0];
+                        }
+                        
                         // Instancia uma nova tela de editar médico
                         EditarMedico editarMedico = new EditarMedico(idValue, cpfValue, nomeValue, crmValue, especialidadeValue, emailValue, telefoneValue, sexoValue, dataNascValue);
                         editarMedico.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -216,7 +233,7 @@ public class Medicos extends JPanel{
         setAlignmentY(0.0f);
     }
     
-    public void atualizarTabela(){
+    private void atualizarTabela(){
         tableModel = UserController.read(3);
         tableModel.fireTableDataChanged();
         tableModel.addColumn("X");

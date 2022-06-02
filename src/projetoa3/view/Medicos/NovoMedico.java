@@ -170,7 +170,7 @@ public class NovoMedico extends JFrame{
         try{
             cpfMask = new MaskFormatter("###.###.###-##");
             cpfMask.setPlaceholderCharacter('0');
-            crmMask = new MaskFormatter("########AA");
+            crmMask = new MaskFormatter("######AA");
             crmMask.setPlaceholderCharacter('0');
             telefoneMask = new MaskFormatter("(##) #####-####");
             telefoneMask.setPlaceholderCharacter('0');
