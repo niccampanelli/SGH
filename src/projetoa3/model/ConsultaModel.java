@@ -1,5 +1,13 @@
 package projetoa3.model;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import projetoa3.util.Resultado;
+import projetoa3.util.database.ConnectionClass;
+
 /**
  * Classe modelo de consultas
  * @author Nicholas Campanelli
@@ -14,6 +22,60 @@ public class ConsultaModel {
     private String hora;
     private String dataAtu;
 
+    public ConsultaModel(){
+        
+    }
+    
+    public ConsultaModel(
+            int idMedico, int idPaciente,
+            String data, String hora
+    ){
+        this.setIdMedico(idMedico);
+        this.setIdPaciente(idPaciente);
+        this.setData(data);
+        this.setHora(hora);
+    }
+    
+    public ConsultaModel(
+            int id,
+            int idMedico, int idPaciente,
+            String data, String hora
+    ){
+        this.setId(id);
+        this.setIdMedico(idMedico);
+        this.setIdPaciente(idPaciente);
+        this.setData(data);
+        this.setHora(hora);
+    }
+    
+    public ConsultaModel(
+            int idMedico, int idPaciente,
+            String dataCad, String data,
+            String hora, String dataAtu
+    ){
+        this.setIdMedico(idMedico);
+        this.setIdPaciente(idPaciente);
+        this.setDataCad(dataCad);
+        this.setData(data);
+        this.setHora(hora);
+        this.setDataAtu(dataAtu);
+    }
+    
+    public ConsultaModel(
+            int id,
+            int idMedico, int idPaciente,
+            String dataCad, String data,
+            String hora, String dataAtu
+    ){
+        this.setId(id);
+        this.setIdMedico(idMedico);
+        this.setIdPaciente(idPaciente);
+        this.setDataCad(dataCad);
+        this.setData(data);
+        this.setHora(hora);
+        this.setDataAtu(dataAtu);
+    }
+    
     public int getId() {
         return id;
     }
@@ -72,4 +134,34 @@ public class ConsultaModel {
     public void setDataAtu(String dataAtu) {
         this.dataAtu = dataAtu;
     }
+    
+    public Resultado create(){
+        
+        try{
+            String insertConsultaSql = "INSERT INTO consultas (id_medico, id_paciente, data, hora) VALUES"
+                                            + "(?, ?, ?, ?)";
+            PreparedStatement insertConsultaStatement = ConnectionClass.getPreparedStatement(insertConsultaSql, Statement.RETURN_GENERATED_KEYS);
+            
+            String[] dataPieces = this.getData().split("/");
+            String newDate = dataPieces[2] + "-" + dataPieces[1] + "-" + dataPieces[0];
+            
+            insertConsultaStatement.setInt(1, idMedico);
+            insertConsultaStatement.setInt(2, idPaciente);
+            insertConsultaStatement.setDate(3, Date.valueOf(newDate));
+            insertConsultaStatement.setString(4, hora);
+            
+            insertConsultaStatement.execute();
+            
+            ResultSet insertConsultaResult = insertConsultaStatement.getGeneratedKeys();
+            insertConsultaResult.next();
+            
+            int key = insertConsultaResult.getInt(1);
+            insertConsultaResult.close();
+            return new Resultado(true, "Sucesso", key);
+        }
+        catch(SQLException e){
+            System.err.println("Erro ao inserir consulta: "+e.getMessage());
+            return new Resultado(false, "Erro ao inserir consulta: "+e.getMessage());
+        }
+    }    
 }

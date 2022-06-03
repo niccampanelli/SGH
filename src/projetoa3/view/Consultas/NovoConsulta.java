@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import projetoa3.controller.ConsultaController;
 import projetoa3.controller.PacienteController;
 import projetoa3.controller.UserController;
 import projetoa3.util.Resultado;
@@ -64,6 +65,19 @@ public class NovoConsulta extends JFrame{
             
             String[] medicoSplit = medico.split(" - ");
             String medicoId = medicoSplit[0].replaceAll("#", "");
+            
+            Resultado res = ConsultaController.create(Integer.parseInt(medicoId), Integer.parseInt(pacienteId), data, hora);
+            
+            if(res.isSucesso()){
+            
+                JOptionPane.showMessageDialog(null, "Consulta adicionada com sucesso!\n"
+                        + "ID da consulta adicionada: "+ res.getCorpo().toString(), "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     
