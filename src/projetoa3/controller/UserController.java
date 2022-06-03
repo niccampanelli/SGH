@@ -573,6 +573,47 @@ public class UserController {
         }
     }
     
+    public static ArrayList<String> readUser(String fieldName, String param, String paramValue){
+        
+        try{
+            // Verifica se o campo informado é um dos campos válidos
+            if(!fieldName.equals("id") &&
+                    !fieldName.equals("tipo") &&
+                    !fieldName.equals("nome") &&
+                    !fieldName.equals("cpf") &&
+                    !fieldName.equals("data_nascimento") &&
+                    !fieldName.equals("telefone") &&
+                    !fieldName.equals("email") &&
+                    !fieldName.equals("cadastro") &&
+                    !fieldName.equals("data_cadastro") &&
+                    !fieldName.equals("sexo") &&
+                    !fieldName.equals("especialidade")){
+                
+                return null;
+            }
+            else{
+            
+                String getUserSql = "SELECT "+fieldName+" FROM usuarios WHERE "+param+" = '"+paramValue+"';";
+                Statement getUserStatement = ConnectionClass.getStatement();
+
+                ArrayList<String> resultado = new ArrayList<>();
+                ResultSet getUserResult = getUserStatement.executeQuery(getUserSql);
+                
+                while(getUserResult.next()){
+                    resultado.add(getUserResult.getObject(fieldName).toString());
+                }
+                
+                getUserResult.close();
+                return resultado;
+            }
+        }
+        catch(SQLException e){
+            System.err.println("Ocorreu um erro ao obter o campo: ");
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
     /**
      * Método para obter especialidades cadastradas no banco de dados
      * @return ArrayList<String> - Array com as especialidades cadastradas.
@@ -598,6 +639,27 @@ public class UserController {
             System.err.println("Falha ao obter especialidades: "+ e.getMessage());
             e.printStackTrace();
             return null;
+        }
+    }
+    
+    public static int readEspecialidades(String nome){
+        
+        try{
+            
+            String getSpecsSql = "SELECT id FROM especialidades WHERE nome = '"+nome+"';";
+            Statement getSpecsStatement = ConnectionClass.getStatement();
+            
+            ResultSet getSpecsResult = getSpecsStatement.executeQuery(getSpecsSql);
+            
+            getSpecsResult.next();
+            int especialidadeId = getSpecsResult.getInt("id");
+            getSpecsStatement.close();
+            return especialidadeId;
+        }
+        catch(Exception e){
+            System.err.println("Falha ao obter especialidades: "+ e.getMessage());
+            e.printStackTrace();
+            return -1;
         }
     }
     

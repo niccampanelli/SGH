@@ -3,6 +3,7 @@ package projetoa3.controller;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 import javax.swing.table.DefaultTableModel;
@@ -151,6 +152,44 @@ public class PacienteController {
             System.err.println("Ocorreu um erro ao obter o campo: ");
             e.printStackTrace();
             return new Resultado(false, "Ocorreu um erro ao obter o campo: "+ e.getMessage());
+        }
+        
+    }
+    
+    public static ArrayList<String> readPaciente(String fieldName, String param, String paramValue){
+        
+        try{
+            // Verifica se o campo informado é um dos campos válidos
+            if(!fieldName.equals("id") &&
+                    !fieldName.equals("nome") &&
+                    !fieldName.equals("sexo") &&
+                    !fieldName.equals("data_nasc") &&
+                    !fieldName.equals("cpf") &&
+                    !fieldName.equals("telefone") &&
+                    !fieldName.equals("endereco")){
+                
+                return null;
+            }
+            else{
+            
+                String getPacienteSql = "SELECT "+fieldName+" FROM pacientes WHERE "+param+" = '"+paramValue+"';";
+                Statement getPacienteStatement = ConnectionClass.getStatement();
+                
+                ArrayList<String> resultado = new ArrayList<>();
+                ResultSet getPacienteResult = getPacienteStatement.executeQuery(getPacienteSql);
+                
+                while(getPacienteResult.next()){
+                    resultado.add(getPacienteResult.getObject(fieldName).toString());
+                }
+                
+                getPacienteResult.close();
+                return resultado;
+            }
+        }
+        catch(SQLException e){
+            System.err.println("Ocorreu um erro ao obter o campo: ");
+            e.printStackTrace();
+            return null;
         }
         
     }

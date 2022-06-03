@@ -3,8 +3,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
+import java.util.ArrayList;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import projetoa3.controller.PacienteController;
+import projetoa3.controller.UserController;
+import projetoa3.util.Resultado;
 import projetoa3.view.Components.CustomButton;
 import projetoa3.view.Components.CustomField;
 import projetoa3.view.Components.CustomFormatted;
@@ -26,13 +30,15 @@ public class NovoConsulta extends JFrame{
     private final CustomButton cancelButton, addButton;
     
     // Variáveis de lógica
+    private ArrayList<String> especialidades;
+    private DefaultComboBoxModel pacienteModel, medicoModel;
     private String paciente, especialidade, medico, data, hora;
     
     private void adicionar(){
         
-        paciente = (String) pacienteField.getSelectedItem();
-        especialidade = (String) especialidadeField.getSelectedItem();
-        medico = (String) medicoField.getSelectedItem();
+        paciente = pacienteField.getSelectedItem().toString();
+        especialidade = especialidadeField.getSelectedItem().toString();
+        medico = medicoField.getSelectedItem().toString();
         data = dataField.getText();
         hora = horaField.getText();
         
@@ -52,13 +58,55 @@ public class NovoConsulta extends JFrame{
             JOptionPane.showMessageDialog(null, "Insira uma hora da consulta válida.", "Hora da consulta inválida", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            JOptionPane.showMessageDialog(null, "Consulta cadastrada com sucesso!\n"
-                    + "ID da consulta cadastrada: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
-            dispose();
+            String[] pacienteSplit = paciente.split(" - ");
+            String pacienteId = pacienteSplit[0].replaceAll("#", "");
+            
+            String[] medicoSplit = medico.split(" - ");
+            String medicoId = medicoSplit[0].replaceAll("#", "");
         }
     }
+    
+    private void atualizarPacientes(){
+        pacienteModel = new DefaultComboBoxModel();
+        pacienteField.setModel(pacienteModel);
+        
+        ArrayList<String> pacientes = PacienteController.readPaciente("id", "1", "1");
+        pacienteModel.removeAllElements();
+        pacientes.forEach(id -> {
             
+            Resultado res = PacienteController.readPaciente(Integer.parseInt(id), "nome");
+            String nome = "";
+            
+            if(res.isSucesso()){
+                nome = res.getCorpo().toString();
+            }
+            
+            pacienteModel.addElement("#"+id + " - " + nome);
+        });
+    }
+    
+    private void atualizarMedicos(){
+        medicoModel = new DefaultComboBoxModel();
+        medicoField.setModel(medicoModel);
+        
+        int especialidadeId = UserController.readEspecialidades(especialidadeField.getSelectedItem().toString());
+        
+        ArrayList<String> medicos = UserController.readUser("id", "especialidade", String.valueOf(especialidadeId));
+        medicoModel.removeAllElements();
+        medicos.forEach(id -> {
+            
+            Resultado res = UserController.readUser(Integer.parseInt(id), "nome");
+            String nome = "";
+            
+            if(res.isSucesso()){
+                nome = res.getCorpo().toString();
+            }
+            
+            medicoModel.addElement("#"+id + " - " + nome);
+        });
+    }
+    
     public NovoConsulta(){
         super("Abrir consulta");
         
@@ -95,18 +143,28 @@ public class NovoConsulta extends JFrame{
         pacienteField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         pacienteField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         pacienteField.setEditable(false);
+        atualizarPacientes();
         
-        especialidadeField = new JComboBox();
+        especialidades = UserController.readEspecialidades();
+        
+        especialidadeField = new JComboBox(especialidades.toArray());
         especialidadeField.setAlignmentX(0.0f);
         especialidadeField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         especialidadeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         especialidadeField.setEditable(false);
+        especialidadeField.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                atualizarMedicos();
+            }
+        });
         
         medicoField = new JComboBox();
         medicoField.setAlignmentX(0.0f);
         medicoField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         medicoField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         medicoField.setEditable(false);
+        atualizarMedicos();
         
         try{
             dataMask = new MaskFormatter("##/##/####");
