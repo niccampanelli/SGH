@@ -5,7 +5,11 @@ import java.awt.event.*;
 import java.text.ParseException;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import projetoa3.controller.PacienteController;
+import projetoa3.util.Resultado;
 import projetoa3.view.Components.CustomButton;
+import projetoa3.view.Components.CustomField;
+import projetoa3.view.Components.CustomFormatted;
 
 /**
  * Tela de edição de pacientes
@@ -14,57 +18,79 @@ import projetoa3.view.Components.CustomButton;
 public class EditarPaciente extends JFrame{
     
     // Componentes da interface
-    private final BoxLayout canvasLayout, mainLayout, buttonLayout;
+    private final BoxLayout canvasLayout, mainLayout, doubleFieldLayout, sexoLayout, dataNascLayout, buttonLayout;
     private final BorderLayout wrapLayout;
-    private final JPanel wrapPanel, mainPanel, buttonPanel;
-    private final JLabel title, subtitle, cpfLabel, nomeLabel, emailLabel, telefoneLabel, dataNascLabel;
-    private final JTextField nomeField, emailField;
-    private final JFormattedTextField cpfField, telefoneField, dataNascField;
+    private final JPanel wrapPanel, mainPanel, doubleField, sexoPanel, dataNascPanel, buttonPanel;
+    private final JLabel title, subtitle, cpfLabel, nomeLabel, telefoneLabel, sexoLabel, dataNascLabel, enderecoLabel;
+    private final CustomField nomeField, enderecoField;
+    private final CustomFormatted cpfField, telefoneField, dataNascField;
+    private final JComboBox sexoField;
     private MaskFormatter cpfMask, telefoneMask, dataNascMask;
     private final CustomButton cancelButton, addButton;
     
     // Variáveis de lógica
-    private String cpf, nome, email, telefone, dataNasc;
+    private String id, nome, telefone, sexo, dataNasc, endereco;
     
     private void editar(){
         
-        cpf = cpfField.getText();
         nome = nomeField.getText();
-        email = emailField.getText();
         telefone = telefoneField.getText();
+        sexo = sexoField.getSelectedItem().toString();
         dataNasc = dataNascField.getText();
+        endereco = enderecoField.getText();
         
-        if("".equals(cpf) || cpf.length() != 14 || cpf.endsWith("0-00")){
-            JOptionPane.showMessageDialog(null, "Insira um CPF válido.", "CPF inválido", JOptionPane.WARNING_MESSAGE);
-        }
-        else if("".equals(nome) || nome.length() < 5){
+        if("".equals(nome) || nome.length() < 5){
             JOptionPane.showMessageDialog(null, "Insira um nome completo com no mínimo 5 caracteres.", "Nome inválido", JOptionPane.WARNING_MESSAGE);
-        }
-        else if("".equals(email) || email.length() < 7 || !email.contains("@") || !email.contains(".")){
-            JOptionPane.showMessageDialog(null, "Insira um endereço de e-mail válido, contendo \"@\" e \".\".", "Endereço de e-mail inválido", JOptionPane.WARNING_MESSAGE);
         }
         else if("".equals(telefone) || telefone.length() != 15 || telefone.startsWith("(00)") || telefone.endsWith("0000")){
             JOptionPane.showMessageDialog(null, "Insira um telefone válido.", "Telefone inválido", JOptionPane.WARNING_MESSAGE);
         }
+        else if("".equals(sexo) || (!"Masculino".equals(sexo) && !"Feminino".equals(sexo)) || sexo == null){
+            JOptionPane.showMessageDialog(null, "Escolha um sexo válido.", "Sexo inválido", JOptionPane.WARNING_MESSAGE);
+        }
         else if("".equals(dataNasc) || dataNasc.length() != 10 || dataNasc.endsWith("0000")){
             JOptionPane.showMessageDialog(null, "Insira uma data de nascimento válida.", "Data de nascimento inválida", JOptionPane.WARNING_MESSAGE);
         }
+        else if("".equals(endereco) || endereco.length() < 20 || endereco.length() > 100){
+            JOptionPane.showMessageDialog(null, "Insira um endereco completo possuindo logradouro, número, bairro e cidade e complemento se necessário.", "Endereco inválido", JOptionPane.WARNING_MESSAGE);
+        }
         else{
-            JOptionPane.showMessageDialog(null, "Cadastro do paciente modificado com sucesso!\n"
-                    + "ID do paciente modificado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
-            dispose();
+            String cleanTelefone = telefone.replaceAll("[^a-zA-Z0-9]", "");
+            String charSexo = "m";
+            
+            if(sexo.equals("Masculino")){
+                charSexo = "m";
+            }
+            else{
+                charSexo = "f";
+            }
+            
+            Resultado res = PacienteController.update(Integer.parseInt(id), nome, charSexo, dataNasc, cleanTelefone, endereco);
+            
+            if(res.isSucesso()){
+            
+                JOptionPane.showMessageDialog(null, "Cadastro atualizado com sucesso!\n"
+                        + "ID do cadastro do paciente atualizado: "+id, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+            
         }
     }
             
-    public EditarPaciente(String id, String cpf, String nome, String email, String telefone, String dataNasc){
+    public EditarPaciente(String id, String cpf, String nome, String telefone, String sexo, String dataNasc, String endereco){
         super("Editar paciente");
         
-        this.cpf = cpf;
+        this.id = id;
         this.nome = nome;
-        this.email = email;
         this.telefone = telefone;
+        this.sexo = sexo;
         this.dataNasc = dataNasc;
+        this.endereco = endereco;
         
         Container canvas = getContentPane();
         canvasLayout = new BoxLayout(canvas, BoxLayout.PAGE_AXIS);
@@ -84,29 +110,25 @@ public class EditarPaciente extends JFrame{
         title = new JLabel("Editar paciente");
         title.setFont(new Font(Font.SANS_SERIF, 1, 24));
         
-        subtitle = new JLabel("#" + id);
+        subtitle = new JLabel("#"+id);
         
         cpfLabel = new JLabel("CPF");
         
         nomeLabel = new JLabel("Nome completo");
-        
-        emailLabel = new JLabel("Endereço de e-mail");
-        
+                
         telefoneLabel = new JLabel("Telefone");
+        
+        sexoLabel = new JLabel("Sexo");
         
         dataNascLabel = new JLabel("Data de nascimento");
         
-        nomeField = new JTextField(nome);
+        enderecoLabel = new JLabel("Endereço");
+        
+        nomeField = new CustomField(nome);
         nomeField.setAlignmentX(0.0f);
         nomeField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         nomeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         nomeField.setMargin(new Insets(0, 10, 0, 10));
-        
-        emailField = new JTextField(email);
-        emailField.setAlignmentX(0.0f);
-        emailField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        emailField.setMargin(new Insets(0, 10, 0, 10));
         
         try{
             cpfMask = new MaskFormatter("###.###.###-##");
@@ -120,26 +142,71 @@ public class EditarPaciente extends JFrame{
             System.out.println("Erro na máscara");
         }
         
-        cpfField = new JFormattedTextField(cpfMask);
+        cpfField = new CustomFormatted(cpfMask);
         cpfField.setText(cpf);
         cpfField.setAlignmentX(0.0f);
         cpfField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         cpfField.setMargin(new Insets(0, 10, 0, 10));
+        cpfField.setEnabled(false);
         
-        telefoneField = new JFormattedTextField(telefoneMask);
+        telefoneField = new CustomFormatted(telefoneMask);
         telefoneField.setText(telefone);
         telefoneField.setAlignmentX(0.0f);
         telefoneField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         telefoneField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         telefoneField.setMargin(new Insets(0, 10, 0, 10));
         
-        dataNascField = new JFormattedTextField(dataNascMask);
+        doubleField = new JPanel();
+        doubleField.setAlignmentX(0.0f);
+        doubleFieldLayout = new BoxLayout(doubleField, BoxLayout.X_AXIS);
+        doubleField.setLayout(doubleFieldLayout);
+        doubleField.setBackground(null);
+        
+        sexoPanel = new JPanel();
+        sexoPanel.setAlignmentX(0.0f);
+        sexoLayout = new BoxLayout(sexoPanel, BoxLayout.Y_AXIS);
+        sexoPanel.setLayout(sexoLayout);
+        sexoPanel.setBackground(null);
+        
+        String[] sexoList = {
+            "Masculino", "Feminino"
+        };
+        
+        sexoField = new JComboBox(sexoList);
+        sexoField.setSelectedItem(sexo);
+        sexoField.setAlignmentX(0.0f);
+        sexoField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        sexoField.setEditable(false);
+        
+        sexoPanel.add(sexoLabel);
+        sexoPanel.add(sexoField);
+        
+        dataNascPanel = new JPanel();
+        dataNascPanel.setAlignmentX(0.0f);
+        dataNascLayout = new BoxLayout(dataNascPanel, BoxLayout.Y_AXIS);
+        dataNascPanel.setLayout(dataNascLayout);
+        dataNascPanel.setBackground(null);
+        
+        dataNascField = new CustomFormatted(dataNascMask);
         dataNascField.setText(dataNasc);
         dataNascField.setAlignmentX(0.0f);
         dataNascField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         dataNascField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         dataNascField.setMargin(new Insets(0, 10, 0, 10));
+        
+        dataNascPanel.add(dataNascLabel);
+        dataNascPanel.add(dataNascField);
+        
+        doubleField.add(sexoPanel);
+        doubleField.add(Box.createRigidArea(new Dimension(10, 0)));
+        doubleField.add(dataNascPanel);
+        
+        enderecoField = new CustomField(endereco);
+        enderecoField.setAlignmentX(0.0f);
+        enderecoField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        enderecoField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        enderecoField.setMargin(new Insets(0, 10, 0, 10));
         
         buttonPanel = new JPanel();
         buttonPanel.setAlignmentX(0.0f);
@@ -154,10 +221,10 @@ public class EditarPaciente extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
                 if((!cpfField.getText().equalsIgnoreCase(cpf)) || 
-                    (!nomeField.getText().equalsIgnoreCase(nome)) ||
-                    (!emailField.getText().equalsIgnoreCase(email)) ||
-                    (!telefoneField.getText().equalsIgnoreCase(telefone)) ||
-                    (!dataNascField.getText().equalsIgnoreCase(dataNasc))){
+                    (!nomeField.getText().equals(nome)) ||
+                    (!telefoneField.getText().equals("(00) 00000-0000")) ||
+                    (!enderecoField.getText().equals(endereco)) ||
+                    (!dataNascField.getText().equals(dataNasc))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
                       "Tem certeza que deseja cancelar a modificação deste cadastro?\n"
@@ -199,14 +266,13 @@ public class EditarPaciente extends JFrame{
         mainPanel.add(nomeLabel);
         mainPanel.add(nomeField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(emailLabel);
-        mainPanel.add(emailField);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         mainPanel.add(telefoneLabel);
         mainPanel.add(telefoneField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(dataNascLabel);
-        mainPanel.add(dataNascField);
+        mainPanel.add(doubleField);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        mainPanel.add(enderecoLabel);
+        mainPanel.add(enderecoField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
         mainPanel.add(buttonPanel);
         
@@ -226,10 +292,10 @@ public class EditarPaciente extends JFrame{
                 setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 
                 if((!cpfField.getText().equalsIgnoreCase(cpf)) || 
-                    (!nomeField.getText().equalsIgnoreCase(nome)) ||
-                    (!emailField.getText().equalsIgnoreCase(email)) ||
-                    (!telefoneField.getText().equalsIgnoreCase(telefone)) ||
-                    (!dataNascField.getText().equalsIgnoreCase(dataNasc))){
+                    (!nomeField.getText().equals(nome)) ||
+                    (!telefoneField.getText().equals("(00) 00000-0000")) ||
+                    (!enderecoField.getText().equals(endereco)) ||
+                    (!dataNascField.getText().equals(dataNasc))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
                       "Tem certeza que deseja cancelar a modificação deste cadastro?\n"

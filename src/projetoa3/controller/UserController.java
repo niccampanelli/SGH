@@ -255,6 +255,11 @@ public class UserController {
         }
     }
     
+    /**
+     * Método para obter usuários
+     * @param tipo
+     * @return DefaultTableModel - modelo de tabela com as linhas dos registros
+     */
     public static DefaultTableModel read(int tipo){
         
         DefaultTableModel model = new DefaultTableModel(0, 0);
@@ -534,7 +539,7 @@ public class UserController {
     public static Resultado readUser(int id, String fieldName){
         
         try{
-            
+            // Verifica se o campo informado é um dos campos válidos
             if(!fieldName.equals("tipo") &&
                     !fieldName.equals("nome") &&
                     !fieldName.equals("cpf") &&
@@ -603,7 +608,6 @@ public class UserController {
             Statement deleteUserStatement = ConnectionClass.getStatement();
             
             deleteUserStatement.execute(deleteUserSql);
-            ResultSet deleteUserResult = deleteUserStatement.getResultSet();
                         
             return new Resultado(true, "Sucesso");
             

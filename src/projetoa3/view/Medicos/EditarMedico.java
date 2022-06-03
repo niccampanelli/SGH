@@ -21,7 +21,7 @@ public class EditarMedico extends JFrame{
     private final BoxLayout canvasLayout, mainLayout, doubleFieldLayout1, crmLayout, especialidadeLayout, doubleFieldLayout2, sexoLayout, dataNascLayout, buttonLayout;
     private final BorderLayout wrapLayout;
     private final JPanel wrapPanel, mainPanel, doubleField1, crmPanel, especialidadePanel, doubleField2, sexoPanel, dataNascPanel, buttonPanel;
-    private final JLabel title, cpfLabel, nomeLabel, crmLabel, especialidadeLabel, emailLabel, telefoneLabel, sexoLabel, dataNascLabel;
+    private final JLabel title, subtitle, cpfLabel, nomeLabel, crmLabel, especialidadeLabel, emailLabel, telefoneLabel, sexoLabel, dataNascLabel;
     private final CustomField nomeField, crmField, emailField;
     private final CustomFormatted cpfField, telefoneField, dataNascField;
     private final JComboBox especialidadeField, sexoField;
@@ -29,33 +29,21 @@ public class EditarMedico extends JFrame{
     private final CustomButton cancelButton, addButton;
     
     // Variáveis de lógica
-    private String id, cpf, nome, crm, especialidade, email, telefone, sexo, dataNasc;
+    private String id, nome, especialidade, telefone, sexo, dataNasc;
     
     private void editar(){
         
-        cpf = cpfField.getText();
         nome = nomeField.getText();
-        crm = crmField.getText();
         especialidade = (String) especialidadeField.getSelectedItem();
-        email = emailField.getText();
         telefone = telefoneField.getText();
         sexo = (String) sexoField.getSelectedItem();
         dataNasc = dataNascField.getText();
         
-        if("".equals(cpf) || cpf.length() != 14 || cpf.endsWith("0-00")){
-            JOptionPane.showMessageDialog(null, "Insira um CPF válido.", "CPF inválido", JOptionPane.WARNING_MESSAGE);
-        }
-        else if("".equals(nome) || nome.length() < 10){
+        if("".equals(nome) || nome.length() < 10){
             JOptionPane.showMessageDialog(null, "Insira um nome completo com no mínimo 10 caracteres.", "Nome inválido", JOptionPane.WARNING_MESSAGE);
-        }
-        else if("".equals(crm) || crm.length() != 8){
-            JOptionPane.showMessageDialog(null, "Insira um CRM válido.", "CRM inválido", JOptionPane.WARNING_MESSAGE);
         }
         else if("".equals(especialidade)){
             JOptionPane.showMessageDialog(null, "Indique uma especialidade válida. Se a especialidade desejada não constar na lista, digite-a no campo.", "Especialidade inválida", JOptionPane.WARNING_MESSAGE);
-        }
-        else if("".equals(email) || email.length() < 7 || !email.contains("@") || !email.contains(".")){
-            JOptionPane.showMessageDialog(null, "Insira um endereço de e-mail válido, contendo \"@\" e \".\".", "Endereço de e-mail inválido", JOptionPane.WARNING_MESSAGE);
         }
         else if("".equals(telefone) || telefone.length() != 15 || telefone.startsWith("(00)") || telefone.endsWith("0000")){
             JOptionPane.showMessageDialog(null, "Insira um telefone válido.", "Telefone inválido", JOptionPane.WARNING_MESSAGE);
@@ -98,11 +86,8 @@ public class EditarMedico extends JFrame{
         super("Editar médico");
         
         this.id = id;
-        this.cpf = cpf;
         this.nome = nome;
-        this.crm = crm;
         this.especialidade = especialidade;
-        this.email = email;
         this.telefone = telefone;
         this.sexo = sexo;
         this.dataNasc = dataNasc;
@@ -124,6 +109,8 @@ public class EditarMedico extends JFrame{
         
         title = new JLabel("Editar médico");
         title.setFont(new Font(Font.SANS_SERIF, 1, 24));
+        
+        subtitle = new JLabel("#"+id);
         
         cpfLabel = new JLabel("CPF");
         
@@ -320,6 +307,7 @@ public class EditarMedico extends JFrame{
         buttonPanel.add(addButton);
         
         mainPanel.add(title);
+        mainPanel.add(subtitle);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(cpfLabel);
         mainPanel.add(cpfField);

@@ -145,4 +145,30 @@ public class PacienteModel {
             return new Resultado(false, "Não foi possível criar um paciente. Tente novamente.\n" + e.getMessage());
         }
     }
+    
+    public Resultado update(){
+        try{
+            String updatePacienteSql = "UPDATE pacientes SET nome = ?, sexo = ?, data_nasc = ?, telefone = ?, endereco = ?"
+                                            + "WHERE id = '"+this.getId()+"';";
+            PreparedStatement updatePacienteStatement = ConnectionClass.getPreparedStatement(updatePacienteSql);
+            
+            String[] dataNascPieces = this.getDataNasc().split("/");
+            String newDate = dataNascPieces[2]+"-"+dataNascPieces[1]+"-"+dataNascPieces[0];
+            
+            updatePacienteStatement.setString(1, this.getNome());
+            updatePacienteStatement.setString(2, this.getSexo());
+            updatePacienteStatement.setDate(3, Date.valueOf(newDate));
+            updatePacienteStatement.setString(4, this.getTelefone());
+            updatePacienteStatement.setString(5, this.getEndereco());
+            
+            updatePacienteStatement.execute();
+            updatePacienteStatement.close();
+            
+            return new Resultado(true, "Sucesso");
+        }
+        catch(SQLException e){
+            System.err.println("Não foi possível criar um paciente: "+ e.getMessage());
+            return new Resultado(false, "Não foi possível criar um paciente. Tente novamente.\n" + e.getMessage());
+        }
+    }
 }
