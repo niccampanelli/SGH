@@ -27,7 +27,7 @@ public class EditarConsulta extends JFrame{
     private final JComboBox pacienteField, especialidadeField, medicoField;
     private final CustomFormatted dataField, horaField;
     private MaskFormatter dataMask, horaMask;
-    private final CustomButton cancelButton, addButton;
+    private final CustomButton examButton, cancelButton, addButton;
     
     // Variáveis de lógica
     private ArrayList<String> especialidades;
@@ -75,6 +75,13 @@ public class EditarConsulta extends JFrame{
                 JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+    
+    private void adicionarExame(){
+        
+        NovoExame novoExame = new NovoExame(1);
+        novoExame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
     }
     
     private void atualizarMedicos(){
@@ -193,6 +200,18 @@ public class EditarConsulta extends JFrame{
         horaField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         horaField.setMargin(new Insets(0, 10, 0, 10));
         
+        examButton = new CustomButton("Adicionar Exame");
+        examButton.setAlignmentX(0.0f);
+        examButton.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        examButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        examButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        examButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                adicionarExame();
+            }
+        });
+        
         buttonPanel = new JPanel();
         buttonPanel.setAlignmentX(0.0f);
         buttonLayout = new BoxLayout(buttonPanel, BoxLayout.X_AXIS);
@@ -243,6 +262,7 @@ public class EditarConsulta extends JFrame{
         buttonPanel.add(addButton);
         
         mainPanel.add(title);
+        mainPanel.add(subtitle);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(pacienteLabel);
         mainPanel.add(pacienteField);
@@ -258,13 +278,15 @@ public class EditarConsulta extends JFrame{
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         mainPanel.add(horaLabel);
         mainPanel.add(horaField);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        mainPanel.add(examButton);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
         mainPanel.add(buttonPanel);
         
         wrapPanel.add(mainPanel);
         canvas.add(wrapPanel);
         
-        setSize(400, 550);
+        setSize(400, 600);
         setLayout(canvasLayout);
         setLocationRelativeTo(null);
         setVisible(true);
