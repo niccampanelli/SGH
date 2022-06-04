@@ -3,9 +3,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
+import java.util.ArrayList;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import projetoa3.controller.ConsultaController;
+import projetoa3.controller.PacienteController;
+import projetoa3.controller.UserController;
+import projetoa3.util.Resultado;
 import projetoa3.view.Components.CustomButton;
+import projetoa3.view.Components.CustomFormatted;
 
 /**
  * Tela de edição de consultas
@@ -17,54 +23,90 @@ public class EditarConsulta extends JFrame{
     private final BoxLayout canvasLayout, mainLayout, buttonLayout;
     private final BorderLayout wrapLayout;
     private final JPanel wrapPanel, mainPanel, buttonPanel;
-    private final JLabel title, subtitle, cpfLabel, nomeLabel, emailLabel, telefoneLabel, dataNascLabel;
-    private final JTextField nomeField, emailField;
-    private final JFormattedTextField cpfField, telefoneField, dataNascField;
-    private MaskFormatter cpfMask, telefoneMask, dataNascMask;
+    private final JLabel title, subtitle, pacienteLabel, especialidadeLabel, medicoLabel, dataLabel, horaLabel;
+    private final JComboBox pacienteField, especialidadeField, medicoField;
+    private final CustomFormatted dataField, horaField;
+    private MaskFormatter dataMask, horaMask;
     private final CustomButton cancelButton, addButton;
     
     // Variáveis de lógica
-    private String cpf, nome, email, telefone, dataNasc;
+    private ArrayList<String> especialidades;
+    private DefaultComboBoxModel medicoModel;
+    private String id, paciente, especialidade, medico, data, hora;
     
     private void editar(){
         
-        cpf = cpfField.getText();
-        nome = nomeField.getText();
-        email = emailField.getText();
-        telefone = telefoneField.getText();
-        dataNasc = dataNascField.getText();
+        paciente = pacienteField.getSelectedItem().toString();
+        especialidade = especialidadeField.getSelectedItem().toString();
+        medico = medicoField.getSelectedItem().toString();
+        data = dataField.getText();
+        hora = horaField.getText();
         
-        if("".equals(cpf) || cpf.length() != 14 || cpf.endsWith("0-00")){
-            JOptionPane.showMessageDialog(null, "Insira um CPF válido.", "CPF inválido", JOptionPane.WARNING_MESSAGE);
+        if("".equals(paciente) || paciente == null){
+            JOptionPane.showMessageDialog(null, "Escolha um paciente válido.", "Paciente inválido", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(nome) || nome.length() < 5){
-            JOptionPane.showMessageDialog(null, "Insira um nome completo com no mínimo 5 caracteres.", "Nome inválido", JOptionPane.WARNING_MESSAGE);
+        else if("".equals(especialidade) || especialidade == null){
+            JOptionPane.showMessageDialog(null, "Escolha uma especialidade válida.", "Especialidade inválida", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(email) || email.length() < 7 || !email.contains("@") || !email.contains(".")){
-            JOptionPane.showMessageDialog(null, "Insira um endereço de e-mail válido, contendo \"@\" e \".\".", "Endereço de e-mail inválido", JOptionPane.WARNING_MESSAGE);
+        else if("".equals(medico) || medico == null){
+            JOptionPane.showMessageDialog(null, "Escolha um médico válido.", "Médico inválido", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(telefone) || telefone.length() != 15 || telefone.startsWith("(00)") || telefone.endsWith("0000")){
-            JOptionPane.showMessageDialog(null, "Insira um telefone válido.", "Telefone inválido", JOptionPane.WARNING_MESSAGE);
+        else if("".equals(data) || data.length() != 10 || data.indexOf('/') == -1 || data.endsWith("0000")){
+            JOptionPane.showMessageDialog(null, "Insira uma data da consulta válida.", "Data inválida", JOptionPane.WARNING_MESSAGE);
         }
-        else if("".equals(dataNasc) || dataNasc.length() != 10 || dataNasc.endsWith("0000")){
-            JOptionPane.showMessageDialog(null, "Insira uma data de nascimento válida.", "Data de nascimento inválida", JOptionPane.WARNING_MESSAGE);
+        else if("".equals(hora) || hora.length() != 5 || hora.indexOf(':') == -1){
+            JOptionPane.showMessageDialog(null, "Insira uma hora da consulta válida.", "Hora da consulta inválida", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            JOptionPane.showMessageDialog(null, "Atendente modificado com sucesso!\n"
-                    + "ID do atentendente modificado: 5415.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
-            dispose();
+            String[] medicoSplit = medico.split(" - ");
+            String medicoId = medicoSplit[0].replaceAll("#", "");
+            
+            Resultado res = ConsultaController.update(Integer.parseInt(id), Integer.parseInt(medicoId), data, hora);
+            
+            if(res.isSucesso()){
+            
+                JOptionPane.showMessageDialog(null, "Consulta modificada com sucesso!\n"
+                        + "ID da consulta modificada: "+id, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
+    
+    private void atualizarMedicos(){
+        medicoModel = new DefaultComboBoxModel();
+        medicoField.setModel(medicoModel);
+        
+        int especialidadeId = UserController.readEspecialidades(especialidadeField.getSelectedItem().toString());
+        
+        ArrayList<String> medicos = UserController.readUser("id", "especialidade", String.valueOf(especialidadeId));
+        medicoModel.removeAllElements();
+        medicos.forEach(id -> {
             
-    public EditarConsulta(String id, String cpf, String nome, String email, String telefone, String dataNasc){
+            Resultado res = UserController.readUser(Integer.parseInt(id), "nome");
+            String nome = "";
+            
+            if(res.isSucesso()){
+                nome = res.getCorpo().toString();
+            }
+            
+            medicoModel.addElement("#"+id + " - " + nome);
+        });
+    }
+            
+    public EditarConsulta(String id, String paciente, String especialidade, String medico, String data, String hora){
         super("Editar consulta");
         
-        this.cpf = cpf;
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.dataNasc = dataNasc;
+        this.id = id;
+        this.paciente = paciente;
+        this.especialidade = especialidade;
+        this.medico = medico;
+        this.data = data;
+        this.hora = hora;
         
         Container canvas = getContentPane();
         canvasLayout = new BoxLayout(canvas, BoxLayout.PAGE_AXIS);
@@ -86,60 +128,70 @@ public class EditarConsulta extends JFrame{
         
         subtitle = new JLabel("#" + id);
         
-        cpfLabel = new JLabel("CPF");
+        pacienteLabel = new JLabel("Escolha um paciente");
         
-        nomeLabel = new JLabel("Nome completo");
+        especialidadeLabel = new JLabel("Especialidade");
         
-        emailLabel = new JLabel("Endereço de e-mail");
+        medicoLabel = new JLabel("Médico da consulta");
         
-        telefoneLabel = new JLabel("Telefone");
+        dataLabel = new JLabel("Data");
         
-        dataNascLabel = new JLabel("Data de nascimento");
+        horaLabel = new JLabel("Hora");
         
-        nomeField = new JTextField(nome);
-        nomeField.setAlignmentX(0.0f);
-        nomeField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        nomeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        nomeField.setMargin(new Insets(0, 10, 0, 10));
+        pacienteField = new JComboBox(new Object[]{ paciente });
+        pacienteField.setAlignmentX(0.0f);
+        pacienteField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        pacienteField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        pacienteField.setEditable(false);
+        pacienteField.setEnabled(false);
+        pacienteField.setSelectedItem(paciente);
         
-        emailField = new JTextField(email);
-        emailField.setAlignmentX(0.0f);
-        emailField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        emailField.setMargin(new Insets(0, 10, 0, 10));
+        especialidades = UserController.readEspecialidades();
+        
+        especialidadeField = new JComboBox(especialidades.toArray());
+        especialidadeField.setAlignmentX(0.0f);
+        especialidadeField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        especialidadeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        especialidadeField.setEditable(false);
+        especialidadeField.setSelectedItem(especialidade);
+        especialidadeField.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                atualizarMedicos();
+            }
+        });
+        
+        medicoField = new JComboBox();
+        atualizarMedicos();
+        medicoField.setAlignmentX(0.0f);
+        medicoField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        medicoField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        medicoField.setEditable(false);
+        medicoField.setSelectedItem(medico);
         
         try{
-            cpfMask = new MaskFormatter("###.###.###-##");
-            cpfMask.setPlaceholderCharacter('0');
-            telefoneMask = new MaskFormatter("(##) #####-####");
-            telefoneMask.setPlaceholderCharacter('0');
-            dataNascMask = new MaskFormatter("##/##/####");
-            dataNascMask.setPlaceholderCharacter('0');
+            dataMask = new MaskFormatter("##/##/####");
+            dataMask.setPlaceholderCharacter('0');
+            horaMask = new MaskFormatter("##:##");
+            horaMask.setPlaceholderCharacter('0');
         }
         catch(ParseException ex){
             System.out.println("Erro na máscara");
         }
         
-        cpfField = new JFormattedTextField(cpfMask);
-        cpfField.setText(cpf);
-        cpfField.setAlignmentX(0.0f);
-        cpfField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        cpfField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        cpfField.setMargin(new Insets(0, 10, 0, 10));
+        dataField = new CustomFormatted(dataMask);
+        dataField.setText(data);
+        dataField.setAlignmentX(0.0f);
+        dataField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        dataField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        dataField.setMargin(new Insets(0, 10, 0, 10));
         
-        telefoneField = new JFormattedTextField(telefoneMask);
-        telefoneField.setText(telefone);
-        telefoneField.setAlignmentX(0.0f);
-        telefoneField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        telefoneField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        telefoneField.setMargin(new Insets(0, 10, 0, 10));
-        
-        dataNascField = new JFormattedTextField(dataNascMask);
-        dataNascField.setText(dataNasc);
-        dataNascField.setAlignmentX(0.0f);
-        dataNascField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        dataNascField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        dataNascField.setMargin(new Insets(0, 10, 0, 10));
+        horaField = new CustomFormatted(horaMask);
+        horaField.setText(hora);
+        horaField.setAlignmentX(0.0f);
+        horaField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        horaField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        horaField.setMargin(new Insets(0, 10, 0, 10));
         
         buttonPanel = new JPanel();
         buttonPanel.setAlignmentX(0.0f);
@@ -153,11 +205,11 @@ public class EditarConsulta extends JFrame{
         cancelButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                if((!cpfField.getText().equalsIgnoreCase(cpf)) || 
-                    (!nomeField.getText().equalsIgnoreCase(nome)) ||
-                    (!emailField.getText().equalsIgnoreCase(email)) ||
-                    (!telefoneField.getText().equalsIgnoreCase(telefone)) ||
-                    (!dataNascField.getText().equalsIgnoreCase(dataNasc))){
+                if((!pacienteField.getSelectedItem().toString().equals(paciente)) || 
+                    (!especialidadeField.getSelectedItem().toString().equals(especialidade)) ||
+                    (!medicoField.getSelectedItem().toString().equals(medico)) ||
+                    (!dataField.getText().equals(data)) ||
+                    (!horaField.getText().equals(hora))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
                       "Tem certeza que deseja cancelar a edição desta consulta?\n"
@@ -191,29 +243,28 @@ public class EditarConsulta extends JFrame{
         buttonPanel.add(addButton);
         
         mainPanel.add(title);
-        mainPanel.add(subtitle);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        mainPanel.add(cpfLabel);
-        mainPanel.add(cpfField);
+        mainPanel.add(pacienteLabel);
+        mainPanel.add(pacienteField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(nomeLabel);
-        mainPanel.add(nomeField);
+        mainPanel.add(especialidadeLabel);
+        mainPanel.add(especialidadeField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(emailLabel);
-        mainPanel.add(emailField);
+        mainPanel.add(medicoLabel);
+        mainPanel.add(medicoField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(telefoneLabel);
-        mainPanel.add(telefoneField);
+        mainPanel.add(dataLabel);
+        mainPanel.add(dataField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        mainPanel.add(dataNascLabel);
-        mainPanel.add(dataNascField);
+        mainPanel.add(horaLabel);
+        mainPanel.add(horaField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
         mainPanel.add(buttonPanel);
         
         wrapPanel.add(mainPanel);
         canvas.add(wrapPanel);
         
-        setSize(400, 570);
+        setSize(400, 550);
         setLayout(canvasLayout);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -225,11 +276,11 @@ public class EditarConsulta extends JFrame{
                 
                 setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 
-                if((!cpfField.getText().equalsIgnoreCase(cpf)) || 
-                    (!nomeField.getText().equalsIgnoreCase(nome)) ||
-                    (!emailField.getText().equalsIgnoreCase(email)) ||
-                    (!telefoneField.getText().equalsIgnoreCase(telefone)) ||
-                    (!dataNascField.getText().equalsIgnoreCase(dataNasc))){
+                if((!pacienteField.getSelectedItem().toString().equals(paciente)) || 
+                    (!especialidadeField.getSelectedItem().toString().equals(especialidade)) ||
+                    (!medicoField.getSelectedItem().toString().equals(medico)) ||
+                    (!dataField.getText().equals(data)) ||
+                    (!horaField.getText().equals(hora))){
                     
                     int confirmed = JOptionPane.showConfirmDialog(null, 
                       "Tem certeza que deseja cancelar a edição desta consulta?\n"

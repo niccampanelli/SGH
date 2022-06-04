@@ -161,9 +161,12 @@ public class PacienteModel {
             updatePacienteStatement.setString(4, this.getTelefone());
             updatePacienteStatement.setString(5, this.getEndereco());
             
-            updatePacienteStatement.execute();
-            updatePacienteStatement.close();
+            if(updatePacienteStatement.executeUpdate() == 0){
+                System.err.println("Não foi possível criar um paciente.");
+                return new Resultado(false, "Não foi possível criar um paciente. Tente novamente.");
+            }
             
+            updatePacienteStatement.close();
             return new Resultado(true, "Sucesso");
         }
         catch(SQLException e){

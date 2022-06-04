@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
+import projetoa3.controller.ConsultaController;
+import projetoa3.util.Resultado;
 
 /**
  * Painel de consultas
@@ -24,7 +26,7 @@ public class Consultas extends JPanel{
     private final CustomButton addButton;
     private final JScrollPane tableWrap;
     private final JTable table;
-    private final DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
     private Image trashIcon;
     
     public Consultas(){
@@ -37,38 +39,6 @@ public class Consultas extends JPanel{
             System.out.println(ex.getMessage());
         }
         
-        String[] columns = {
-            "ID",
-            "CPF do paciente",
-            "Nome",
-            "Especialista",
-            "Médico",
-            "Data marcada",
-            "Cadastrado em"
-        };
-        
-        Object[][] data = {
-            {1231, "365.785.234-45", "Nicholas Campanelli de Souza", "nicholasoucampanelli@hotmail.com", "(11) 95846-4236", "21/12/2003", "30/05/2022"},
-            {4124, "645.754.425-53", "Charles", "Charles@email.com", "(11) 91424-3454", "20/03/1954", "12/05/2022"},
-            {4563, "453.754.578-24", "Eric", "Eric@email.com", "(11) 45363-5353", "10/05/1959", "22/05/2022"},
-            {4563, "856.453.424-54", "Gabriel", "Gabriel@email.com", "(11) 46367-4356", "03/04/1962", "13/05/2022"},
-            {4251, "235.351.231-63", "Hanna", "Hanna@email.com", "(11) 46235-5647", "17/02/1963", "23/05/2022"},
-            {3563, "647.823.555-86", "Ali", "Ali@email.com", "(11) 75674-5647", "27/09/1994", "22/05/2022"},
-            {4847, "345.142.453-23", "Beatriz", "Beatriz@email.com", "(11) 64758-6888", "10/08/1986", "23/05/2022"},
-            {2763, "867.423.252-22", "Diya", "Diya@email.com", "(11) 53678-6858", "28/07/1980", "31/05/2022"},
-            {2746, "565.998.364-35", "Fatima", "Fatima@email.com", "(11) 23412-7657", "22/09/2000", "11/05/2022"},
-            {2341, "076.657.312-48", "Eman Glass", "Eman@email.com", "(11) 66743-7657", "28/07/1980", "11/05/2022"},
-            {7463, "564.858.467-67", "Ubaid Downs", "Ubaid@email.com", "(11) 23463-4553", "15/02/2002", "22/05/2022"},
-            {2451, "234.840.453-88", "Orson Burton", "Orson@email.com", "(11) 13662-4345", "06/01/1994", "31/05/2022"},
-            {1245, "535.564.998-40", "Kirby Medina", "Kirby@email.com", "(11) 13455-5523", "08/03/1995", "31/05/2022"},
-            {9574, "323.345.564-23", "Dulcie Needham", "Dulcie@email.com", "(11) 23321-9977", "01/03/1986", "21/05/2022"},
-            {2356, "414.574.342-53", "Muhamed Guerra", "Muhamed@email.com", "(11) 44768-7655", "21/12/2000", "04/05/2022"},
-            {1746, "332.232.356-42", "Glen Hubbard", "Glen@email.com", "(11) 34577-7576", "31/12/2003", "12/05/2022"},
-            {2754, "362.216.436-67", "Hebe Stein", "Hebe@email.com", "(11) 46788-6422", "12/05/1992", "04/05/2022"},
-            {4675, "637.622.243-12", "Louie Nicholson", "Louie@email.com", "(11) 57554-4333", "04/06/1966", "04/05/2022"},
-            {6487, "132.475.518-21", "Dylon Gibson", "Dylon@email.com", "(11) 65466-1123", "15/03/1979", "04/05/2022"}
-        };
-        
         // Painel que contém o título
         titlePanel = new JPanel();
         titleLayout = new BoxLayout(titlePanel, BoxLayout.LINE_AXIS);
@@ -78,14 +48,7 @@ public class Consultas extends JPanel{
         
         title = new JLabel("Consultas");
         title.setFont(new Font(Font.SANS_SERIF, 1, 30));
-        
-        // Verifica o plural
-        if(data.length == 1){
-            subtitle = new JLabel("1 consulta encontrada");
-        }
-        else{
-            subtitle = new JLabel(data.length + " consultas encontradas");
-        }
+        subtitle = new JLabel("1 consulta encontrada");
         
         // Botão de adicionar pacientes
         addButton = new CustomButton("Abrir nova consulta");
@@ -96,6 +59,12 @@ public class Consultas extends JPanel{
                 
                 // Instancia uma tela de adicionar consulta
                 NovoConsulta novoConsulta = new NovoConsulta();
+                novoConsulta.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e){
+                        atualizarTabela();
+                    }
+                });
                 novoConsulta.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             }
         });
@@ -116,7 +85,7 @@ public class Consultas extends JPanel{
         
         descriptionPanel.add(description);
         
-        tableModel = new DefaultTableModel(data, columns);
+        tableModel = new DefaultTableModel(0, 0);
         
         // Cria a tabela com os dados e colunas
         // e desabilita a edição de células
@@ -126,28 +95,7 @@ public class Consultas extends JPanel{
                 return false;
             }
         };
-        tableModel.addColumn("X");
-        table.setShowVerticalLines(false);
-        table.setGridColor(new Color(230, 230, 230));
-        table.setRowHeight(40);
-        table.setIntercellSpacing(new Dimension(0, 0));
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.getColumn("X").setCellRenderer(new TableDeleteButton(trashIcon));
-        table.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        table.setAutoCreateRowSorter(true);
-        
-        table.getColumn("ID").setMinWidth(40);
-        table.getColumn("ID").setMaxWidth(40);
-        table.getColumn("CPF do paciente").setMinWidth(100);
-        table.getColumn("CPF do paciente").setMaxWidth(100);
-        table.getColumn("Especialista").setMinWidth(110);
-        table.getColumn("Especialista").setMaxWidth(110);
-        table.getColumn("Data marcada").setMinWidth(130);
-        table.getColumn("Data marcada").setMaxWidth(130);
-        table.getColumn("Cadastrado em").setMinWidth(100);
-        table.getColumn("Cadastrado em").setMaxWidth(100);
-        table.getColumn("X").setMinWidth(40);
-        table.getColumn("X").setMaxWidth(40);
+        atualizarTabela();
         
         // Adiciona um event listener para tornar as linhas clicáveis
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -171,14 +119,14 @@ public class Consultas extends JPanel{
                         
                         // Pega o ID e o nome para serem mostrados
                         String idValue = table.getModel().getValueAt(modelRow, 0).toString();
-                        String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
+                        String nomeValue = table.getModel().getValueAt(modelRow, 1).toString();
                         
                         // Opções do painel de confirmação
                         Object[] options = {"Excluir", "Cancelar"};
                         
                         // Mostra um painel de confirmação, para impedir exclusões acidentais
                         int confirmed = JOptionPane.showOptionDialog(null, 
-                          "Tem certeza que deseja cancelar a consulta #"+idValue+" - "+nomeValue+"?\n"
+                          "Tem certeza que deseja cancelar a consulta #"+idValue+" com o paciente "+nomeValue+"?\n"
                           + "Esta ação não poderá ser desfeita.",
                           "Excluir",
                           JOptionPane.YES_NO_OPTION,
@@ -190,7 +138,16 @@ public class Consultas extends JPanel{
                         
                         // Se a opção for "sim"
                         if(confirmed == JOptionPane.YES_OPTION) {
-                            table.repaint();
+                            Resultado res = ConsultaController.delete(Integer.parseInt(idValue));
+                            
+                            if(res.isSucesso()){
+                                JOptionPane.showMessageDialog(null, "Consulta #"+idValue+" cancelada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                                
+                                atualizarTabela();
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
+                            }
                         }
                         
                         // Limpa a seleção da tabela
@@ -202,16 +159,22 @@ public class Consultas extends JPanel{
                     else{
                         // Obtém os dados da linha selecionada
                         String idValue = table.getModel().getValueAt(modelRow, 0).toString();
-                        String cpfValue = table.getModel().getValueAt(modelRow, 1).toString();
-                        String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
-                        String emailValue = table.getModel().getValueAt(modelRow, 3).toString();
-                        String telefoneValue = table.getModel().getValueAt(modelRow, 4).toString();
-                        String dataNascValue = table.getModel().getValueAt(modelRow, 5).toString();
+                        String pacienteValue = table.getModel().getValueAt(modelRow, 1).toString();
+                        String especialidadeValue = table.getModel().getValueAt(modelRow, 2).toString();
+                        String medicoValue = table.getModel().getValueAt(modelRow, 3).toString();
+                        String dataValue = table.getModel().getValueAt(modelRow, 4).toString();
+                        String horaValue = table.getModel().getValueAt(modelRow, 5).toString();
                         
                         // Instancia uma nova tela de editar consultas
-                        EditarConsulta editarConsulta = new EditarConsulta(idValue, cpfValue, nomeValue, emailValue, telefoneValue, dataNascValue);
+                        EditarConsulta editarConsulta = new EditarConsulta(idValue, pacienteValue, especialidadeValue, medicoValue, dataValue, horaValue);
+                        editarConsulta.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e){
+                                atualizarTabela();
+                            }
+                        });
                         editarConsulta.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                                                
+                        
                         // Limpa a seleção da tabela
                         // Se a linha continuar selecionada, não é possível
                         // clicá-la novamente
@@ -249,5 +212,42 @@ public class Consultas extends JPanel{
         setBorder(new EmptyBorder(40, 40, 40, 40));
         setBackground(new Color(255, 255, 255));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    }
+    
+    private void atualizarTabela(){
+        tableModel = ConsultaController.read();
+        tableModel.fireTableDataChanged();
+        tableModel.addColumn("X");
+        
+        // Verifica o plural
+        if(tableModel.getRowCount() == 1){
+            subtitle.setText("1 consulta encontrada");
+        }
+        else{
+            subtitle.setText(tableModel.getRowCount() + " consultas encontradas");
+        }
+        
+        table.setModel(tableModel);
+        table.setShowVerticalLines(false);
+        table.setGridColor(new Color(230, 230, 230));
+        table.setRowHeight(40);
+        table.setIntercellSpacing(new Dimension(0, 0));
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.getColumn("X").setCellRenderer(new TableDeleteButton(trashIcon));
+        table.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        table.setAutoCreateRowSorter(true);
+        
+        table.getColumn("ID").setMinWidth(40);
+        table.getColumn("ID").setMaxWidth(40);
+        table.getColumn("Especialista").setMinWidth(130);
+        table.getColumn("Especialista").setMaxWidth(130);
+        table.getColumn("Data").setMinWidth(80);
+        table.getColumn("Data").setMaxWidth(80);
+        table.getColumn("Hora").setMinWidth(50);
+        table.getColumn("Hora").setMaxWidth(50);
+        table.getColumn("Cadastrada em").setMinWidth(100);
+        table.getColumn("Cadastrada em").setMaxWidth(100);
+        table.getColumn("X").setMinWidth(40);
+        table.getColumn("X").setMaxWidth(40);
     }
 }

@@ -2,6 +2,7 @@ package projetoa3.view.Components;
 import java.awt.*;
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
+import projetoa3.util.ProgramDefaults;
 
 /**
  * Botão com aparência personalizada
@@ -42,15 +43,15 @@ public class CustomButton extends JButton {
         
         // Se pressionado
         if(getModel().isPressed()){
-            graphic.setColor(new Color(5, 130, 180));
+            graphic.setColor(ProgramDefaults.getBaseColorDark());
         }
         // Ao passar o mouse
         else if(getModel().isRollover()){
-            graphic.setColor(new Color(25, 150, 200));
+            graphic.setColor(ProgramDefaults.getBaseColorLight());
         }
         // Padrão
         else{
-            graphic.setColor(new Color(15, 140, 190));
+            graphic.setColor(ProgramDefaults.getBaseColor());
         }
         
         // Define o tamanho do componente como o tamanho do botão

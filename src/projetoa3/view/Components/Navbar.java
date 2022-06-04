@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+import projetoa3.util.ProgramDefaults;
 import projetoa3.view.Principal;
 import projetoa3.view.Home;
 import projetoa3.view.Pacientes.Pacientes;
@@ -137,7 +138,7 @@ public class Navbar extends JPanel{
                 homeButton.setBorder(
                             new CompoundBorder(
                                 new EmptyBorder(10, 10, 10, 0),
-                                new MatteBorder(0, 0, 0, 5, new Color(15, 140, 190))
+                                new MatteBorder(0, 0, 0, 5, ProgramDefaults.getBaseColor())
                             )
                 );
                 break;
@@ -145,7 +146,7 @@ public class Navbar extends JPanel{
                 pacientesButton.setBorder(
                             new CompoundBorder(
                                 new EmptyBorder(10, 10, 10, 0),
-                                new MatteBorder(0, 0, 0, 5, new Color(15, 140, 190))
+                                new MatteBorder(0, 0, 0, 5, ProgramDefaults.getBaseColor())
                             )
                 );
                 break;
@@ -153,7 +154,7 @@ public class Navbar extends JPanel{
                 consultasButton.setBorder(
                             new CompoundBorder(
                                 new EmptyBorder(10, 10, 10, 0),
-                                new MatteBorder(0, 0, 0, 5, new Color(15, 140, 190))
+                                new MatteBorder(0, 0, 0, 5, ProgramDefaults.getBaseColor())
                             )
                 );
                 break;
@@ -161,7 +162,7 @@ public class Navbar extends JPanel{
                 usuariosButton.setBorder(
                             new CompoundBorder(
                                 new EmptyBorder(10, 10, 10, 0),
-                                new MatteBorder(0, 0, 0, 5, new Color(15, 140, 190))
+                                new MatteBorder(0, 0, 0, 5, ProgramDefaults.getBaseColor())
                             )
                 );
                 break;
@@ -173,7 +174,7 @@ public class Navbar extends JPanel{
         add(consultasButton);
         add(usuariosButton);
         
-        setBackground(new java.awt.Color(245, 250, 251));
+        setBackground(ProgramDefaults.getBackgroundColor());
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
 }

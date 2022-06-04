@@ -185,9 +185,12 @@ public class UserModel {
             updateUserStatement.setDate(2, Date.valueOf(newDate));
             updateUserStatement.setString(3, this.getTelefone());
             
-            updateUserStatement.execute();
-            updateUserStatement.close();
+            if(updateUserStatement.executeUpdate() == 0){
+                System.err.println("Não foi possível atualizar o usuário.");
+                return new Resultado(false, "Não foi possivel atualizar o usuário. Tente novamente.");
+            }
             
+            updateUserStatement.close();
             return new Resultado(true, "Sucesso");
         }
         catch(SQLException e){

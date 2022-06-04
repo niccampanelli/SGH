@@ -156,12 +156,39 @@ public class ConsultaModel {
             insertConsultaResult.next();
             
             int key = insertConsultaResult.getInt(1);
-            insertConsultaResult.close();
+            insertConsultaStatement.close();
             return new Resultado(true, "Sucesso", key);
         }
         catch(SQLException e){
             System.err.println("Erro ao inserir consulta: "+e.getMessage());
             return new Resultado(false, "Erro ao inserir consulta: "+e.getMessage());
         }
-    }    
+    }
+    
+    public Resultado update(){
+        
+        try{
+            String updateConsultaSql = "UPDATE consultas SET id_medico = ?, data = ?, hora = ? WHERE id = "+this.getId()+"";
+            PreparedStatement updateConsultaStatement = ConnectionClass.getPreparedStatement(updateConsultaSql);
+            
+            String[] dataPieces = this.getData().split("/");
+            String newDate = dataPieces[2] + "-" + dataPieces[1] + "-" + dataPieces[0];
+            
+            updateConsultaStatement.setInt(1, this.getIdMedico());
+            updateConsultaStatement.setDate(2, Date.valueOf(newDate));
+            updateConsultaStatement.setString(3, this.getHora());
+            
+            if(updateConsultaStatement.executeUpdate() == 0){
+                System.err.println("Erro inesperado ao atualizar consulta");
+                return new Resultado(false, "Erro inesperado ao atualizar consulta. Tente novamente.");
+            }
+            
+            updateConsultaStatement.close();
+            return new Resultado(true, "Sucesso");
+        }
+        catch(SQLException e){
+            System.err.println("Erro ao atualizar consulta: "+e.getMessage());
+            return new Resultado(false, "Erro ao atualizar consulta: "+e.getMessage());
+        }
+    }
 }
