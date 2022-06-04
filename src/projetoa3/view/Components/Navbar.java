@@ -169,10 +169,16 @@ public class Navbar extends JPanel{
         }
         
         // Adiciona os botões à barra de navegação
+                
         add(homeButton);
         add(pacientesButton);
         add(consultasButton);
-        add(usuariosButton);
+        
+        // Se o usuário logado não for um médico
+        // ele pode ver a aba "usuários"
+        if(ProgramDefaults.getUserType() != 3){
+            add(usuariosButton);
+        }
         
         setBackground(ProgramDefaults.getBackgroundColor());
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

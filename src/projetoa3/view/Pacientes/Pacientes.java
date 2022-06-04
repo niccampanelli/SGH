@@ -12,6 +12,7 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import projetoa3.controller.PacienteController;
+import projetoa3.util.ProgramDefaults;
 import projetoa3.util.Resultado;
 
 /**
@@ -72,7 +73,10 @@ public class Pacientes extends JPanel{
         // Adiciona os elementos antetiores no painel do título
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
-        titlePanel.add(addButton);
+        
+        if(ProgramDefaults.getUserType() != 3){
+            titlePanel.add(addButton);
+        }
         
         descriptionPanel = new JPanel();
         descriptionLayout = new BoxLayout(descriptionPanel, BoxLayout.Y_AXIS);
@@ -102,100 +106,103 @@ public class Pacientes extends JPanel{
             @Override
             public void valueChanged(ListSelectionEvent e){
                 
-                // Índice da linha e da coluna selecionados
-                int viewRow = table.getSelectedRow();
-                int viewColumn = table.getSelectedColumn();
-                
-                // Previne as instruções de serem chamadas duas vezes
-                if (!e.getValueIsAdjusting() && viewRow != -1) {
-                    
-                    // Converte o índice da tabela para um índice de modelo
-                    // previne de obter a célula errada ao ordenar a tabela
-                    int modelRow = table.convertRowIndexToModel(viewRow);
-                    int modelColumn = table.convertColumnIndexToModel(viewColumn);
-                    
-                    // Se a coluna selecionada for a última (onde estão os botões de excluir)
-                    if(modelColumn == table.getColumnCount()-1){
-                        
-                        // Pega o ID e o nome para serem mostrados
-                        String idValue = table.getModel().getValueAt(modelRow, 0).toString();
-                        String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
-                        
-                        // Opções do painel de confirmação
-                        Object[] options = {"Excluir", "Cancelar"};
-                        
-                        // Mostra um painel de confirmação, para impedir exclusões acidentais
-                        int confirmed = JOptionPane.showOptionDialog(null, 
-                          "Tem certeza que deseja remover o cadastro do paciente #"+idValue+" - "+nomeValue+"?\n"
-                          + "Esta ação não poderá ser desfeita.",
-                          "Excluir",
-                          JOptionPane.YES_NO_OPTION,
-                          JOptionPane.QUESTION_MESSAGE,
-                          null,
-                          options,
-                          options[1]
-                        );
-                        
-                        // Se a opção for "sim"
-                        if(confirmed == JOptionPane.YES_OPTION) {
-                            Resultado res = PacienteController.delete(Integer.parseInt(idValue));
-                            
-                            if(res.isSucesso()){
-                                JOptionPane.showMessageDialog(null, "Paciente #"+idValue+" excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                                
-                                atualizarTabela();
+                if(ProgramDefaults.getUserType() != 3){
+                    System.out.println(ProgramDefaults.getUserType());
+                    // Índice da linha e da coluna selecionados
+                    int viewRow = table.getSelectedRow();
+                    int viewColumn = table.getSelectedColumn();
+
+                    // Previne as instruções de serem chamadas duas vezes
+                    if (!e.getValueIsAdjusting() && viewRow != -1) {
+
+                        // Converte o índice da tabela para um índice de modelo
+                        // previne de obter a célula errada ao ordenar a tabela
+                        int modelRow = table.convertRowIndexToModel(viewRow);
+                        int modelColumn = table.convertColumnIndexToModel(viewColumn);
+
+                        // Se a coluna selecionada for a última (onde estão os botões de excluir)
+                        if(modelColumn == table.getColumnCount()-1){
+
+                            // Pega o ID e o nome para serem mostrados
+                            String idValue = table.getModel().getValueAt(modelRow, 0).toString();
+                            String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
+
+                            // Opções do painel de confirmação
+                            Object[] options = {"Excluir", "Cancelar"};
+
+                            // Mostra um painel de confirmação, para impedir exclusões acidentais
+                            int confirmed = JOptionPane.showOptionDialog(null, 
+                              "Tem certeza que deseja remover o cadastro do paciente #"+idValue+" - "+nomeValue+"?\n"
+                              + "Esta ação não poderá ser desfeita.",
+                              "Excluir",
+                              JOptionPane.YES_NO_OPTION,
+                              JOptionPane.QUESTION_MESSAGE,
+                              null,
+                              options,
+                              options[1]
+                            );
+
+                            // Se a opção for "sim"
+                            if(confirmed == JOptionPane.YES_OPTION) {
+                                Resultado res = PacienteController.delete(Integer.parseInt(idValue));
+
+                                if(res.isSucesso()){
+                                    JOptionPane.showMessageDialog(null, "Paciente #"+idValue+" excluído com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+                                    atualizarTabela();
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
+                                }
                             }
-                            else{
-                                JOptionPane.showMessageDialog(null, res.getMensagem(), "Erro", JOptionPane.ERROR_MESSAGE);
-                            }
-                        }
-                        
-                        // Limpa a seleção da tabela
-                        // Se a linha continuar selecionada, não é possível
-                        // clicá-la novamente
-                        table.clearSelection();
-                        table.getSelectionModel().clearSelection();
-                    }
-                    else{
-                        // Obtém os dados da linha selecionada
-                        String idValue = table.getModel().getValueAt(modelRow, 0).toString();
-                        String cpfValue = table.getModel().getValueAt(modelRow, 1).toString();
-                        String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
-                        String telefoneValue = table.getModel().getValueAt(modelRow, 3).toString();
-                        String enderecoValue = table.getModel().getValueAt(modelRow, 4).toString();
-                        String dataNascValue = table.getModel().getValueAt(modelRow, 5).toString();
-                        String sexoValue = "Masculino";
-                        
-                        Resultado sexoRes =  PacienteController.readPaciente(Integer.parseInt(idValue), "sexo");
-                        
-                        if(sexoRes.isSucesso()){
-                            System.out.println(sexoRes.getCorpo());
-                            if(sexoRes.getCorpo().equals("m")){
-                                sexoValue = "Masculino";
-                            }
-                            else if(sexoRes.getCorpo().equals("f")){
-                                sexoValue = "Feminino";
-                            }
+
+                            // Limpa a seleção da tabela
+                            // Se a linha continuar selecionada, não é possível
+                            // clicá-la novamente
+                            table.clearSelection();
+                            table.getSelectionModel().clearSelection();
                         }
                         else{
-                            System.err.println("Erro ao obter campos do paciente: "+sexoRes.getMensagem());
-                        }
-                                                
-                        // Instancia uma nova tela de editar administrador
-                        EditarPaciente editarPaciente = new EditarPaciente(idValue, cpfValue, nomeValue, telefoneValue, sexoValue, dataNascValue, enderecoValue);
-                        editarPaciente.addWindowListener(new WindowAdapter() {
-                            @Override
-                            public void windowClosed(WindowEvent e){
-                                atualizarTabela();
+                            // Obtém os dados da linha selecionada
+                            String idValue = table.getModel().getValueAt(modelRow, 0).toString();
+                            String cpfValue = table.getModel().getValueAt(modelRow, 1).toString();
+                            String nomeValue = table.getModel().getValueAt(modelRow, 2).toString();
+                            String telefoneValue = table.getModel().getValueAt(modelRow, 3).toString();
+                            String enderecoValue = table.getModel().getValueAt(modelRow, 4).toString();
+                            String dataNascValue = table.getModel().getValueAt(modelRow, 5).toString();
+                            String sexoValue = "Masculino";
+
+                            Resultado sexoRes =  PacienteController.readPaciente(Integer.parseInt(idValue), "sexo");
+
+                            if(sexoRes.isSucesso()){
+                                System.out.println(sexoRes.getCorpo());
+                                if(sexoRes.getCorpo().equals("m")){
+                                    sexoValue = "Masculino";
+                                }
+                                else if(sexoRes.getCorpo().equals("f")){
+                                    sexoValue = "Feminino";
+                                }
                             }
-                        });
-                        editarPaciente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                                                
-                        // Limpa a seleção da tabela
-                        // Se a linha continuar selecionada, não é possível
-                        // clicá-la novamente
-                        table.clearSelection();
-                        table.getSelectionModel().clearSelection();
+                            else{
+                                System.err.println("Erro ao obter campos do paciente: "+sexoRes.getMensagem());
+                            }
+
+                            // Instancia uma nova tela de editar administrador
+                            EditarPaciente editarPaciente = new EditarPaciente(idValue, cpfValue, nomeValue, telefoneValue, sexoValue, dataNascValue, enderecoValue);
+                            editarPaciente.addWindowListener(new WindowAdapter() {
+                                @Override
+                                public void windowClosed(WindowEvent e){
+                                    atualizarTabela();
+                                }
+                            });
+                            editarPaciente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                            // Limpa a seleção da tabela
+                            // Se a linha continuar selecionada, não é possível
+                            // clicá-la novamente
+                            table.clearSelection();
+                            table.getSelectionModel().clearSelection();
+                        }
                     }
                 }
             }
@@ -233,7 +240,14 @@ public class Pacientes extends JPanel{
     private void atualizarTabela(){
         tableModel = PacienteController.read();
         tableModel.fireTableDataChanged();
-        tableModel.addColumn("X");
+        table.setModel(tableModel);
+        
+        if(ProgramDefaults.getUserType() != 3){
+            tableModel.addColumn("X");
+            table.getColumn("X").setCellRenderer(new TableDeleteButton(trashIcon));
+            table.getColumn("X").setMinWidth(40);
+            table.getColumn("X").setMaxWidth(40);
+        }
         
         // Verifica o plural
         if(tableModel.getRowCount() == 1){
@@ -243,13 +257,11 @@ public class Pacientes extends JPanel{
             subtitle.setText(tableModel.getRowCount() + " pacientes cadastrados");
         }
         
-        table.setModel(tableModel);
         table.setShowVerticalLines(false);
         table.setGridColor(new Color(230, 230, 230));
         table.setRowHeight(40);
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.getColumn("X").setCellRenderer(new TableDeleteButton(trashIcon));
         table.setCursor(new Cursor(Cursor.HAND_CURSOR));
         table.setAutoCreateRowSorter(true);
         
@@ -261,7 +273,5 @@ public class Pacientes extends JPanel{
         table.getColumn("Telefone").setMaxWidth(100);
         table.getColumn("Data de nascimento").setMinWidth(130);
         table.getColumn("Data de nascimento").setMaxWidth(130);
-        table.getColumn("X").setMinWidth(40);
-        table.getColumn("X").setMaxWidth(40);
     }
 }

@@ -78,7 +78,7 @@ public class SessionController {
                         writer.close();
                         
                         System.out.println("Arquivo config salvo");
-                        return new Resultado(true, "Sucesso");
+                        return new Resultado(true, "Sucesso", tipoResult);
                     }
                     else{
                         System.err.println("Erro ao realizar login: Senha inválida.");
@@ -101,9 +101,8 @@ public class SessionController {
         }
     }
     
-    public static String validateTemp(){
+    public static Resultado validateTemp(){
         
-        String returnValue = "";
         String[] data = new String[2];
         
         try{
@@ -142,33 +141,31 @@ public class SessionController {
                     catch(Exception e){
                         System.out.println("Erro na criptografia:");
                         e.printStackTrace();
-                        returnValue = "erro";
+                        return new Resultado(false, "Erro interno. Tente novamente.");
                     }
                     
                     if(salted.toString(16).equals(passwordResult)){
-                        returnValue = Integer.toString(tipoResult);
+                        return new Resultado(true, "Sucesso", tipoResult);
                     }
                     else{
                         System.err.println("Erro ao realizar login: Senha inválida.");
-                        returnValue = "erro";
+                        return new Resultado(false, "Erro interno. Tente novamente.");
                     }
                 }
                 else{
                     System.err.println("Erro ao realizar login: Email não cadastrado.");
-                    returnValue = "erro";
+                    return new Resultado(false, "Erro interno. Tente novamente.");
                 }
             }
             else{
-                returnValue = "erro";
+                return new Resultado(false, "Erro interno. Tente novamente.");
             }
         }
         catch(Exception e){
             System.err.println("Erro no login:");
             e.printStackTrace();
-            returnValue = "erro";
+            return new Resultado(false, "Erro interno. Tente novamente. "+e.getMessage());
         }
-        
-        return returnValue;
     }
     
     public static String[] read(){

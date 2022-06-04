@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.border.*;
 import projetoa3.controller.SessionController;
 import projetoa3.controller.UserController;
+import projetoa3.util.ProgramDefaults;
 import projetoa3.util.Resultado;
 import projetoa3.util.database.ConnectionClass;
 
@@ -52,6 +53,10 @@ public class Login extends JFrame{
             Resultado res = SessionController.create(login, String.valueOf(senha));
             
             if(res.isSucesso() == true){
+                
+                
+                ProgramDefaults.setUserType(Integer.parseInt(res.getCorpo().toString()));
+                
                 // Verifica se a tela está maximizada (questão de estética)
                 if(getExtendedState() == JFrame.MAXIMIZED_BOTH || getExtendedState() == JFrame.MAXIMIZED_HORIZ || getExtendedState() == JFrame.MAXIMIZED_VERT){
 
@@ -183,7 +188,11 @@ public class Login extends JFrame{
         // Inicia a conexão com o banco de dados
         ConnectionClass.connect();
         
-        if(!"erro".equals(SessionController.validateTemp())){
+        Resultado tempRes = SessionController.validateTemp();
+        
+        if(tempRes.isSucesso()){
+            ProgramDefaults.setUserType(Integer.parseInt(tempRes.getCorpo().toString()));
+            
             Principal principal = new Principal();
             principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }

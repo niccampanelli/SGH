@@ -5,6 +5,7 @@ import projetoa3.view.Administradores.Administradores;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
+import projetoa3.util.ProgramDefaults;
 
 /**
  * Tela de usuários onde serão acomodadas as diferentes tabelas dos usuários
@@ -28,8 +29,12 @@ public class Usuarios extends JPanel{
         add(new Medicos());
         add(Box.createRigidArea(new Dimension(0, 20))); // Cria um espaçamento entre os elementos
         add(new Atendentes());
-        add(Box.createRigidArea(new Dimension(0, 20))); // Cria um espaçamento entre os elementos
-        add(new Administradores());
+        
+        // Se o usuário for do tipo administrador
+        if(ProgramDefaults.getUserType() == 1){
+            add(Box.createRigidArea(new Dimension(0, 20))); // Cria um espaçamento entre os elementos
+            add(new Administradores());
+        }
         
         
         setBorder(new EmptyBorder(40, 40, 40, 40));
