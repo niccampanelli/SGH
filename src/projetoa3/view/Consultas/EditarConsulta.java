@@ -20,14 +20,14 @@ import projetoa3.view.Components.CustomFormatted;
 public class EditarConsulta extends JFrame{
     
     // Componentes da interface
-    private final BoxLayout canvasLayout, mainLayout, buttonLayout;
-    private final BorderLayout wrapLayout;
-    private final JPanel wrapPanel, mainPanel, buttonPanel;
-    private final JLabel title, subtitle, pacienteLabel, especialidadeLabel, medicoLabel, dataLabel, horaLabel;
-    private final JComboBox pacienteField, especialidadeField, medicoField;
-    private final CustomFormatted dataField, horaField;
+    private BoxLayout canvasLayout, mainLayout, buttonLayout;
+    private BorderLayout wrapLayout;
+    private JPanel wrapPanel, mainPanel, buttonPanel;
+    private JLabel title, subtitle, pacienteLabel, especialidadeLabel, medicoLabel, dataLabel, horaLabel;
+    private JComboBox pacienteField, especialidadeField, medicoField;
+    private CustomFormatted dataField, horaField;
     private MaskFormatter dataMask, horaMask;
-    private final CustomButton seeExamsButton, examButton, cancelButton, addButton;
+    private CustomButton seeExamsButton, examButton, cancelButton, addButton;
     
     // Variáveis de lógica
     private ArrayList<String> especialidades;
@@ -109,18 +109,11 @@ public class EditarConsulta extends JFrame{
             medicoModel.addElement("#"+id + " - " + nome);
         });
     }
-            
-    public EditarConsulta(String id, String paciente, String especialidade, String medico, String data, String hora){
-        super("Editar consulta");
-        
-        this.id = id;
-        this.paciente = paciente;
-        this.especialidade = especialidade;
-        this.medico = medico;
-        this.data = data;
-        this.hora = hora;
+    
+    private void buildGUI(){
         
         Container canvas = getContentPane();
+        canvas.removeAll(); // Remove os elementos do canvas para atualizá-lo
         canvasLayout = new BoxLayout(canvas, BoxLayout.PAGE_AXIS);
         wrapLayout = new BorderLayout();
         
@@ -205,7 +198,6 @@ public class EditarConsulta extends JFrame{
         horaField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         horaField.setMargin(new Insets(0, 10, 0, 10));
         
-        contarExames();
         seeExamsButton = new CustomButton("Ver exames");
         seeExamsButton.setAlignmentX(0.0f);
         seeExamsButton.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -215,8 +207,16 @@ public class EditarConsulta extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
                 Exames exames = new Exames(Integer.parseInt(id));
+                exames.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e){
+                        contarExames();
+                        buildGUI();
+                    }
+                });
                 exames.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 contarExames();
+                buildGUI();
             }
         });
         
@@ -233,10 +233,12 @@ public class EditarConsulta extends JFrame{
                     @Override
                     public void windowClosed(WindowEvent e){
                         contarExames();
+                        buildGUI();
                     }
                 });
                 novoExame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 contarExames();
+                buildGUI();
             }
         });
         
@@ -320,7 +322,28 @@ public class EditarConsulta extends JFrame{
         wrapPanel.add(mainPanel);
         canvas.add(wrapPanel);
         
-        setSize(400, 600);
+        if(quantidadeExames > 0)
+            setSize(400, 670);
+        else
+            setSize(400, 620);
+        
+        // Atualiza o layout para acomodar os componentes
+        validate();
+    }
+            
+    public EditarConsulta(String id, String paciente, String especialidade, String medico, String data, String hora){
+        super("Editar consulta");
+        
+        this.id = id;
+        this.paciente = paciente;
+        this.especialidade = especialidade;
+        this.medico = medico;
+        this.data = data;
+        this.hora = hora;
+        
+        contarExames();
+        buildGUI();
+        
         setLayout(canvasLayout);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -353,6 +376,5 @@ public class EditarConsulta extends JFrame{
                 }
             }
         });
-        
     }
 }

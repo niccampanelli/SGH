@@ -8,6 +8,7 @@ import javax.swing.border.*;
 import javax.swing.text.*;
 import projetoa3.controller.ConsultaController;
 import projetoa3.controller.ExameController;
+import projetoa3.util.ProgramDefaults;
 import projetoa3.util.Resultado;
 import projetoa3.view.Components.CustomButton;
 import projetoa3.view.Components.CustomField;
@@ -22,6 +23,7 @@ public class NovoExame extends JFrame{
     private final BoxLayout canvasLayout, mainLayout, buttonLayout;
     private final BorderLayout wrapLayout;
     private final JPanel wrapPanel, mainPanel, buttonPanel;
+    private final JScrollPane descricaoPanel, resultadoPanel;
     private final JLabel title, subtitle, tituloLabel, descricaoLabel, resultadoLabel;
     private final CustomField tituloField;
     private final JTextArea descricaoField, resultadoField;
@@ -85,23 +87,38 @@ public class NovoExame extends JFrame{
         tituloField.setAlignmentX(0.0f);
         tituloField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         tituloField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        tituloField.setMargin(new Insets(0, 10, 0, 10));
         
         descricaoField = new JTextArea("");
         descricaoField.setLineWrap(true);
         descricaoField.setRows(3);
-        descricaoField.setAlignmentX(0.0f);
-        descricaoField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 50));
-        descricaoField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-        descricaoField.setMargin(new Insets(0, 10, 0, 10));
+        
+        descricaoPanel = new JScrollPane(descricaoField);
+        descricaoPanel.setAlignmentX(0.0f);
+        descricaoPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 80));
+        descricaoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+        descricaoPanel.setBackground(new Color(255, 255, 255));
+        descricaoPanel.setBorder(new CompoundBorder(
+                    new MatteBorder(0, 0, 3, 0, ProgramDefaults.getBaseColor()),
+                    new CompoundBorder(
+                        new MatteBorder(2, 2, 0, 2, new Color(0, 0, 0, 10)),
+                        new EmptyBorder(10, 10, 0, 0)
+        )));
         
         resultadoField = new JTextArea("");
         resultadoField.setLineWrap(true);
         resultadoField.setRows(3);
-        resultadoField.setAlignmentX(0.0f);
-        resultadoField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 50));
-        resultadoField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-        resultadoField.setMargin(new Insets(0, 10, 0, 10));
+        
+        resultadoPanel = new JScrollPane(resultadoField);
+        resultadoPanel.setAlignmentX(0.0f);
+        resultadoPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 80));
+        resultadoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+        resultadoPanel.setBackground(new Color(255, 255, 255));
+        resultadoPanel.setBorder(new CompoundBorder(
+                    new MatteBorder(0, 0, 3, 0, ProgramDefaults.getBaseColor()),
+                    new CompoundBorder(
+                        new MatteBorder(2, 2, 0, 2, new Color(0, 0, 0, 10)),
+                        new EmptyBorder(10, 10, 0, 0)
+        )));
         
         buttonPanel = new JPanel();
         buttonPanel.setAlignmentX(0.0f);
@@ -157,17 +174,17 @@ public class NovoExame extends JFrame{
         mainPanel.add(tituloField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         mainPanel.add(descricaoLabel);
-        mainPanel.add(descricaoField);
+        mainPanel.add(descricaoPanel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         mainPanel.add(resultadoLabel);
-        mainPanel.add(resultadoField);
+        mainPanel.add(resultadoPanel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
         mainPanel.add(buttonPanel);
         
         wrapPanel.add(mainPanel);
         canvas.add(wrapPanel);
         
-        setSize(400, 440);
+        setSize(400, 500);
         setLayout(canvasLayout);
         setLocationRelativeTo(null);
         setVisible(true);
