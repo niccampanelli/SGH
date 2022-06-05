@@ -149,7 +149,6 @@ public class MedicoModel extends UserModel {
             }
             
             updateUserStatement.close();
-            
             return new Resultado(true, "Sucesso");
         }
         catch(SQLException e){

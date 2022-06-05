@@ -587,7 +587,8 @@ public class UserController {
                     !fieldName.equals("cadastro") &&
                     !fieldName.equals("data_cadastro") &&
                     !fieldName.equals("sexo") &&
-                    !fieldName.equals("especialidade")){
+                    !fieldName.equals("especialidade") &&
+                    !fieldName.equals("COUNT(*)")){
                 
                 return null;
             }

@@ -166,7 +166,8 @@ public class PacienteController {
                     !fieldName.equals("data_nasc") &&
                     !fieldName.equals("cpf") &&
                     !fieldName.equals("telefone") &&
-                    !fieldName.equals("endereco")){
+                    !fieldName.equals("endereco") &&
+                    !fieldName.equals("COUNT(*)")){
                 
                 return null;
             }
@@ -204,7 +205,6 @@ public class PacienteController {
         try{
             
             if((!"".equals(nome)) && (!"".equals(sexo)) && (!"".equals(dataNasc)) && (!"".equals(telefone)) && (!"".equals(endereco))){
-                System.out.println(telefone);
                 PacienteModel paciente = new PacienteModel(id, nome, sexo, dataNasc, "00000000000", telefone, endereco);
                 return paciente.update();
             }

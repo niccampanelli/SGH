@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.swing.border.*;
 import javax.swing.text.*;
 import projetoa3.controller.ConsultaController;
-import projetoa3.controller.PacienteController;
+import projetoa3.controller.ExameController;
 import projetoa3.controller.UserController;
 import projetoa3.util.Resultado;
 import projetoa3.view.Components.CustomButton;
@@ -27,11 +27,12 @@ public class EditarConsulta extends JFrame{
     private final JComboBox pacienteField, especialidadeField, medicoField;
     private final CustomFormatted dataField, horaField;
     private MaskFormatter dataMask, horaMask;
-    private final CustomButton examButton, cancelButton, addButton;
+    private final CustomButton seeExamsButton, examButton, cancelButton, addButton;
     
     // Variáveis de lógica
     private ArrayList<String> especialidades;
     private DefaultComboBoxModel medicoModel;
+    private int quantidadeExames;
     private String id, paciente, especialidade, medico, data, hora;
     
     private void editar(){
@@ -77,11 +78,15 @@ public class EditarConsulta extends JFrame{
         }
     }
     
-    private void adicionarExame(){
+    private void contarExames(){
+        ArrayList<String> res = ExameController.readExame("COUNT(*)", "id_consulta", id);
         
-        NovoExame novoExame = new NovoExame(1);
-        novoExame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+        if(!res.isEmpty()){
+            quantidadeExames = Integer.parseInt(res.get(0));
+        }
+        else{
+            System.err.println("Erro ao obter quantidade de exames da consulta #"+id+".");
+        }
     }
     
     private void atualizarMedicos(){
@@ -200,6 +205,21 @@ public class EditarConsulta extends JFrame{
         horaField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         horaField.setMargin(new Insets(0, 10, 0, 10));
         
+        contarExames();
+        seeExamsButton = new CustomButton("Ver exames");
+        seeExamsButton.setAlignmentX(0.0f);
+        seeExamsButton.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
+        seeExamsButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        seeExamsButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        seeExamsButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                Exames exames = new Exames(Integer.parseInt(id));
+                exames.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                contarExames();
+            }
+        });
+        
         examButton = new CustomButton("Adicionar Exame");
         examButton.setAlignmentX(0.0f);
         examButton.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -208,7 +228,15 @@ public class EditarConsulta extends JFrame{
         examButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                adicionarExame();
+                NovoExame novoExame = new NovoExame(Integer.parseInt(id));
+                novoExame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e){
+                        contarExames();
+                    }
+                });
+                novoExame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                contarExames();
             }
         });
         
@@ -279,6 +307,12 @@ public class EditarConsulta extends JFrame{
         mainPanel.add(horaLabel);
         mainPanel.add(horaField);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        
+        if(quantidadeExames > 0){
+            mainPanel.add(seeExamsButton);
+            mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        }
+        
         mainPanel.add(examButton);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 40)));
         mainPanel.add(buttonPanel);
