@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
+import java.time.Year;
 import java.util.ArrayList;
 import javax.swing.border.*;
 import javax.swing.text.*;
@@ -34,6 +35,115 @@ public class NovoConsulta extends JFrame{
     private ArrayList<String> especialidades;
     private DefaultComboBoxModel pacienteModel, medicoModel;
     private String paciente, especialidade, medico, data, hora;
+    
+    private String checarData(String data){
+        String[] dataSplit = data.split("/");
+        int dia = Integer.parseInt(dataSplit[0]);
+        int mes = Integer.parseInt(dataSplit[1]);
+        int ano = Integer.parseInt(dataSplit[2]);
+
+        for(int i = dataSplit.length-1; i >= 0; i--){
+            if(i == 2){
+                if(Integer.parseInt(dataSplit[2]) < 1900 || Integer.parseInt(dataSplit[2]) > Year.now().getValue()-18){
+                    ano = Year.now().getValue()-18;
+                }
+            }
+            else if(i == 1){
+                if(Integer.parseInt(dataSplit[1]) < 1 || Integer.parseInt(dataSplit[1]) > 12){
+                    mes = 12;
+                }
+            }
+            else if(i == 0){
+                if(Integer.parseInt(dataSplit[1]) < 8){
+                    if(Integer.parseInt(dataSplit[1]) % 2 == 0){
+                        if(Integer.parseInt(dataSplit[1]) == 2){
+                            if(Integer.parseInt(dataSplit[0]) < 1 || Integer.parseInt(dataSplit[0]) > 28){
+                                dia = 28;
+                            }
+                        }
+                        else{
+                            if(Integer.parseInt(dataSplit[0]) < 1 || Integer.parseInt(dataSplit[0]) > 30){
+                                dia = 30;
+                            }
+                        }
+                    }
+                    else{
+                        if(Integer.parseInt(dataSplit[0]) < 1 || Integer.parseInt(dataSplit[0]) > 31){
+                            dia = 31;
+                        }
+                    }
+                }
+                else{
+                    if(Integer.parseInt(dataSplit[1]) % 2 == 0){
+                        if(Integer.parseInt(dataSplit[0]) < 1 || Integer.parseInt(dataSplit[0]) > 31){
+                            dia = 31;
+                        }
+                    }
+                    else{
+                        if(Integer.parseInt(dataSplit[0]) < 1 || Integer.parseInt(dataSplit[0]) > 30){
+                            dia = 30;
+                        }
+                    }
+                }
+            }
+        }
+
+        String diaStr = "01";
+        String mesStr = "01";
+        String anoStr = String.valueOf(ano);
+
+        if(dia < 10)
+            diaStr = "0"+dia;
+        else
+            diaStr = String.valueOf(dia);
+
+        if(mes < 10)
+            mesStr = "0"+mes;
+        else
+            mesStr = String.valueOf(mes);
+
+        if(!data.replaceAll("/", "").equals(diaStr+""+mesStr+""+anoStr))
+            JOptionPane.showMessageDialog(null, "Data substituida por uma data válida.", "Data inválida", JOptionPane.WARNING_MESSAGE);
+
+        return diaStr+""+mesStr+""+anoStr;
+    }
+    
+    private String checarHora(String texto){
+        String[] horaSplit = texto.split(":");
+        int hora = Integer.parseInt(horaSplit[0]);
+        int min = Integer.parseInt(horaSplit[1]);
+        
+        for(int i = 0; i < horaSplit.length; i++){
+            if(i == 0){
+                if(hora > 23){
+                    hora = 23;
+                }
+            }
+            else{
+                if(min > 59){
+                    min = 59;
+                }
+            }
+        }
+        
+        String horaStr = "01";
+        String minStr = "01";
+        
+        if(hora < 10)
+            horaStr = "0" + hora;
+        else
+            horaStr = String.valueOf(hora);
+        
+        if(min < 10)
+            minStr = "0" + min;
+        else
+            minStr = String.valueOf(min);
+
+        if(!texto.replaceAll(":", "").equals(horaStr+""+minStr))
+            JOptionPane.showMessageDialog(null, "Hora substituida por uma hora válida.", "Hora inválida", JOptionPane.WARNING_MESSAGE);
+
+        return horaStr+""+minStr;
+    }
     
     private void adicionar(){
         
@@ -195,12 +305,36 @@ public class NovoConsulta extends JFrame{
         dataField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         dataField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         dataField.setMargin(new Insets(0, 10, 0, 10));
+        dataField.addFocusListener(new FocusListener(){
+
+            @Override  
+            public void focusGained(FocusEvent e){
+                
+            }
+
+            @Override  
+            public void focusLost(FocusEvent e){
+                dataField.setText(checarData(dataField.getText()));
+            }
+        });
         
         horaField = new CustomFormatted(horaMask);
         horaField.setAlignmentX(0.0f);
         horaField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         horaField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         horaField.setMargin(new Insets(0, 10, 0, 10));
+        horaField.addFocusListener(new FocusListener(){
+
+            @Override  
+            public void focusGained(FocusEvent e){
+                
+            }
+
+            @Override  
+            public void focusLost(FocusEvent e){
+                horaField.setText(checarHora(horaField.getText()));
+            }
+        });
         
         buttonPanel = new JPanel();
         buttonPanel.setAlignmentX(0.0f);

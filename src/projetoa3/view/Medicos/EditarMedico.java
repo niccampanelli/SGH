@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
+import java.time.Year;
 import javax.swing.border.*;
 import javax.swing.text.*;
 import projetoa3.controller.UserController;
@@ -30,6 +31,78 @@ public class EditarMedico extends JFrame{
     
     // Variáveis de lógica
     private String id, nome, especialidade, telefone, sexo, dataNasc;
+    
+    private String checarData(String data){
+        String[] dataSplit = data.split("/");
+        int dia = Integer.parseInt(dataSplit[0]);
+        int mes = Integer.parseInt(dataSplit[1]);
+        int ano = Integer.parseInt(dataSplit[2]);
+
+        for(int i = dataSplit.length-1; i >= 0; i--){
+            if(i == 2){
+                if(Integer.parseInt(dataSplit[2]) < 1900 || Integer.parseInt(dataSplit[2]) > Year.now().getValue()-18){
+                    ano = Year.now().getValue()-18;
+                }
+            }
+            else if(i == 1){
+                if(Integer.parseInt(dataSplit[1]) < 1 || Integer.parseInt(dataSplit[1]) > 12){
+                    mes = 12;
+                }
+            }
+            else if(i == 0){
+                if(Integer.parseInt(dataSplit[1]) < 8){
+                    if(Integer.parseInt(dataSplit[1]) % 2 == 0){
+                        if(Integer.parseInt(dataSplit[1]) == 2){
+                            if(Integer.parseInt(dataSplit[0]) < 1 || Integer.parseInt(dataSplit[0]) > 28){
+                                dia = 28;
+                            }
+                        }
+                        else{
+                            if(Integer.parseInt(dataSplit[0]) < 1 || Integer.parseInt(dataSplit[0]) > 30){
+                                dia = 30;
+                            }
+                        }
+                    }
+                    else{
+                        if(Integer.parseInt(dataSplit[0]) < 1 || Integer.parseInt(dataSplit[0]) > 31){
+                            dia = 31;
+                        }
+                    }
+                }
+                else{
+                    if(Integer.parseInt(dataSplit[1]) % 2 == 0){
+                        if(Integer.parseInt(dataSplit[0]) < 1 || Integer.parseInt(dataSplit[0]) > 31){
+                            dia = 31;
+                        }
+                    }
+                    else{
+                        if(Integer.parseInt(dataSplit[0]) < 1 || Integer.parseInt(dataSplit[0]) > 30){
+                            dia = 30;
+                        }
+                    }
+                }
+            }
+        }
+
+        String diaStr = "01";
+        String mesStr = "01";
+        String anoStr = String.valueOf(ano);
+
+        if(dia < 10)
+            diaStr = "0"+dia;
+        else
+            diaStr = String.valueOf(dia);
+
+        if(mes < 10)
+            mesStr = "0"+mes;
+        else
+            mesStr = String.valueOf(mes);
+
+        if(!data.replaceAll("/", "").equals(diaStr+""+mesStr+""+anoStr))
+            JOptionPane.showMessageDialog(null, "Data substituida por uma data válida.", "Data inválida", JOptionPane.WARNING_MESSAGE);
+
+        return diaStr+""+mesStr+""+anoStr;
+    }
     
     private void editar(){
         
@@ -242,6 +315,18 @@ public class EditarMedico extends JFrame{
         dataNascField.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
         dataNascField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         dataNascField.setMargin(new Insets(0, 10, 0, 10));
+        dataNascField.addFocusListener(new FocusListener(){
+
+            @Override  
+            public void focusGained(FocusEvent e){
+                
+            }
+
+            @Override  
+            public void focusLost(FocusEvent e){
+                dataNascField.setText(checarData(dataNascField.getText()));
+            }
+        });
         
         dataNascPanel.add(dataNascLabel);
         dataNascPanel.add(dataNascField);

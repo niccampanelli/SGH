@@ -205,6 +205,7 @@ public class Administradores extends JPanel{
         tableWrap.setAlignmentX(Component.LEFT_ALIGNMENT);
         tableWrap.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
         tableWrap.setBorder(new EmptyBorder(0, 0, 0, 0));
+        tableWrap.getViewport().setBackground(new Color(255, 255, 255));
         tableWrap.setBackground(new Color(255, 255, 255));
         
         // Adiciona os elementos na tela

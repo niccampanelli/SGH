@@ -176,8 +176,8 @@ public class Exames extends JFrame{
         tableWrap = new JScrollPane(table);
         tableWrap.setAlignmentX(Component.LEFT_ALIGNMENT);
         tableWrap.setBorder(new EmptyBorder(0, 0, 0, 0));
+        tableWrap.getViewport().setBackground(new Color(255, 255, 255));
         tableWrap.setBackground(new Color(255, 255, 255));
-        tableWrap.getViewport().setBackground(Color.white);
         
         mainPanel = new JPanel();
         mainLayout = new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS);

@@ -222,6 +222,7 @@ public class Pacientes extends JPanel{
         tableWrap = new JScrollPane(table);
         tableWrap.setAlignmentX(Component.LEFT_ALIGNMENT);
         tableWrap.setBorder(new EmptyBorder(0, 0, 0, 0));
+        tableWrap.getViewport().setBackground(new Color(255, 255, 255));
         tableWrap.setBackground(new Color(255, 255, 255));
         
         // Adiciona os elementos na tela
