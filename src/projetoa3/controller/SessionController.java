@@ -33,13 +33,13 @@ public class SessionController {
                 
                 if(emailCount == 1){
                     
-                    String validatePasswordSql = "SELECT senha, tipo FROM usuarios WHERE email = '"+address+"' LIMIT 1;";
+                    String validatePasswordSql = "SELECT senha, id FROM usuarios WHERE email = '"+address+"' LIMIT 1;";
                     Statement validatePasswordStatement = ConnectionClass.getStatement();
                     
                     ResultSet validatePasswordResult = validatePasswordStatement.executeQuery(validatePasswordSql);
                     validatePasswordResult.next();
                     String passwordResult = validatePasswordResult.getString("senha");
-                    int tipoResult = validatePasswordResult.getInt("tipo");
+                    int idResult = validatePasswordResult.getInt("id");
                     validatePasswordStatement.close();
                     
                     BigInteger bigint = BigInteger.ONE;
@@ -55,9 +55,6 @@ public class SessionController {
                         e.printStackTrace();
                         return new Resultado(false, "Erro interno. Tente novamente.", e);
                     }
-                    
-                    System.out.println(passwordResult);
-                    System.out.println(salted.toString(16));
                     
                     if(salted.toString(16).equals(passwordResult)){
                         
@@ -78,7 +75,7 @@ public class SessionController {
                         writer.close();
                         
                         System.out.println("Arquivo config salvo");
-                        return new Resultado(true, "Sucesso", tipoResult);
+                        return new Resultado(true, "Sucesso", idResult);
                     }
                     else{
                         System.err.println("Erro ao realizar login: Senha inválida.");
@@ -123,13 +120,13 @@ public class SessionController {
                 
                 if(emailCount == 1){
                     
-                    String validatePasswordSql = "SELECT senha, tipo FROM usuarios WHERE email = '"+address+"' LIMIT 1;";
+                    String validatePasswordSql = "SELECT senha, id FROM usuarios WHERE email = '"+address+"' LIMIT 1;";
                     Statement validatePasswordStatement = ConnectionClass.getStatement();
                     
                     ResultSet validatePasswordResult = validatePasswordStatement.executeQuery(validatePasswordSql);
                     validatePasswordResult.next();
                     String passwordResult = validatePasswordResult.getString("senha");
-                    int tipoResult = validatePasswordResult.getInt("tipo");
+                    int idResult = validatePasswordResult.getInt("id");
                     validatePasswordStatement.close();
                     
                     BigInteger salted = BigInteger.ONE;
@@ -145,7 +142,7 @@ public class SessionController {
                     }
                     
                     if(salted.toString(16).equals(passwordResult)){
-                        return new Resultado(true, "Sucesso", tipoResult);
+                        return new Resultado(true, "Sucesso", idResult);
                     }
                     else{
                         System.err.println("Erro ao realizar login: Senha inválida.");

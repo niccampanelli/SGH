@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.io.FileWriter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import projetoa3.controller.SessionController;
+import projetoa3.util.ProgramDefaults;
 
 /**
  * Frame principal, onde são instanciadas as páginas
@@ -91,7 +92,7 @@ public class Principal extends JFrame{
             contaMenu = new JMenu("Conta");
             
             // Exemplos, vão ser modificados depois
-            nomeContaMenu = new JMenuItem("Fulano de Souza - Administrador");
+            nomeContaMenu = new JMenuItem(ProgramDefaults.getUserName());
             sairContaMenu = new JMenuItem("Sair");
             sairContaMenu.addActionListener(new ActionListener(){
                 @Override

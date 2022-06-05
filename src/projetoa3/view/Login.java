@@ -191,7 +191,15 @@ public class Login extends JFrame{
         Resultado tempRes = SessionController.validateTemp();
         
         if(tempRes.isSucesso()){
-            ProgramDefaults.setUserType(Integer.parseInt(tempRes.getCorpo().toString()));
+            Resultado nomeRes = UserController.readUser(Integer.parseInt(tempRes.getCorpo().toString()), "nome");
+            Resultado tipoRes = UserController.readUser(Integer.parseInt(tempRes.getCorpo().toString()), "tipo");
+            
+            if(tipoRes.isSucesso())
+                ProgramDefaults.setUserType(Integer.parseInt(tipoRes.getCorpo().toString()));
+            
+            if(nomeRes.isSucesso())
+                ProgramDefaults.setUserName(nomeRes.getCorpo().toString());
+            
             
             Principal principal = new Principal();
             principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
