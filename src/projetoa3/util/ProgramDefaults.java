@@ -11,16 +11,51 @@ public class ProgramDefaults {
     private static int userType = 3;
     private static String userName = "?";
     
-    private static final Color baseColor = new Color(0, 140, 140);
-    private static final Color baseColorLight = new Color(Integer.min(255, baseColor.getRed()+20),
-                                                    Integer.min(255, baseColor.getGreen()+20),
-                                                    Integer.min(255, baseColor.getBlue()+20));
-    private static final Color baseColorDark = new Color(Integer.max(0, baseColor.getRed()-20),
-                                                    Integer.max(0, baseColor.getGreen()-20),
-                                                    Integer.max(0, baseColor.getBlue()-20));
-    private static final Color backgroundColor = new Color(Integer.min(255, baseColor.getRed()+220),
-                                                    Integer.min(255, baseColor.getGreen()+220),
-                                                    Integer.min(255, baseColor.getBlue()+220));
+    private static final Color baseColor = new Color(49, 85, 204);
+    
+    private static final Color baseColorLight =  getLightShade(baseColor, 2f);
+    private static final Color baseColorDark =  getDarkShade(baseColor, 1f);
+    private static final Color backgroundColor = getLightShade(baseColor, 9.5f);
+    
+    private static Color getLightShade(Color color, float perc){
+        int r = color.getRed();
+        int g = color.getGreen();
+        int b = color.getBlue();
+
+        float rPerc = (r*100)/255;
+        float gPerc = (g*100)/255;
+        float bPerc = (b*100)/255;
+        
+        float newR = rPerc + ((((rPerc - 100)*-1)/10)*perc);
+        float newG = gPerc + ((((gPerc - 100)*-1)/10)*perc);
+        float newB = bPerc + ((((bPerc - 100)*-1)/10)*perc);
+        
+        int finalR = Integer.min(255, (int) Math.ceil(255*(newR)/100));
+        int finalG = Integer.min(255, (int) Math.ceil(255*(newG)/100));
+        int finalB = Integer.min(255, (int) Math.ceil(255*(newB)/100));
+                
+        return new Color(finalR, finalG, finalB);
+    }
+    
+    private static Color getDarkShade(Color color, float perc){
+        int r = color.getRed();
+        int g = color.getGreen();
+        int b = color.getBlue();
+
+        float rPerc = (r*100)/255;
+        float gPerc = (g*100)/255;
+        float bPerc = (b*100)/255;
+        
+        float newR = rPerc - ((((rPerc - 100)*-1)/10)*perc);
+        float newG = gPerc - ((((gPerc - 100)*-1)/10)*perc);
+        float newB = bPerc - ((((bPerc - 100)*-1)/10)*perc);
+        
+        int finalR = Integer.max(0, (int) Math.ceil(255*(newR)/100));
+        int finalG = Integer.max(0, (int) Math.ceil(255*(newG)/100));
+        int finalB = Integer.max(0, (int) Math.ceil(255*(newB)/100));
+                
+        return new Color(finalR, finalG, finalB);
+    }
     
     public static int getUserType(){
         return userType;

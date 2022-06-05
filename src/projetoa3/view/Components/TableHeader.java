@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.TableCellRenderer;
+import projetoa3.util.ProgramDefaults;
 
 /**
  * Cabeçalho customizado para as tabelas
@@ -26,6 +27,7 @@ public class TableHeader extends JLabel implements TableCellRenderer {
         // Customiza o cabeçalho
         setBorder(new MatteBorder(0, 0, 1, 0, new Color(200, 200, 200)));
         setBackground(new Color(255, 255, 255));
+        setForeground(ProgramDefaults.getBaseColorDark());
         setText((value == null) ? "" : value.toString());
         
         // Retorna o cabeçalho
