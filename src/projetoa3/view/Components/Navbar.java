@@ -49,11 +49,12 @@ public class Navbar extends JPanel{
         }
         
         homeButton = new JButton("Início");
-        homeButton.setPreferredSize(new Dimension(200, 50));
-        homeButton.setMaximumSize(new Dimension(200, 50));
+        homeButton.setPreferredSize(new Dimension(180, 50));
+        homeButton.setMaximumSize(new Dimension(180, 50));
         homeButton.setHorizontalAlignment(JButton.LEFT);
         homeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         homeButton.setBackground(null);
+        homeButton.setForeground(new Color(255, 255, 255));
         homeButton.setBorder(new EmptyBorder(10, 10, 10, 10));
         homeButton.setIcon(new ImageIcon(houseIcon));
         homeButton.setFont(new Font(Font.SANS_SERIF, 1, 18));
@@ -70,11 +71,12 @@ public class Navbar extends JPanel{
         });
         
         pacientesButton = new JButton("Pacientes");
-        pacientesButton.setPreferredSize(new Dimension(200, 50));
-        pacientesButton.setMaximumSize(new Dimension(200, 50));
+        pacientesButton.setPreferredSize(new Dimension(180, 50));
+        pacientesButton.setMaximumSize(new Dimension(180, 50));
         pacientesButton.setHorizontalAlignment(JButton.LEFT);
         pacientesButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         pacientesButton.setBackground(null);
+        pacientesButton.setForeground(new Color(255, 255, 255));
         pacientesButton.setBorder(new EmptyBorder(10, 10, 10, 10));
         pacientesButton.setIcon(new ImageIcon(peopleIcon));
         pacientesButton.setFont(new Font(Font.SANS_SERIF, 1, 18));
@@ -90,11 +92,12 @@ public class Navbar extends JPanel{
         });
         
         consultasButton = new JButton("Consultas");
-        consultasButton.setPreferredSize(new Dimension(200, 50));
-        consultasButton.setMaximumSize(new Dimension(200, 50));
+        consultasButton.setPreferredSize(new Dimension(180, 50));
+        consultasButton.setMaximumSize(new Dimension(180, 50));
         consultasButton.setHorizontalAlignment(JButton.LEFT);
         consultasButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         consultasButton.setBackground(null);
+        consultasButton.setForeground(new Color(255, 255, 255));
         consultasButton.setBorder(new EmptyBorder(10, 10, 10, 10));
         consultasButton.setIcon(new ImageIcon(calendarIcon));
         consultasButton.setFont(new Font(Font.SANS_SERIF, 1, 18));
@@ -111,11 +114,12 @@ public class Navbar extends JPanel{
         });
         
         usuariosButton = new JButton("Usuários");
-        usuariosButton.setPreferredSize(new Dimension(200, 50));
-        usuariosButton.setMaximumSize(new Dimension(200, 50));
+        usuariosButton.setPreferredSize(new Dimension(180, 50));
+        usuariosButton.setMaximumSize(new Dimension(180, 50));
         usuariosButton.setHorizontalAlignment(JButton.LEFT);
         usuariosButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         usuariosButton.setBackground(null);
+        usuariosButton.setForeground(new Color(255, 255, 255));
         usuariosButton.setBorder(new EmptyBorder(10, 10, 10, 10));
         usuariosButton.setIcon(new ImageIcon(userIcon));
         usuariosButton.setFont(new Font(Font.SANS_SERIF, 1, 18));
@@ -138,33 +142,37 @@ public class Navbar extends JPanel{
                 homeButton.setBorder(
                             new CompoundBorder(
                                 new EmptyBorder(10, 10, 10, 0),
-                                new MatteBorder(0, 0, 0, 5, ProgramDefaults.getBaseColor())
+                                new MatteBorder(0, 0, 0, 6, new Color(255, 255, 255))
                             )
                 );
+                homeButton.setBackground(ProgramDefaults.getBaseColorLight());
                 break;
             case 1:
                 pacientesButton.setBorder(
                             new CompoundBorder(
                                 new EmptyBorder(10, 10, 10, 0),
-                                new MatteBorder(0, 0, 0, 5, ProgramDefaults.getBaseColor())
+                                new MatteBorder(0, 0, 0, 6, new Color(255, 255, 255))
                             )
                 );
+                pacientesButton.setBackground(ProgramDefaults.getBaseColorLight());
                 break;
             case 2:
                 consultasButton.setBorder(
                             new CompoundBorder(
                                 new EmptyBorder(10, 10, 10, 0),
-                                new MatteBorder(0, 0, 0, 5, ProgramDefaults.getBaseColor())
+                                new MatteBorder(0, 0, 0, 6, new Color(255, 255, 255))
                             )
                 );
+                consultasButton.setBackground(ProgramDefaults.getBaseColorLight());
                 break;
             case 3:
                 usuariosButton.setBorder(
                             new CompoundBorder(
                                 new EmptyBorder(10, 10, 10, 0),
-                                new MatteBorder(0, 0, 0, 5, ProgramDefaults.getBaseColor())
+                                new MatteBorder(0, 0, 0, 6, new Color(255, 255, 255))
                             )
                 );
+                usuariosButton.setBackground(ProgramDefaults.getBaseColorLight());
                 break;
         }
         
@@ -180,6 +188,8 @@ public class Navbar extends JPanel{
             add(usuariosButton);
         }
         
+        
+        setBorder(new EmptyBorder(10, 10, 10, 10));
         setBackground(ProgramDefaults.getBackgroundColor());
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }

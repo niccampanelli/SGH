@@ -30,7 +30,7 @@ public class Login extends JFrame{
     private final JTextField loginField;
     private final JPasswordField senhaField;
     private final CustomButton button;
-    private Image loginBanner;
+    private Image loginBanner, appIcon;
     
     // Variáveis de lógica
     private String login;
@@ -54,6 +54,14 @@ public class Login extends JFrame{
             
             if(res.isSucesso() == true){
                 
+                Resultado nomeRes = UserController.readUser(Integer.parseInt(res.getCorpo().toString()), "nome");
+                Resultado tipoRes = UserController.readUser(Integer.parseInt(res.getCorpo().toString()), "tipo");
+
+                if(tipoRes.isSucesso())
+                    ProgramDefaults.setUserType(Integer.parseInt(tipoRes.getCorpo().toString()));
+
+                if(nomeRes.isSucesso())
+                    ProgramDefaults.setUserName(nomeRes.getCorpo().toString());
                 
                 ProgramDefaults.setUserType(Integer.parseInt(res.getCorpo().toString()));
                 
@@ -92,7 +100,9 @@ public class Login extends JFrame{
         // Tenta pegar o banner do login
         try{
             URL url = getClass().getResource("/projetoa3/util/icons/loginBanner.jpg");
+            URL appIconUrl = getClass().getResource("/projetoa3/util/icons/sgh_logo.png");
             loginBanner = ImageIO.read(url);
+            appIcon = ImageIO.read(appIconUrl);
         }
         catch (IOException ex) {
             System.out.println(ex.getMessage());
@@ -182,6 +192,7 @@ public class Login extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(true);
+        setIconImage(appIcon);
     }
     
     public static void main(String[] args){

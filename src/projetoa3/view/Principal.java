@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
+import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import projetoa3.controller.SessionController;
 import projetoa3.util.ProgramDefaults;
@@ -23,6 +26,7 @@ public class Principal extends JFrame{
     private JScrollPane mainPanel;
     private JPanel Navbar, wrapPanel;
     private JFileChooser fileChooser;
+    private Image appIcon;
     
     // Definem o painel a ser mostrado
     private JPanel currentPanel;
@@ -91,8 +95,22 @@ public class Principal extends JFrame{
             // Menu de ações de "conta"
             contaMenu = new JMenu("Conta");
             
+            String tipoNome = "?";
+            
+            switch(ProgramDefaults.getUserType()){
+                case 1:
+                    tipoNome = "Administrador(a)";
+                    break;
+                case 2:
+                    tipoNome = "Atendente";
+                    break;
+                case 3:
+                    tipoNome = "Médico(a)";
+                    break;
+            }
+            
             // Exemplos, vão ser modificados depois
-            nomeContaMenu = new JMenuItem(ProgramDefaults.getUserName());
+            nomeContaMenu = new JMenuItem(ProgramDefaults.getUserName() +" - "+ tipoNome);
             sairContaMenu = new JMenuItem("Sair");
             sairContaMenu.addActionListener(new ActionListener(){
                 @Override
@@ -149,6 +167,15 @@ public class Principal extends JFrame{
     public Principal(){
         super("Inicio");
         
+        // Tenta pegar o banner do login
+        try{
+            URL appIconUrl = getClass().getResource("/projetoa3/util/icons/sgh_logo.png");
+            appIcon = ImageIO.read(appIconUrl);
+        }
+        catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
         buildGUI();
         
         setSize(1280, 720);
@@ -156,6 +183,7 @@ public class Principal extends JFrame{
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(true);
+        setIconImage(appIcon);
     }
     
     /**
