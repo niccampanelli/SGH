@@ -141,7 +141,7 @@ public class Principal extends JFrame{
         // Se o painel a ser exibido não estiver definido
         // define como "home".
         if(currentPanel == null){
-            currentPanel = new Home();
+            currentPanel = new Home(this);
         }
         
         // Instancia a barra de navegação lateral

@@ -3,6 +3,7 @@ package projetoa3.controller;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 import javax.swing.table.DefaultTableModel;
@@ -126,6 +127,45 @@ public class ConsultaController {
         }
         
         return model;
+    }
+    
+    public static ArrayList<String> readConsulta(String fieldName, String param, String paramValue){
+        
+        try{
+            // Verifica se o campo informado é um dos campos válidos
+            if(!fieldName.equals("id") &&
+                    !fieldName.equals("id_medico") &&
+                    !fieldName.equals("id_paciente") &&
+                    !fieldName.equals("data") &&
+                    !fieldName.equals("hora") &&
+                    !fieldName.equals("data_atualizada") &&
+                    !fieldName.equals("data_cadastrada") &&
+                    !fieldName.equals("COUNT(*)")){
+                
+                return null;
+            }
+            else{
+            
+                String getConsultaSql = "SELECT "+fieldName+" FROM consultas WHERE "+param+" = '"+paramValue+"';";
+                Statement getConsultaStatement = ConnectionClass.getStatement();
+                
+                ArrayList<String> resultado = new ArrayList<>();
+                ResultSet getConsultaResult = getConsultaStatement.executeQuery(getConsultaSql);
+                
+                while(getConsultaResult.next()){
+                    resultado.add(getConsultaResult.getObject(fieldName).toString());
+                }
+                
+                getConsultaResult.close();
+                return resultado;
+            }
+        }
+        catch(SQLException e){
+            System.err.println("Ocorreu um erro ao obter o campo: ");
+            e.printStackTrace();
+            return null;
+        }
+        
     }
     
     public static Resultado update(

@@ -23,8 +23,8 @@ public class Navbar extends JPanel{
     
     // Componentes da interface
     // Os botões são declarados como final para impedir que sejam atribuidas mais de uma vez
-    private final JButton homeButton, consultasButton, pacientesButton, usuariosButton;
-    private Image houseIcon, calendarIcon, peopleIcon, userIcon;
+    private final JButton logoButton, homeButton, consultasButton, pacientesButton, usuariosButton;
+    private Image logoImage, houseIcon, calendarIcon, peopleIcon, userIcon;
     
     /**
      * Construtor padrão
@@ -35,10 +35,12 @@ public class Navbar extends JPanel{
         
         // Tenta pegar os ícones dos botões
         try{
+            URL logoUrl = getClass().getResource("/projetoa3/util/icons/sgh_logo.png");
             URL houseUrl = getClass().getResource("/projetoa3/util/icons/houseIcon.png");
             URL calendarUrl = getClass().getResource("/projetoa3/util/icons/calendarIcon.png");
             URL peopleUrl = getClass().getResource("/projetoa3/util/icons/peopleIcon.png");
             URL userUrl = getClass().getResource("/projetoa3/util/icons/userIcon.png");
+            logoImage = ImageIO.read(logoUrl);
             houseIcon = ImageIO.read(houseUrl);
             calendarIcon = ImageIO.read(calendarUrl);
             peopleIcon = ImageIO.read(peopleUrl);
@@ -47,6 +49,27 @@ public class Navbar extends JPanel{
         catch (IOException ex) {
             System.out.print(ex);
         }
+        
+        logoButton = new JButton();
+        logoButton.setPreferredSize(new Dimension(180, 50));
+        logoButton.setMaximumSize(new Dimension(180, 50));
+        logoButton.setHorizontalAlignment(JButton.LEFT);
+        logoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        logoButton.setBackground(null);
+        logoButton.setBorder(new EmptyBorder(10, 10, 10, 10));
+        logoButton.setIcon(new ImageIcon(logoImage.getScaledInstance( 120, 50, Image.SCALE_FAST)));
+        logoButton.setHorizontalAlignment(JButton.CENTER);
+        logoButton.setIconTextGap(10);
+        logoButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                
+                callingFrame.setTitle("Cadastro de Consultas"); // Define titulo do JFrame
+                callingFrame.setCurrentPanel(new Home(callingFrame)); // Instancia a tela Home e define como tela principal
+                callingFrame.setCurrentPanelIndex(0); // Define o índice da tela
+                callingFrame.buildGUI(); // Constrói a tela
+            }
+        });
         
         homeButton = new JButton("Início");
         homeButton.setPreferredSize(new Dimension(180, 50));
@@ -64,7 +87,7 @@ public class Navbar extends JPanel{
             public void actionPerformed(ActionEvent e){
                 
                 callingFrame.setTitle("Cadastro de Consultas"); // Define titulo do JFrame
-                callingFrame.setCurrentPanel(new Home()); // Instancia a tela Home e define como tela principal
+                callingFrame.setCurrentPanel(new Home(callingFrame)); // Instancia a tela Home e define como tela principal
                 callingFrame.setCurrentPanelIndex(0); // Define o índice da tela
                 callingFrame.buildGUI(); // Constrói a tela
             }
@@ -177,7 +200,8 @@ public class Navbar extends JPanel{
         }
         
         // Adiciona os botões à barra de navegação
-                
+        add(logoButton);
+        add(Box.createRigidArea(new Dimension(0, 20)));
         add(homeButton);
         add(pacientesButton);
         add(consultasButton);
@@ -189,7 +213,7 @@ public class Navbar extends JPanel{
         }
         
         
-        setBorder(new EmptyBorder(10, 10, 10, 10));
+        setBorder(new EmptyBorder(20, 10, 10, 10));
         setBackground(ProgramDefaults.getBackgroundColor());
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
