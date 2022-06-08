@@ -118,7 +118,7 @@ public class UserController {
                                         // Se a chave primária da especialidade adicionada for maior que zero
                                         // significa que criou com sucesso
                                         if(key > 0){
-
+                                            
                                             // Seção de criptografia da senha
                                             BigInteger senharaw = BigInteger.ONE;
                                             BigInteger cripsenha = BigInteger.ONE;
@@ -133,7 +133,7 @@ public class UserController {
                                                 e.printStackTrace();
                                                 return new Resultado(false, "Erro inesperado na criação de médico. Tente novamente.");
                                             }
-
+                                            
                                             // Cria um modelo de médico
                                             MedicoModel medico = new MedicoModel(
                                                     tipo, nome,

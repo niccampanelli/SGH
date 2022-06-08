@@ -5,8 +5,6 @@ import java.awt.event.*;
 import java.text.ParseException;
 import java.time.Year;
 import javax.swing.border.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
 import projetoa3.controller.UserController;
 import projetoa3.util.Resultado;

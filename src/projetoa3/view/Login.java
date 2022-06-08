@@ -162,6 +162,7 @@ public class Login extends JFrame{
         button.setAlignmentX(0.0f);
         button.setPreferredSize(new Dimension(300, 40));
         button.setMaximumSize(new Dimension(300, 40));
+        
         button.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){

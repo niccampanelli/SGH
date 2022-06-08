@@ -10,7 +10,7 @@ public class ConnectionClass {
     private static String url;
     private static String host = "localhost";
     private static String port = "3306";
-    private static String dbname = "projetoa3";
+    private static String dbname = "sgh_db";
     private static String user = "root";
     private static String password = "";
     
@@ -85,6 +85,24 @@ public class ConnectionClass {
         }
         catch(SQLException e){
             System.err.println("Não foi possível criar uma PreparedStatement: "+ e.getMessage());
+            return null;
+        }
+    }
+    
+    public static Connection getConnection(){
+        
+        try{
+            // Se a conexão existir
+            if(ConnectionClass.conn != null){
+                return ConnectionClass.conn;
+            }
+            else{
+                ConnectionClass.connect();
+                return conn;
+            }
+        }
+        catch(Exception e){
+            System.err.println("Não foi possível encerrar a conexão com o servidor do banco de dados: "+e.getMessage());
             return null;
         }
     }
