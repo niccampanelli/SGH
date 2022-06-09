@@ -272,7 +272,10 @@ public class Home extends JPanel{
         buttonPanel.setLayout(buttonLayout);
         buttonPanel.add(pacientesButton);
         buttonPanel.add(consultasButton);
-        buttonPanel.add(usuariosButton);
+        
+        if(ProgramDefaults.getUserType() != 3)
+            buttonPanel.add(usuariosButton);
+        
         buttonPanel.add(sairButton);
         
         // Adiciona os elementos ao painel

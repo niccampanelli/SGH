@@ -113,16 +113,16 @@ public class CustomField extends JTextField {
             public void focusGained(FocusEvent e){
                 setBackground(new Color(255, 255, 255));
                 if(getText().equals(placeholder)){
-                    //setText("");
+                    setText("");
                     setForeground(new Color(100, 100, 100));
                 }
-            }  
+            }
 
             @Override  
             public void focusLost(FocusEvent e){
                 setBackground(new Color(250, 250, 250));
                 if(getText().isEmpty()){
-                    //setText(placeholder);
+                    setText(placeholder);
                     setForeground(new Color(180, 180, 180));
                 }
             }
