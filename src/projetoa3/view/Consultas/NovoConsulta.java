@@ -44,8 +44,8 @@ public class NovoConsulta extends JFrame{
 
         for(int i = dataSplit.length-1; i >= 0; i--){
             if(i == 2){
-                if(Integer.parseInt(dataSplit[2]) < 1900 || Integer.parseInt(dataSplit[2]) > Year.now().getValue()-18){
-                    ano = Year.now().getValue()-18;
+                if(Integer.parseInt(dataSplit[2]) < Year.now().getValue() || Integer.parseInt(dataSplit[2]) > Year.now().getValue()+10){
+                    ano = Year.now().getValue();
                 }
             }
             else if(i == 1){
@@ -214,7 +214,12 @@ public class NovoConsulta extends JFrame{
         medicoModel = new DefaultComboBoxModel();
         medicoField.setModel(medicoModel);
         
-        int especialidadeId = UserController.readEspecialidades(especialidadeField.getSelectedItem().toString());
+        String spec = "";
+        
+        if(especialidadeField.getSelectedItem() != null)
+            spec = especialidadeField.getSelectedItem().toString();
+        
+        int especialidadeId = UserController.readEspecialidades(spec);
         
         ArrayList<String> medicos = UserController.readUser("id", "especialidade", String.valueOf(especialidadeId));
         medicoModel.removeAllElements();

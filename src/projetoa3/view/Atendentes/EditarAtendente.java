@@ -2,12 +2,21 @@ package projetoa3.view.Atendentes;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
 import java.text.ParseException;
 import java.time.Year;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import projetoa3.controller.UserController;
 import projetoa3.util.Resultado;
+import projetoa3.util.database.ConnectionClass;
 import projetoa3.view.Components.CustomButton;
 import projetoa3.view.Components.CustomField;
 import projetoa3.view.Components.CustomFormatted;
@@ -19,14 +28,14 @@ import projetoa3.view.Components.CustomFormatted;
 public class EditarAtendente extends JFrame{
     
     // Componentes da interface
-    private final BoxLayout canvasLayout, mainLayout, buttonLayout;
+    private final BoxLayout canvasLayout, mainLayout, titleLayout, buttonLayout;
     private final BorderLayout wrapLayout;
-    private final JPanel wrapPanel, mainPanel, buttonPanel;
+    private final JPanel wrapPanel, mainPanel, titlePanel, buttonPanel;
     private final JLabel title, subtitle, cpfLabel, nomeLabel, emailLabel, telefoneLabel, dataNascLabel;
     private final CustomField nomeField, emailField;
     private final CustomFormatted cpfField, telefoneField, dataNascField;
     private MaskFormatter cpfMask, telefoneMask, dataNascMask;
-    private final CustomButton cancelButton, addButton;
+    private final CustomButton cancelButton, addButton, imprimir;
     
     // Variáveis de lógica
     private String id, cpf, nome, email, telefone, dataNasc;
@@ -170,8 +179,49 @@ public class EditarAtendente extends JFrame{
         mainPanel.setAlignmentX(0.0f);
         mainPanel.setAlignmentY(0.0f);
         
+        titlePanel = new JPanel();
+        titleLayout = new BoxLayout(titlePanel, BoxLayout.X_AXIS);
+        titlePanel.setLayout(titleLayout);
+        titlePanel.setAlignmentX(0.0f);
+        titlePanel.setBackground(null);
+        
         title = new JLabel("Editar atendente");
         title.setFont(new Font(Font.SANS_SERIF, 1, 24));
+        
+        imprimir = new CustomButton("imprimir");
+        imprimir.setAlignmentX(0.0f);
+        imprimir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        imprimir.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                
+                String jrxml = "usuario.jrxml";
+
+                try {
+                    Connection conn = ConnectionClass.getConnection();
+
+                    String jasper = JasperCompileManager.compileReportToFile(jrxml);
+                    int intId = Integer.parseInt(id);
+                    
+                    System.out.println(intId);
+                    
+                    Map<String, Object> filtro = new HashMap();
+                    filtro.put("id", intId);
+                    JasperPrint jaspertPrint = JasperFillManager.fillReport(jasper, filtro, conn);
+
+                    JasperViewer view = new JasperViewer(jaspertPrint, false);
+                    view.setVisible(true);
+                    
+                } catch (JRException ex) {
+                    System.err.println(ex.getMessage());
+                    ex.printStackTrace();
+                }
+            }
+        });
+        
+        titlePanel.add(title);
+        titlePanel.add(Box.createHorizontalGlue());
+        titlePanel.add(imprimir);
         
         subtitle = new JLabel("#" + id);
         
@@ -293,7 +343,7 @@ public class EditarAtendente extends JFrame{
         buttonPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         buttonPanel.add(addButton);
         
-        mainPanel.add(title);
+        mainPanel.add(titlePanel);
         mainPanel.add(subtitle);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(cpfLabel);

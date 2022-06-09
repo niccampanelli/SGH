@@ -216,7 +216,7 @@ public class EditarPaciente extends JFrame{
                     filtro.put("id", intId);
                     JasperPrint jaspertPrint = JasperFillManager.fillReport(jasper, filtro, conn);
 
-                    JasperViewer view = new JasperViewer(jaspertPrint);
+                    JasperViewer view = new JasperViewer(jaspertPrint, false);
                     view.setVisible(true);
                     
                 } catch (JRException ex) {

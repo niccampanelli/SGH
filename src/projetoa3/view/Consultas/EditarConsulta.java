@@ -2,15 +2,23 @@ package projetoa3.view.Consultas;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
 import java.text.ParseException;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.border.*;
 import javax.swing.text.*;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import projetoa3.controller.ConsultaController;
 import projetoa3.controller.ExameController;
 import projetoa3.controller.UserController;
 import projetoa3.util.Resultado;
+import projetoa3.util.database.ConnectionClass;
 import projetoa3.view.Components.CustomButton;
 import projetoa3.view.Components.CustomFormatted;
 
@@ -21,14 +29,14 @@ import projetoa3.view.Components.CustomFormatted;
 public class EditarConsulta extends JFrame{
     
     // Componentes da interface
-    private BoxLayout canvasLayout, mainLayout, buttonLayout;
+    private BoxLayout canvasLayout, mainLayout, titleLayout, buttonLayout;
     private BorderLayout wrapLayout;
-    private JPanel wrapPanel, mainPanel, buttonPanel;
+    private JPanel wrapPanel, mainPanel, titlePanel, buttonPanel;
     private JLabel title, subtitle, pacienteLabel, especialidadeLabel, medicoLabel, dataLabel, horaLabel;
     private JComboBox pacienteField, especialidadeField, medicoField;
     private CustomFormatted dataField, horaField;
     private MaskFormatter dataMask, horaMask;
-    private CustomButton seeExamsButton, examButton, cancelButton, addButton;
+    private CustomButton seeExamsButton, examButton, cancelButton, addButton, imprimir;
     
     // Variáveis de lógica
     private ArrayList<String> especialidades;
@@ -44,8 +52,8 @@ public class EditarConsulta extends JFrame{
 
         for(int i = dataSplit.length-1; i >= 0; i--){
             if(i == 2){
-                if(Integer.parseInt(dataSplit[2]) < 1900 || Integer.parseInt(dataSplit[2]) > Year.now().getValue()-18){
-                    ano = Year.now().getValue()-18;
+                if(Integer.parseInt(dataSplit[2]) < Year.now().getValue() || Integer.parseInt(dataSplit[2]) > Year.now().getValue()+10){
+                    ano = Year.now().getValue();
                 }
             }
             else if(i == 1){
@@ -238,8 +246,50 @@ public class EditarConsulta extends JFrame{
         mainPanel.setAlignmentX(0.0f);
         mainPanel.setAlignmentY(0.0f);
         
+        titlePanel = new JPanel();
+        titleLayout = new BoxLayout(titlePanel, BoxLayout.X_AXIS);
+        titlePanel.setLayout(titleLayout);
+        titlePanel.setAlignmentX(0.0f);
+        titlePanel.setBackground(null);
+        
         title = new JLabel("Editar consulta");
         title.setFont(new Font(Font.SANS_SERIF, 1, 24));
+        
+        imprimir = new CustomButton("imprimir");
+        imprimir.setAlignmentX(0.0f);
+        imprimir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        imprimir.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                
+                String jrxml = "consulta.jrxml";
+
+                try {
+                    Connection conn = ConnectionClass.getConnection();
+
+                    String jasper = JasperCompileManager.compileReportToFile(jrxml);
+                    int intId = Integer.parseInt(id); 
+                    
+                    HashMap filtro = new HashMap();
+                    filtro.put("id", intId);
+                    filtro.put("especialidade", especialidade);
+                    filtro.put("medico", medico.split(" - ")[1]);
+                    filtro.put("data", data);
+                    JasperPrint jaspertPrint = JasperFillManager.fillReport(jasper, filtro, conn);
+
+                    JasperViewer view = new JasperViewer(jaspertPrint, false);
+                    view.setVisible(true);
+                    
+                } catch (JRException ex) {
+                    System.err.println(ex.getMessage());
+                    ex.printStackTrace();
+                }
+            }
+        });
+        
+        titlePanel.add(title);
+        titlePanel.add(Box.createHorizontalGlue());
+        titlePanel.add(imprimir);
         
         subtitle = new JLabel("#" + id);
         
@@ -425,7 +475,7 @@ public class EditarConsulta extends JFrame{
         buttonPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         buttonPanel.add(addButton);
         
-        mainPanel.add(title);
+        mainPanel.add(titlePanel);
         mainPanel.add(subtitle);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(pacienteLabel);

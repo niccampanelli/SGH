@@ -175,7 +175,6 @@ public class Pacientes extends JPanel{
                             Resultado sexoRes =  PacienteController.readPaciente(Integer.parseInt(idValue), "sexo");
 
                             if(sexoRes.isSucesso()){
-                                System.out.println(sexoRes.getCorpo());
                                 if(sexoRes.getCorpo().equals("m")){
                                     sexoValue = "Masculino";
                                 }

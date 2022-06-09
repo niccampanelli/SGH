@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="projeto" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="usuario" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
-	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
-	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
-	<style name="Detail" mode="Transparent" fontName="Times New Roman"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Serif" fontSize="50" isBold="false"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Serif" fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666" fontName="Serif" fontSize="14" isBold="true"/>
+	<style name="Detail" mode="Transparent" fontName="Serif"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -117,14 +117,14 @@
 			<![CDATA[sgh_db.pacientes.nome  sgh_db.pacientes.sexo]]>
 		</queryString>
 		<field name="Nome" class="java.lang.String"/>
-		<field name="sexo" class="java.lang.String">
+		<field name="email" class="java.lang.String">
 			<fieldDescription><![CDATA[]]></fieldDescription>
 		</field>
 		<field name="nasc" class="java.lang.String"/>
 		<field name="Telefone" class="java.lang.String"/>
 		<field name="cpf" class="java.lang.String"/>
 	</subDataset>
-	<subDataset name="projeto" uuid="c92f84d1-7c62-4ff1-8407-42966db2f3ab">
+	<subDataset name="usuario" uuid="c92f84d1-7c62-4ff1-8407-42966db2f3ab">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
 		<queryString language="SQL">
@@ -154,9 +154,9 @@
 			<property name="com.jaspersoft.studio.field.tree.path" value="usuarios"/>
 			<fieldDescription><![CDATA[Telefone para contactar o usuário]]></fieldDescription>
 		</field>
-		<field name="sexo" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="sexo"/>
-			<property name="com.jaspersoft.studio.field.label" value="sexo"/>
+		<field name="email" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="email"/>
+			<property name="com.jaspersoft.studio.field.label" value="email"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="usuarios"/>
 			<fieldDescription><![CDATA[Char de sexo para usuários do tipo médico]]></fieldDescription>
 		</field>
@@ -172,8 +172,8 @@
 		<group name="telefone">
 			<groupExpression><![CDATA[$F{telefone}]]></groupExpression>
 		</group>
-		<group name="sexo">
-			<groupExpression><![CDATA[$F{sexo}]]></groupExpression>
+		<group name="email">
+			<groupExpression><![CDATA[$F{email}]]></groupExpression>
 		</group>
 	</subDataset>
 	<subDataset name="table" uuid="eeb0fab3-814c-4d47-8b99-dc4805d5f02b">
@@ -188,9 +188,9 @@
 			<property name="com.jaspersoft.studio.field.tree.path" value="pacientes"/>
 			<fieldDescription><![CDATA[Nome e sobrenome do paciente]]></fieldDescription>
 		</field>
-		<field name="sexo" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.name" value="sexo"/>
-			<property name="com.jaspersoft.studio.field.label" value="sexo"/>
+		<field name="email" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="email"/>
+			<property name="com.jaspersoft.studio.field.label" value="email"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="pacientes"/>
 			<fieldDescription><![CDATA[Char de sexo do paciente]]></fieldDescription>
 		</field>
@@ -221,8 +221,8 @@
 		<group name="nome">
 			<groupExpression><![CDATA[$F{nome}]]></groupExpression>
 		</group>
-		<group name="sexo">
-			<groupExpression><![CDATA[$F{sexo}]]></groupExpression>
+		<group name="email">
+			<groupExpression><![CDATA[$F{email}]]></groupExpression>
 		</group>
 		<group name="data_nasc">
 			<groupExpression><![CDATA[$F{data_nasc}]]></groupExpression>
@@ -237,18 +237,15 @@
 			<groupExpression><![CDATA[$F{endereco}]]></groupExpression>
 		</group>
 	</subDataset>
+	<parameter name="id" class="java.lang.String" isForPrompting="false"></parameter>
 	<queryString>
-		<![CDATA[SELECT * FROM pacientes where  sgh_db.pacientes.id  = id]]>
+		<![CDATA[SELECT * FROM sgh_db.usuarios  where id = $P{id} ]]>
 	</queryString>
-	<field name="id" class="java.lang.Integer"/>
 	<field name="nome" class="java.lang.String"/>
-	<field name="data_nasc" class="java.lang.String"/>
+	<field name="data_nascimento" class="java.lang.String"/>
 	<field name="cpf" class="java.lang.String"/>
-	<field name="sexo" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
 	<field name="telefone" class="java.lang.String"/>
-	<variable name="id1" class="java.lang.Integer" calculation="First">
-		<variableExpression><![CDATA[$F{id}]]></variableExpression>
-	</variable>
 	<title>
 		<band height="397" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -259,13 +256,18 @@
 				</reportElement>
 			</line>
 			<staticText>
-				<reportElement x="415" y="10" width="50" height="20" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
+				<reportElement x="415" y="10" width="50" height="25" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
 				<box rightPadding="4"/>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[Date:]]></text>
 			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="465" y="10" width="84" height="20" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
+				<reportElement x="465" y="10" width="84" height="25" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -274,75 +276,87 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font size="19" isBold="true"/>
+					<font fontName="SansSerif" size="19"/>
 				</textElement>
-				<text><![CDATA[Sistema de gerenciamento hospitalar]]></text>
+				<text><![CDATA[Sistema de Gerenciamento Hospitalar]]></text>
 			</staticText>
 			<image>
 				<reportElement x="-10" y="0" width="80" height="50" uuid="84abd9d5-21f8-4c87-8fb1-1e7afd0a3c4a"/>
-				<imageExpression><![CDATA["sgh_logo.png"]]></imageExpression>
+				<imageExpression><![CDATA["src/projetoa3/util/icons/sgh_logo.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="100" y="80" width="350" height="30" uuid="39dc26d3-f891-4f3f-96b3-988df2bd4c73"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="22"/>
+					<font fontName="SansSerif" size="22"/>
 				</textElement>
-				<text><![CDATA[Ficha do paciente]]></text>
+				<text><![CDATA[Ficha do Usuário]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="120" width="42" height="15" uuid="21b0b186-a178-47fc-bc2b-6305f308173a"/>
+				<reportElement x="0" y="120" width="42" height="25" uuid="21b0b186-a178-47fc-bc2b-6305f308173a"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<text><![CDATA[NOME:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="150" width="85" height="15" uuid="22e4c963-829c-4909-b45e-c3bc786652d9"/>
+				<reportElement x="0" y="150" width="85" height="25" uuid="22e4c963-829c-4909-b45e-c3bc786652d9"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<text><![CDATA[NASCIMENTO:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="180" width="70" height="15" uuid="f750ca1d-570e-4b86-b2e5-600fedf31f7c"/>
+				<reportElement x="0" y="180" width="70" height="25" uuid="f750ca1d-570e-4b86-b2e5-600fedf31f7c"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<text><![CDATA[TELEFONE:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="235" width="40" height="20" uuid="dd156f7a-8a0a-4793-9e18-62f331ccc020"/>
+				<reportElement x="1" y="235" width="40" height="25" uuid="dd156f7a-8a0a-4793-9e18-62f331ccc020"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
-				<text><![CDATA[SEXO:]]></text>
+				<text><![CDATA[EMAIL:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="210" width="32" height="25" uuid="9451592a-aed4-4b5e-bdde-293b5e32ee54"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<text><![CDATA[CPF:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="42" y="120" width="188" height="30" uuid="4f9e07dc-982d-4122-87a7-24dcaa70eaa1"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="90" y="150" width="100" height="30" uuid="7aee37e9-6c29-4c8d-be09-f26abc2772ab"/>
-				<textFieldExpression><![CDATA[$F{data_nasc}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="32" y="210" width="100" height="20" uuid="837c3631-4efa-474d-8dc2-7dc7d20b2db7"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{cpf}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="40" y="235" width="100" height="20" uuid="fe4517b5-03f4-4bda-9881-fb27b154d2e5"/>
-				<textFieldExpression><![CDATA[$F{sexo}]]></textFieldExpression>
+				<reportElement x="40" y="235" width="200" height="20" uuid="fe4517b5-03f4-4bda-9881-fb27b154d2e5"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="70" y="180" width="100" height="22" uuid="c987eca7-bc1f-4c82-9504-168eef4eaed9"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{telefone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="85" y="150" width="100" height="22" uuid="24213389-4c3f-46a0-acbf-efe7c27a6101"/>
+				<textFieldExpression><![CDATA[$F{data_nascimento}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

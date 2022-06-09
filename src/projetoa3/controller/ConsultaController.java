@@ -202,6 +202,9 @@ public class ConsultaController {
     public static Resultado delete(int id){
         
         try{
+            String checkExameSql = "SELECT id FROM exames WHERE id_consulta = '"+id+"';";
+            Statement checkExameStatement = ConnectionClass.getStatement();
+            
             String deleteConsultasSql = "DELETE FROM consultas WHERE id = '"+id+"'";
             Statement deleteConsultasStatement = ConnectionClass.getStatement();
             
