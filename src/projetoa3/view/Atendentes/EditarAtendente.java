@@ -23,7 +23,7 @@ import projetoa3.view.Components.CustomFormatted;
 
 /**
  * Tela de edição de atendentes
- * @author Nicholas Campanelli
+ * @author Nicholas Campanelli, Alexandre Soares
  */
 public class EditarAtendente extends JFrame{
     

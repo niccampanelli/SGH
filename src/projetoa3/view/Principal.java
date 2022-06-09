@@ -13,7 +13,7 @@ import projetoa3.util.ProgramDefaults;
 
 /**
  * Frame principal, onde são instanciadas as páginas
- * @author Nicholas Campanelli
+ * @author Alexandre Soares, Kevin Morais, Nicholas Campanelli, Samuel Vincoletto, Tiago Massao, Victor Carvalho
  */
 public class Principal extends JFrame{
     

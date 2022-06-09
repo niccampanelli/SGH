@@ -24,7 +24,7 @@ import projetoa3.view.Components.CustomFormatted;
 
 /**
  * Tela de edição de consultas
- * @author Nicholas Campanelli
+ * @author Nicholas Campanelli, Alexandre Soares
  */
 public class EditarConsulta extends JFrame{
     

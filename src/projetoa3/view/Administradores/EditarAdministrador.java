@@ -22,7 +22,7 @@ import projetoa3.view.Components.CustomFormatted;
 
 /**
  * Tela de edição de administradores
- * @author Nicholas Campanelli
+ * @author Nicholas Campanelli, Alexandre Soares
  */
 public class EditarAdministrador extends JFrame{
     

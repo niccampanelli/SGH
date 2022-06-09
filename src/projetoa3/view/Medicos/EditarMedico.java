@@ -22,7 +22,7 @@ import projetoa3.view.Components.CustomFormatted;
 
 /**
  * Tela de criação de médico
- * @author Nicholas Campanelli
+ * @author Nicholas Campanelli, Alexandre Soares
  */
 public class EditarMedico extends JFrame{
     
