@@ -262,21 +262,29 @@ public class EditarConsulta extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
                 
+                // Especifica o modelo a ser seguido para gerar o arquivo
                 String jrxml = "consulta.jrxml";
 
                 try {
+                    // Pega a conexão com o banco
                     Connection conn = ConnectionClass.getConnection();
 
+                    // Gera um arquivo do tipo Jasper com base no modelo passado
                     String jasper = JasperCompileManager.compileReportToFile(jrxml);
                     int intId = Integer.parseInt(id); 
                     
+                    // Cria um objeto do tipo Map
                     HashMap filtro = new HashMap();
+                    // Insere os dados ao Map
                     filtro.put("id", paciente.split(" - ")[0].replaceAll("#", ""));
                     filtro.put("especialidade", especialidade);
                     filtro.put("medico", medico.split(" - ")[1]);
                     filtro.put("data", data);
+                    // Preenche o arquivo Jasper com os dados do map criado acima e passa a classe
+                    // de conexão com o banco, para serem puxados os dados do banco
                     JasperPrint jaspertPrint = JasperFillManager.fillReport(jasper, filtro, conn);
 
+                    // Cria uma tela da biblioteca Jasper para visualizar o arquivo
                     JasperViewer view = new JasperViewer(jaspertPrint, false);
                     view.setVisible(true);
                     

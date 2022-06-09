@@ -11,7 +11,7 @@ public class ProgramDefaults {
     private static int userType = 3;
     private static String userName = "?";
     
-    private static final Color baseColor = new Color(40, 140, 200);
+    private static final Color baseColor = new Color(40, 100, 200);
     
     private static final Color baseColorLight =  getLightShade(baseColor, 2f);
     private static final Color baseColorDark =  getDarkShade(baseColor, 1f);

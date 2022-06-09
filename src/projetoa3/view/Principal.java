@@ -21,11 +21,10 @@ public class Principal extends JFrame{
     private BoxLayout canvasLayout;
     private BorderLayout wrapLayout;
     private JMenuBar menu;
-    private JMenu arquivoMenu, contaMenu;
-    private JMenuItem exportarArquivoMenu, nomeContaMenu, sairContaMenu;
+    private JMenu contaMenu;
+    private JMenuItem  nomeContaMenu, sairContaMenu;
     private JScrollPane mainPanel;
     private JPanel Navbar, wrapPanel;
-    private JFileChooser fileChooser;
     private Image appIcon;
     
     // Definem o painel a ser mostrado
@@ -68,30 +67,6 @@ public class Principal extends JFrame{
         menu = new JMenuBar();
         menu.setBackground(new Color(255, 255, 255));
         
-            // Menu de ações de "arquivo"
-            arquivoMenu = new JMenu("Arquivo");
-
-            // Opção de exportar arquivo
-            exportarArquivoMenu = new JMenuItem("Exportar");
-            exportarArquivoMenu.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e){
-                    fileChooser = new JFileChooser();
-                    fileChooser.setMultiSelectionEnabled(false);
-                    fileChooser.setFileFilter(new FileNameExtensionFilter("Arquivo de texto", "txt", "text"));
-                    int option = fileChooser.showSaveDialog(null);
-                    if (option == JFileChooser.APPROVE_OPTION) {
-                        try {
-                            FileWriter writer = new FileWriter(fileChooser.getSelectedFile());
-                            writer.write("123dfsdf");
-                            writer.close();
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                }
-            });
-        
             // Menu de ações de "conta"
             contaMenu = new JMenu("Conta");
             
@@ -109,7 +84,7 @@ public class Principal extends JFrame{
                     break;
             }
             
-            // Exemplos, vão ser modificados depois
+            // Menu da conta
             nomeContaMenu = new JMenuItem(ProgramDefaults.getUserName() +" - "+ tipoNome);
             sairContaMenu = new JMenuItem("Sair");
             sairContaMenu.addActionListener(new ActionListener(){
@@ -128,10 +103,8 @@ public class Principal extends JFrame{
             });
         
         // Adiciona os menus no menu superior principal
-        arquivoMenu.add(exportarArquivoMenu);
         contaMenu.add(nomeContaMenu);
         contaMenu.add(sairContaMenu);
-        menu.add(arquivoMenu);
         menu.add(contaMenu);
         
         // Define o menu do programa como o menu criado

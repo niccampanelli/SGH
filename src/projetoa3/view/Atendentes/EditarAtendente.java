@@ -195,20 +195,25 @@ public class EditarAtendente extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e){
                 
+                // Especifica o modelo a ser seguido para gerar o arquivo
                 String jrxml = "usuario.jrxml";
 
                 try {
+                    // Pega a conexão com o banco
                     Connection conn = ConnectionClass.getConnection();
 
+                    // Gera um arquivo do tipo Jasper com base no modelo passado
                     String jasper = JasperCompileManager.compileReportToFile(jrxml);
                     int intId = Integer.parseInt(id);
                     
-                    System.out.println(intId);
-                    
+                    // Cria um objeto do tipo Map
                     Map<String, Object> filtro = new HashMap();
-                    filtro.put("id", intId);
+                    filtro.put("id", intId); // Insere o id ao map
+                    // Preenche o arquivo Jasper com o map criado acima e passa a classe
+                    // de conexão com o banco, para serem puxados os dados do banco
                     JasperPrint jaspertPrint = JasperFillManager.fillReport(jasper, filtro, conn);
 
+                    // Cria uma tela da biblioteca Jasper para visualizar o arquivo
                     JasperViewer view = new JasperViewer(jaspertPrint, false);
                     view.setVisible(true);
                     

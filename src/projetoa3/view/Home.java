@@ -30,8 +30,8 @@ public class Home extends JPanel{
     private final JPanel pacientesButton, consultasButton, usuariosButton, sairButton;
     private final JLabel pacientesLabel, consultasLabel, usuariosLabel, sairLabel;
     private final JLabel pacientesCount, consultasCount, usuariosCount;
-    private final JLabel calendarLabel, peopleLabel, userLabel;
-    private Image calendarIcon, peopleIcon, userIcon;
+    private final JLabel arrowLabel, calendarLabel, peopleLabel, userLabel;
+    private Image arrowIcon, calendarIcon, peopleIcon, userIcon;
     private final BoxLayout pacientesLayout, consultasLayout, usuariosLayout, sairLayout;
     
     /**
@@ -41,9 +41,11 @@ public class Home extends JPanel{
         
         // Tenta pegar os ícones dos botões
         try{
+            URL arrowUrl = getClass().getResource("/projetoa3/util/icons/arrowIcon.png");
             URL calendarUrl = getClass().getResource("/projetoa3/util/icons/calendarIcon.png");
             URL peopleUrl = getClass().getResource("/projetoa3/util/icons/peopleIcon.png");
             URL userUrl = getClass().getResource("/projetoa3/util/icons/userIcon.png");
+            arrowIcon = ImageIO.read(arrowUrl);
             calendarIcon = ImageIO.read(calendarUrl);
             peopleIcon = ImageIO.read(peopleUrl);
             userIcon = ImageIO.read(userUrl);
@@ -54,7 +56,7 @@ public class Home extends JPanel{
         
         title = new JLabel("Bem-vindo, "+ProgramDefaults.getUserName()+"!");
         title.setFont(new Font(Font.SANS_SERIF, 1, 30));
-        
+                
         pacientesButton = new JPanel();
         pacientesButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         pacientesButton.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -256,6 +258,9 @@ public class Home extends JPanel{
         sairLabel.setFont(new Font(Font.SANS_SERIF, 1, 18));
         sairLabel.setForeground(new Color(255, 255, 255));
         
+        arrowLabel = new JLabel(new ImageIcon(arrowIcon));
+        
+        sairButton.add(arrowLabel);
         sairButton.add(Box.createVerticalGlue());
         sairButton.add(sairLabel);
         
