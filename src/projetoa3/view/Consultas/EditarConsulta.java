@@ -271,7 +271,7 @@ public class EditarConsulta extends JFrame{
                     int intId = Integer.parseInt(id); 
                     
                     HashMap filtro = new HashMap();
-                    filtro.put("id", intId);
+                    filtro.put("id", paciente.split(" - ")[0].replaceAll("#", ""));
                     filtro.put("especialidade", especialidade);
                     filtro.put("medico", medico.split(" - ")[1]);
                     filtro.put("data", data);

@@ -205,11 +205,18 @@ public class ConsultaController {
             String checkExameSql = "SELECT id FROM exames WHERE id_consulta = '"+id+"';";
             Statement checkExameStatement = ConnectionClass.getStatement();
             
+            ResultSet checkExameResult = checkExameStatement.executeQuery(checkExameSql);
+            
+            while(checkExameResult.next()){
+                ExameController.delete(checkExameResult.getInt("id"));
+            }
+            checkExameStatement.close();
+            
             String deleteConsultasSql = "DELETE FROM consultas WHERE id = '"+id+"'";
             Statement deleteConsultasStatement = ConnectionClass.getStatement();
             
             deleteConsultasStatement.execute(deleteConsultasSql);
-                        
+            deleteConsultasStatement.close();
             return new Resultado(true, "Sucesso");
             
         }

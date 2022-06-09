@@ -162,7 +162,7 @@ public class ExameController {
             Statement deleteExameStatement = ConnectionClass.getStatement();
             
             deleteExameStatement.execute(deleteExameSql);
-                        
+            deleteExameStatement.close();
             return new Resultado(true, "Sucesso");
             
         }

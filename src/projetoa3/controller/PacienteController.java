@@ -224,11 +224,21 @@ public class PacienteController {
     public static Resultado delete(int id){
         
         try{
+            String checkConsultasSql = "SELECT id FROM consultas WHERE id_paciente = '"+id+"';";
+            Statement checkConsultasStatement = ConnectionClass.getStatement();
+            
+            ResultSet checkConsultasResult = checkConsultasStatement.executeQuery(checkConsultasSql);
+            
+            while(checkConsultasResult.next()){
+                ConsultaController.delete(checkConsultasResult.getInt("id"));
+            }
+            checkConsultasStatement.close();
+            
             String deletePacienteSql = "DELETE FROM pacientes WHERE id = '"+id+"'";
             Statement deletePacienteStatement = ConnectionClass.getStatement();
             
             deletePacienteStatement.execute(deletePacienteSql);
-                        
+            deletePacienteStatement.close();
             return new Resultado(true, "Sucesso");
             
         }
