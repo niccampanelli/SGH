@@ -27,6 +27,12 @@ Este sistema foi desenvolvido como um trabalho acadêmico na Universidade Anhemb
 - [Alexandre Soares](https://github.com/alexandrests)
 - [Tiago Massao](https://github.com/Tmassao)
 
+<h2>Ferramentas utilizadas</h2>
+
+- [Apache Netbeans IDE](https://github.com/apache/netbeans)
+- [Java Swing](https://docs.oracle.com/javase/6/docs/technotes/guides/swing/)
+- [JasperReport](https://community.jaspersoft.com/)
+
 <h2>Como utilizar</h2>
 
 Este sistema foi desenvolvido com a Netbeans IDE. Para utilizar este projeto, clone este repositório e abra-o na sua IDE. Suas dependências estão associadas ao projeto, não é preciso baixá-las. Caso a IDE não encontre-as, abra as propriedades do projeto e então importe as bibliotecas das pastas `/src/sgh/util` e `/src/sgh/util/database`.
