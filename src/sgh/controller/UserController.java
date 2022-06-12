@@ -17,24 +17,24 @@ import sgh.util.Resultado;
 import sgh.util.database.ConnectionClass;
 
 /**
- * Classe controladora das funções de usuários
+ * Controller com os métodos relacionados aos usuários
  * @author Nicholas Campanelli
  */
 public class UserController {
     
     /**
-     * Método de criação de usuários
-     * @param tipo
-     * @param nome
-     * @param cpf
-     * @param dataNasc
-     * @param telefone
-     * @param email
-     * @param cadastro
-     * @param senha
-     * @param sexo
-     * @param especialidade 
-     * @return Resultado - objeto do tipo Resultado definindo se o resultado foi sucesso ou não
+     * Método controlador de verificação e inserção de usuários
+     * @param tipo - Tipo do usuário a ser inserido
+     * @param nome - Nome completo do usuário
+     * @param cpf - CPF limpo contendo apenas números
+     * @param dataNasc - Data de nascrimento no padrão dd/MM/yyyy
+     * @param telefone - Telefone limpo contendo apenas os números
+     * @param email - Endereço de e-mail do usuário. Deve ser único pois é utilizado para login
+     * @param cadastro - CRM limpo contendo apenas números para caso o usuário seja um médico
+     * @param senha - Senha do usuário a ser cadastrado
+     * @param sexo - Char de sexo ("m" ou "f") do usuário a ser inserido
+     * @param especialidade -  Nome da especialidade caso o usuário seja um médico
+     * @return Resultado - Ojeto de Resultado definindo se o resultado foi sucesso ou não, uma mensagem e o id do usuário inserido
      */
     public static Resultado create(
             int tipo, String nome,
@@ -45,29 +45,32 @@ public class UserController {
     ){
         // Tratativa de erro
         try{
-            
-            // Verifica se os campos não estão vazios ou com valores inválidos
+            // Verifica se os campos não estão vazios
             if((tipo >= 1 && tipo <= 3) && (!"".equals(nome)) && (!"".equals(cpf)) && (!"".equals(dataNasc))
                     && (!"".equals(telefone)) && (!"".equals(email)) && (!"".equals(senha))){
                 
+                // Verifica a quantidade de usuários estão cadastrados com o CPF fornecido
                 String checkCpfSql = "SELECT COUNT(*) FROM usuarios WHERE cpf = '"+cpf+"';";
                 Statement checkCpfStatement = ConnectionClass.getStatement();
                 
+                // Executa a query e obtém os resultados
                 ResultSet checkCpfResult = checkCpfStatement.executeQuery(checkCpfSql);
-                checkCpfResult.next();
-                int cpfCount = checkCpfResult.getInt("COUNT(*)");
-                checkCpfResult.close();
+                checkCpfResult.next(); // Avança para o primeiro registro
+                int cpfCount = checkCpfResult.getInt("COUNT(*)"); // Obtém a quantidade
+                checkCpfResult.close(); // Fecha a conexão com o banco
                 
+                // Se não existir usuário com o mesmo CPF
                 if(cpfCount == 0){
 
                     // Verifica se o email informado já está em uso por outro registro
                     String checkEmailSql = "SELECT COUNT(*) FROM usuarios WHERE email = '"+email+"';";
                     Statement checkEmailStatement = ConnectionClass.getStatement();
 
+                    // Executa a query e obtém os resultados
                     ResultSet checkEmailResult = checkEmailStatement.executeQuery(checkEmailSql);
-                    checkEmailResult.next();
-                    int emailCount = checkEmailResult.getInt("COUNT(*)");
-                    checkEmailStatement.close();
+                    checkEmailResult.next(); // Avança para o primeiro registro
+                    int emailCount = checkEmailResult.getInt("COUNT(*)"); // Obtém a quantidade
+                    checkEmailStatement.close(); // Fecha a conexão com o banco
 
                     // Se a quantidade de registros for zero
                     // significa que o email está disponível para uso
@@ -77,43 +80,47 @@ public class UserController {
                         // significa que ele é do tipo "médico"
                         if(tipo == 3){
 
-                            // Verifica se o cadastro e a especialidade não estão vazios
+                            // Verifica se o CRM e a especialidade não estão vazios
                             if((!"".equals(cadastro)) && (!"".equals(especialidade))){
 
-                                // Verifica se o CRM está cadastrado
+                                // Verifica se o CRM já está cadastrado
                                 String checkCrmSql = "SELECT COUNT(*) FROM usuarios WHERE cadastro = '"+cadastro+"';";
                                 Statement checkCrmStatement = ConnectionClass.getStatement();
 
+                                // Executa a query e obtém os resultados
                                 ResultSet checkCrmResult = checkCrmStatement.executeQuery(checkCrmSql);
-                                checkCrmResult.next();
-                                int crmCount = checkCrmResult.getInt("COUNT(*)");
-                                checkCrmStatement.close();
+                                checkCrmResult.next(); // Avança para o primeiro registro
+                                int crmCount = checkCrmResult.getInt("COUNT(*)"); // Obtém a quantidade
+                                checkCrmStatement.close(); // Fecha a conexão com o banco
 
+                                // Se não existir outro usuário com o mesmo CRM
                                 if(crmCount == 0){
 
                                     // Verifica a existência da especialidade indicada
                                     String checkSpecSql = "SELECT COUNT(*) FROM especialidades WHERE nome LIKE '%"+especialidade+"%';";
                                     Statement checkSpecStatement = ConnectionClass.getStatement();
 
+                                    // Executa a query e obtém o resultado
                                     ResultSet checkSpecResult = checkSpecStatement.executeQuery(checkSpecSql);
-                                    checkSpecResult.next();
-                                    int specCount = checkSpecResult.getInt("COUNT(*)");
-                                    checkSpecStatement.close();
+                                    checkSpecResult.next(); // Avança para o primeiro registro
+                                    int specCount = checkSpecResult.getInt("COUNT(*)"); // Obtém a quantidade
+                                    checkSpecStatement.close(); // Fecha a conexão com o banco
 
                                     // Se a especialidade indicada não existe
                                     if(specCount == 0){
                                         // Insere a especialidade
-                                        String insertSpecSql = "INSERT INTO especialidades (nome) VALUES"
-                                                + "(?);";
+                                        String insertSpecSql = "INSERT INTO especialidades (nome) VALUES (?);";
                                         PreparedStatement insertSpecStatement = ConnectionClass.getPreparedStatement(insertSpecSql, Statement.RETURN_GENERATED_KEYS);
                                         insertSpecStatement.setString(1, especialidade);
                                         insertSpecStatement.execute();
 
+                                        // Pega o id da especialidade inserida
                                         ResultSet insertSpecResult = insertSpecStatement.getGeneratedKeys();
-                                        insertSpecResult.next();
+                                        insertSpecResult.next(); // Avança para o primeiro registro
 
+                                        // Pega o id
                                         int key = insertSpecResult.getInt(1);
-                                        insertSpecStatement.close();
+                                        insertSpecStatement.close(); // Fecha a conexão com o banco
 
                                         // Se a chave primária da especialidade adicionada for maior que zero
                                         // significa que criou com sucesso
@@ -124,9 +131,10 @@ public class UserController {
                                             BigInteger cripsenha = BigInteger.ONE;
 
                                             try{
+                                                // Pega uma instância do algoritimo de criptografia MD5
                                                 MessageDigest md = MessageDigest.getInstance("MD5");
-                                                senharaw = new BigInteger(1, md.digest(senha.getBytes()));
-                                                cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes()));
+                                                senharaw = new BigInteger(1, md.digest(senha.getBytes())); // Criptografa a senha fornecida
+                                                cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes())); // Salt a senha criptografada e criptografa de novo
                                             }
                                             catch(NoSuchAlgorithmException e){
                                                 System.err.println("Erro na criptografia da senha: "+e.getMessage());
@@ -134,7 +142,7 @@ public class UserController {
                                                 return new Resultado(false, "Erro inesperado na criação de médico. Tente novamente.");
                                             }
                                             
-                                            // Cria um modelo de médico
+                                            // Cria um modelo de médico com os dados fornecidos
                                             MedicoModel medico = new MedicoModel(
                                                     tipo, nome,
                                                     cpf, dataNasc,
@@ -142,24 +150,25 @@ public class UserController {
                                                     cadastro, cripsenha.toString(16),
                                                     sexo, key
                                             );
-                                            // Adiciona o médico
-                                            return medico.create();
+                                            return medico.create(); // Chama o método de inserção e retorna o resultado
                                         }
                                         else{
                                             System.err.println("Erro inesperado ao criar médico: Especialidade não foi criada corretamente no banco de dados.");
                                             return new Resultado(false, "Erro inesperado ao criar médico: Especialidade não foi criada corretamente no banco de dados.");
                                         }
                                     }
+                                    // Quando a especialidade existe
                                     else{
-
+                                        
                                         // Pega o id da especialidade com o nome informado pelo usuário
                                         String getSpecSql = "SELECT id FROM especialidades WHERE nome LIKE '%"+especialidade+"%' LIMIT 1;";
                                         Statement getSpecStatement = ConnectionClass.getStatement();
 
+                                        // Executa a query e obtém o resultado
                                         ResultSet getSpecResult = getSpecStatement.executeQuery(getSpecSql);
-                                        getSpecResult.next();
-                                        int specId = getSpecResult.getInt("id");
-                                        getSpecStatement.close();
+                                        getSpecResult.next(); // Avança para o primeiro registro
+                                        int specId = getSpecResult.getInt("id"); // Obtém o id
+                                        getSpecStatement.close(); // Fecha a conexão com o banco
 
                                         // Se o id retornado da consulta for maior que zero
                                         // significa que a especialidade foi obtida com sucesso
@@ -170,9 +179,10 @@ public class UserController {
                                             BigInteger cripsenha = BigInteger.ONE;
 
                                             try{
+                                                // Pega uma instância do algoritimo de criptografia MD5
                                                 MessageDigest md = MessageDigest.getInstance("MD5");
-                                                senharaw = new BigInteger(1, md.digest(senha.getBytes()));
-                                                cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes()));
+                                                senharaw = new BigInteger(1, md.digest(senha.getBytes())); // Criptografa a senha inserida
+                                                cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes())); // Salt a senha criptografada e criptografa de novo
                                             }
                                             catch(NoSuchAlgorithmException e){
                                                 System.err.println("Erro na criptografia da senha: "+e.getMessage());
@@ -180,7 +190,7 @@ public class UserController {
                                                 return new Resultado(false, "Erro inesperado na criação de médico. Tente novamente.");
                                             }
 
-                                            // Cria um modelo de médico
+                                            // Cria um modelo de médico com os dados fornecidos
                                             MedicoModel medico = new MedicoModel(
                                                     tipo, nome,
                                                     cpf, dataNasc,
@@ -188,8 +198,7 @@ public class UserController {
                                                     cadastro, cripsenha.toString(16),
                                                     sexo, specId
                                             );
-                                            // Adiciona o médico
-                                            return medico.create();
+                                            return medico.create(); // Chama o método de inserção e retorna o resultado
                                         }
                                         else{
                                             System.err.println("Erro ao obter especialidade: A especialidade não foi encontrada.");
@@ -207,6 +216,7 @@ public class UserController {
                                 return new Resultado(false, "Erro ao cadastrar médico: o CRM e/ou especialidade está faltando.");
                             }
                         }
+                        // Se o usuário não for do tipo médico
                         else{
 
                             // Seção de criptografia da senha
@@ -214,9 +224,10 @@ public class UserController {
                             BigInteger cripsenha = BigInteger.ONE;
 
                             try{
+                                // Pega uma instância do algoritimo de criptografia MD5
                                 MessageDigest md = MessageDigest.getInstance("MD5");
-                                senharaw = new BigInteger(1, md.digest(senha.getBytes()));
-                                cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes()));
+                                senharaw = new BigInteger(1, md.digest(senha.getBytes())); // Criptografa a senha inserida
+                                cripsenha = new BigInteger(1, md.digest((senharaw.toString(16) + "segredo").getBytes())); // Salt a senha criptografada e criptografa de novo
                             }
                             catch(NoSuchAlgorithmException e){
                                 System.err.println("Erro na criptografia da senha: "+e.getMessage());
@@ -224,14 +235,13 @@ public class UserController {
                                 return new Resultado(false, "Erro inesperado ao criar o usuário. Tente novamente.");
                             }
 
-                            // Cria um modelo de usuário
+                            // Cria um modelo de usuário com os dados fornecidos
                             UserModel usuario = new UserModel(
                                     tipo, nome, cpf,
                                     dataNasc, telefone, 
                                     email, cripsenha.toString(16)
                             );
-                            // Adiciona o usuário
-                            return usuario.create();
+                            return usuario.create(); // Chama o método de inserção e retorna o resultado
                         }
                     }
                     else{
@@ -256,129 +266,169 @@ public class UserController {
     }
     
     /**
-     * Método para obter usuários
-     * @param tipo
-     * @return DefaultTableModel - modelo de tabela com as linhas dos registros
+     * Método controlador para obter todos os usuários do banco com o tipo informado
+     * @param tipo - Tipo dos usuários a serem listados
+     * @return DefaultTableModel - Modelo de tabela com os dados dos registros obtidos e o cabeçalho da tabela
      */
     public static DefaultTableModel read(int tipo){
         
+        // Instancia um novo modelo de tabela vazio
         DefaultTableModel model = new DefaultTableModel(0, 0);
         String[] columns;
         
         try{
-            if(tipo == 3){
-                columns = new String[]{
-                  "ID",
-                  "CPF",
-                  "CRM",
-                  "Nome",
-                  "Especialidade",
-                  "E-mail",
-                  "Telefone",
-                  "Cadastrado em"
-                };
-
-                model = new DefaultTableModel(columns, 0);
-                String getMedicSql = "SELECT b.id, b.cpf, b.cadastro, b.nome, a.nome as especialidade, b.email, b.telefone, b.data_cadastro "
-                        + "FROM especialidades a INNER JOIN usuarios b ON a.id = b.especialidade;";
-                Statement getMedicStatement = ConnectionClass.getStatement();
-
-                ResultSet getMedicResult = getMedicStatement.executeQuery(getMedicSql);
-
-                while(getMedicResult.next()){
+            switch (tipo) {
+                // Se o usuário for médico
+                case 3:
+                    // Define o cabeçalho da tabela
+                    columns = new String[]{
+                        "ID",
+                        "CPF",
+                        "CRM",
+                        "Nome",
+                        "Especialidade",
+                        "E-mail",
+                        "Telefone",
+                        "Cadastrado em"
+                    };
                     
-                    String[] dataCadSplit = getMedicResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
-                    String newDataCad = dataCadSplit[2] + "/" + dataCadSplit[1] + "/" + dataCadSplit[0];
+                    // Insere o cabeçalho ao modelo
+                    model = new DefaultTableModel(columns, 0);
                     
-                    model.addRow(new Object[]{
-                        getMedicResult.getInt("id"),
-                        getMedicResult.getString("cpf"),
-                        getMedicResult.getString("cadastro"),
-                        getMedicResult.getString("nome"),
-                        getMedicResult.getString("especialidade"),
-                        getMedicResult.getString("email"),
-                        getMedicResult.getString("telefone"),
-                        newDataCad,
-                    });
-                }
+                    // Obtém o médico e utiliza um inner join para obter o nome da especialidade
+                    String getMedicSql = "SELECT b.id, b.cpf, b.cadastro, b.nome, a.nome as especialidade, b.email, b.telefone, b.data_cadastro "
+                            + "FROM especialidades a INNER JOIN usuarios b ON a.id = b.especialidade;";
+                    Statement getMedicStatement = ConnectionClass.getStatement();
+                    
+                    // Executa a query e obtém o resultado
+                    ResultSet getMedicResult = getMedicStatement.executeQuery(getMedicSql);
+                    
+                    // Enquanto houver registros, avança para o próximo
+                    while(getMedicResult.next()){
+                        
+                        // Pega a data de cadastro e separa por hífen
+                        String[] dataCadSplit = getMedicResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                        String newDataCad = dataCadSplit[2] + "/" + dataCadSplit[1] + "/" + dataCadSplit[0];
+                        
+                        // Insere o registro atual no modelo da tabela
+                        model.addRow(new Object[]{
+                            getMedicResult.getInt("id"),
+                            getMedicResult.getString("cpf"),
+                            getMedicResult.getString("cadastro"),
+                            getMedicResult.getString("nome"),
+                            getMedicResult.getString("especialidade"),
+                            getMedicResult.getString("email"),
+                            getMedicResult.getString("telefone"),
+                            newDataCad,
+                        });
+                    }
+                    
+                    // Fecha a conexão com o banco
+                    getMedicStatement.close();
+                    
+                    break;
                 
-                getMedicStatement.close();
-            }
-            else if(tipo == 2){
-                columns = new String[]{
-                  "ID",
-                  "CPF",
-                  "Nome",
-                  "E-mail",
-                  "Telefone",
-                  "Data de nascimento",
-                  "Cadastrado em"
-                };
-
-                model = new DefaultTableModel(columns, 0);
-                String getAtendenteSql = "SELECT id, cpf, nome, email, telefone, data_nascimento, data_cadastro FROM usuarios WHERE tipo = 2;";
-                Statement getAtendenteStatement = ConnectionClass.getStatement();
-
-                ResultSet getAtendenteResult = getAtendenteStatement.executeQuery(getAtendenteSql);
-
-                while(getAtendenteResult.next()){
+                // Caso o usuário seja um atendente
+                case 2:
+                    // Define o cabeçalho da tabela
+                    columns = new String[]{
+                        "ID",
+                        "CPF",
+                        "Nome",
+                        "E-mail",
+                        "Telefone",
+                        "Data de nascimento",
+                        "Cadastrado em"
+                    };
                     
-                    String[] dataNascSplit = getAtendenteResult.getDate("data_nascimento", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
-                    String[] dataCadSplit = getAtendenteResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                    // Insere o cabeçalho ao modelo
+                    model = new DefaultTableModel(columns, 0);
                     
-                    String newDataNasc = dataNascSplit[2] + "/" + dataNascSplit[1] + "/" + dataNascSplit[0];
-                    String newDataCad = dataCadSplit[2] + "/" + dataCadSplit[1] + "/" + dataCadSplit[0];
+                    // Obtém os dados do usuário
+                    String getAtendenteSql = "SELECT id, cpf, nome, email, telefone, data_nascimento, data_cadastro FROM usuarios WHERE tipo = 2;";
+                    Statement getAtendenteStatement = ConnectionClass.getStatement();
                     
-                    model.addRow(new Object[]{
-                        getAtendenteResult.getInt("id"),
-                        getAtendenteResult.getString("cpf"),
-                        getAtendenteResult.getString("nome"),
-                        getAtendenteResult.getString("email"),
-                        getAtendenteResult.getString("telefone"),
-                        newDataNasc,
-                        newDataCad,
-                    });
-                }
-                
-                getAtendenteStatement.close();
-            }
-            else if(tipo == 1){
-                columns = new String[]{
-                  "ID",
-                  "CPF",
-                  "Nome",
-                  "E-mail",
-                  "Telefone",
-                  "Data de nascimento",
-                  "Cadastrado em"
-                };
-
-                model = new DefaultTableModel(columns, 0);
-                String getAdminSql = "SELECT id, cpf, nome, email, telefone, data_nascimento, data_cadastro FROM usuarios WHERE tipo = 1;";
-                Statement getAdminStatement = ConnectionClass.getStatement();
-
-                ResultSet getAdminResult = getAdminStatement.executeQuery(getAdminSql);
-
-                while(getAdminResult.next()){
+                    // Executa a query e obtém o resultado
+                    ResultSet getAtendenteResult = getAtendenteStatement.executeQuery(getAtendenteSql);
                     
-                    String[] dataNascSplit = getAdminResult.getDate("data_nascimento", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
-                    String[] dataCadSplit = getAdminResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                    // Enquanto houver registros, avança para o próximo
+                    while(getAtendenteResult.next()){
+                        
+                        // Pega as datas e separa por hífen
+                        String[] dataNascSplit = getAtendenteResult.getDate("data_nascimento", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                        String[] dataCadSplit = getAtendenteResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                        
+                        // Formata as datas no padrão dd/MM/yyyy
+                        String newDataNasc = dataNascSplit[2] + "/" + dataNascSplit[1] + "/" + dataNascSplit[0];
+                        String newDataCad = dataCadSplit[2] + "/" + dataCadSplit[1] + "/" + dataCadSplit[0];
+                        
+                        // Adiciona o registro atual no modelo da tabela
+                        model.addRow(new Object[]{
+                            getAtendenteResult.getInt("id"),
+                            getAtendenteResult.getString("cpf"),
+                            getAtendenteResult.getString("nome"),
+                            getAtendenteResult.getString("email"),
+                            getAtendenteResult.getString("telefone"),
+                            newDataNasc,
+                            newDataCad,
+                        });
+                    }
                     
-                    String newDataNasc = dataNascSplit[2] + "/" + dataNascSplit[1] + "/" + dataNascSplit[0];
-                    String newDataCad = dataCadSplit[2] + "/" + dataCadSplit[1] + "/" + dataCadSplit[0];
+                    // Fecha a conexão com o banco
+                    getAtendenteStatement.close();
                     
-                    model.addRow(new Object[]{
-                        getAdminResult.getInt("id"),
-                        getAdminResult.getString("cpf"),
-                        getAdminResult.getString("nome"),
-                        getAdminResult.getString("email"),
-                        getAdminResult.getString("telefone"),
-                        newDataNasc,
-                        newDataCad,
-                    });
-                }
-                
-                getAdminStatement.close();
+                    break;
+                    
+                // Caso o usuário seja um administrador
+                case 1:
+                    // Define o cabeçalho da tabela
+                    columns = new String[]{
+                        "ID",
+                        "CPF",
+                        "Nome",
+                        "E-mail",
+                        "Telefone",
+                        "Data de nascimento",
+                        "Cadastrado em"
+                    };
+                    
+                    // Insere o cabeçalho no modelo
+                    model = new DefaultTableModel(columns, 0);
+                    
+                    // Obtém os dados do administrador
+                    String getAdminSql = "SELECT id, cpf, nome, email, telefone, data_nascimento, data_cadastro FROM usuarios WHERE tipo = 1;";
+                    Statement getAdminStatement = ConnectionClass.getStatement();
+                    
+                    // Executa a query e obtém o resultado
+                    ResultSet getAdminResult = getAdminStatement.executeQuery(getAdminSql);
+                    
+                    // Enquanto houver registros, avança para o próximo
+                    while(getAdminResult.next()){
+                        
+                        // Obtém as datas e separa por hífen
+                        String[] dataNascSplit = getAdminResult.getDate("data_nascimento", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                        String[] dataCadSplit = getAdminResult.getDate("data_cadastro", Calendar.getInstance(TimeZone.getDefault())).toString().split("-");
+                        
+                        // Formata as datas no padrão dd/MM/yyyy
+                        String newDataNasc = dataNascSplit[2] + "/" + dataNascSplit[1] + "/" + dataNascSplit[0];
+                        String newDataCad = dataCadSplit[2] + "/" + dataCadSplit[1] + "/" + dataCadSplit[0];
+                        
+                        // Adiciona o registro atual no modelo da tabela
+                        model.addRow(new Object[]{
+                            getAdminResult.getInt("id"),
+                            getAdminResult.getString("cpf"),
+                            getAdminResult.getString("nome"),
+                            getAdminResult.getString("email"),
+                            getAdminResult.getString("telefone"),
+                            newDataNasc,
+                            newDataCad,
+                        });
+                    }
+                    
+                    // Fecha a conexão com o banco
+                    getAdminStatement.close();
+                    
+                    break;
             }
         }
         catch(SQLException e){
@@ -386,22 +436,19 @@ public class UserController {
             e.printStackTrace();
         }
         
+        // Retorna o modelo da tabela
         return model;
     }
     
     /**
-     * Método para atualizar dados dos usuários
-     * @param tipo
-     * @param nome
-     * @param cpf
-     * @param dataNasc
-     * @param telefone
-     * @param email
-     * @param cadastro
-     * @param senha
-     * @param sexo
-     * @param especialidade 
-     * @return Resultado - objeto do tipo Resultado definindo se o resultado foi sucesso ou não
+     * Método controlador para atualizar os dados de um usuário
+     * @param tipo - Tipo do usuário que será atualizado
+     * @param nome - Novo nome completo do usuário
+     * @param dataNasc - Nova data de nascimento do usuário no padrão dd/MM/yyyy
+     * @param telefone - Novo telefone do usuário limpo com apenas os números
+     * @param sexo - Novo char de sexo ("m" ou "f") do usuário
+     * @param especialidade - Nome da nova especialidade do usuário
+     * @return Resultado - Objeto do tipo Resultado definindo se o resultado foi sucesso ou não, uma mensagem e o id do usuário atualizado
      */
     public static Resultado update(
             int id, int tipo,
@@ -409,49 +456,50 @@ public class UserController {
             String telefone, String sexo, 
             String especialidade
     ){
-        // Tratativa de erro
         try{
-            
             // Verifica se os campos não estão vazios ou com valores inválidos
             if((tipo >= 1 && tipo <= 3) && (!"".equals(nome)) && (!"".equals(dataNasc))
                     && (!"".equals(telefone))){
 
-                // Quando o tipo do usuário a ser cadastrado for 3
+                // Quando o tipo do usuário a ser atualizado for 3
                 // significa que ele é do tipo "médico"
                 if(tipo == 3){
 
-                    // Verifica se o cadastro e a especialidade não estão vazios
+                    // Verifica se a especialidade não estão vazios
                     if(!"".equals(especialidade)){
 
                         // Verifica a existência da especialidade indicada
                         String checkSpecSql = "SELECT COUNT(*) FROM especialidades WHERE nome LIKE '%"+especialidade+"%';";
                         Statement checkSpecStatement = ConnectionClass.getStatement();
 
+                        // Executa a query e obtém o resultado
                         ResultSet checkSpecResult = checkSpecStatement.executeQuery(checkSpecSql);
-                        checkSpecResult.next();
-                        int specCount = checkSpecResult.getInt("COUNT(*)");
-                        checkSpecStatement.close();
+                        checkSpecResult.next(); // Avança para o primeiro registro
+                        int specCount = checkSpecResult.getInt("COUNT(*)"); // Obtém a quantidade
+                        checkSpecStatement.close(); // Fecha a conexão com o banco
 
                         // Se a especialidade indicada não existe
                         if(specCount == 0){
                             // Insere a especialidade
-                            String insertSpecSql = "INSERT INTO especialidades (nome) VALUES"
-                                    + "(?);";
+                            String insertSpecSql = "INSERT INTO especialidades (nome) VALUES (?);";
                             PreparedStatement insertSpecStatement = ConnectionClass.getPreparedStatement(insertSpecSql, Statement.RETURN_GENERATED_KEYS);
+                            
+                            // Define o nome da especialidade 
                             insertSpecStatement.setString(1, especialidade);
                             insertSpecStatement.execute();
 
+                            // Obtém a chave do usuário atualizado
                             ResultSet insertSpecResult = insertSpecStatement.getGeneratedKeys();
-                            insertSpecResult.next();
+                            insertSpecResult.next(); // Avança para o primeiro registro
 
-                            int key = insertSpecResult.getInt(1);
+                            int key = insertSpecResult.getInt(1); // Obtém a chave
                             insertSpecStatement.close();
 
                             // Se a chave primária da especialidade adicionada for maior que zero
                             // significa que criou com sucesso
                             if(key > 0){
                                 
-                                // Cria um modelo de médico
+                                // Cria um modelo de médico com os dados fornecidos
                                 MedicoModel medico = new MedicoModel(
                                         id,
                                         tipo, nome,
@@ -460,8 +508,8 @@ public class UserController {
                                         "00000000", "",
                                         sexo, key
                                 );
-                                // Adiciona o médico
-                                return medico.update();
+                                
+                                return medico.update(); // Chama o método de atualizar e retorna o resultado
                             }
                             else{
                                 System.err.println("Erro inesperado ao atualizar médico: Especialidade não foi criada corretamente no banco de dados.");
@@ -469,21 +517,21 @@ public class UserController {
                             }
                         }
                         else{
-
                             // Pega o id da especialidade com o nome informado pelo usuário
                             String getSpecSql = "SELECT id FROM especialidades WHERE nome LIKE '%"+especialidade+"%' LIMIT 1;";
                             Statement getSpecStatement = ConnectionClass.getStatement();
 
+                            // Executa a query e obtém o resultado
                             ResultSet getSpecResult = getSpecStatement.executeQuery(getSpecSql);
-                            getSpecResult.next();
-                            int specId = getSpecResult.getInt("id");
-                            getSpecStatement.close();
+                            getSpecResult.next(); // Avança para o primeiro registro
+                            int specId = getSpecResult.getInt("id"); // Obtém o id da especialidade
+                            getSpecStatement.close(); // Fecha a conexão com o banco
 
                             // Se o id retornado da consulta for maior que zero
                             // significa que a especialidade foi obtida com sucesso
                             if(specId > 0){
                                 
-                                // Cria um modelo de médico
+                                // Cria um modelo de médico com os dados fornecidos
                                 MedicoModel medico = new MedicoModel(
                                         id,
                                         tipo, nome,
@@ -492,8 +540,7 @@ public class UserController {
                                         "00000000", "",
                                         sexo, specId
                                 );
-                                // Adiciona o médico
-                                return medico.update();
+                                return medico.update(); // Chama o método de atualizar e retorna o resultado
                             }
                             else{
                                 System.err.println("Erro ao obter especialidade: A especialidade não foi encontrada.");
@@ -507,16 +554,14 @@ public class UserController {
                     }
                 }
                 else{
-                    
-                    // Cria um modelo de usuário
+                    // Cria um modelo de usuário com os dados fornecidos
                     UserModel usuario = new UserModel(
                             id,
                             tipo, nome, "00000000000",
                             dataNasc, telefone, 
                             "e@e.com", ""
                     );
-                    // Adiciona o usuário
-                    return usuario.update();
+                    return usuario.update(); // Chama o método de atualizar e retorna o resultado
                 }
             }
             else{
@@ -531,10 +576,10 @@ public class UserController {
     }
     
     /**
-     * Método para obter dados específicos de um usuário
-     * @param id - id do usuário escolhido para obter os campos
-     * @param fieldName - nome do campo a ser obtido da forma em que ele aparece no banco de dados
-     * @return Resultado - objeto de resultado. É possível obter o campo desejado com o método <code>Resultado.getCorpo()</code>
+     * Método controlador para obter um dado específico de um usuário com dado ID
+     * @param id - ID do usuário escolhido para obter o campo
+     * @param fieldName - Nome do campo a ser obtido da forma em que ele aparece no banco de dados
+     * @return Resultado - Objeto de resultado. É possível obter o campo desejado com o método <code>Resultado.getCorpo()</code>
      */
     public static Resultado readUser(int id, String fieldName){
         
@@ -555,14 +600,17 @@ public class UserController {
             }
             else{
             
+                // Coloca os dados informados no SQL
                 String getUserSql = "SELECT "+fieldName+" FROM usuarios WHERE id = '"+id+"';";
                 Statement getUserStatement = ConnectionClass.getStatement();
 
+                // Executa a query e obtém o resultado
                 ResultSet getUserResult = getUserStatement.executeQuery(getUserSql);
-                getUserResult.next();
-                Object obj = getUserResult.getObject(fieldName);
-                getUserResult.close();
+                getUserResult.next(); // Avança para o primeiro registro
+                Object obj = getUserResult.getObject(fieldName); // Obtém o campo
+                getUserResult.close(); // Fecha a conexão com o banco
                 
+                // Retorna o campo obtido
                 return new Resultado(true, "Sucesso", obj);
             }
         }
@@ -573,6 +621,13 @@ public class UserController {
         }
     }
     
+    /**
+     * Método controlador para obter um campo de um determinado registro onde dada condição for satisfeita
+     * @param fieldName - Nome do campo a ser obtido
+     * @param param - Primeiro parâmetro da condição
+     * @param paramValue - Segundo parâmentro da condição
+     * @return ArrayList<String> - ArrayList de strings com os dados obtidos
+     */
     public static ArrayList<String> readUser(String fieldName, String param, String paramValue){
         
         try{
@@ -588,22 +643,41 @@ public class UserController {
                     !fieldName.equals("data_cadastro") &&
                     !fieldName.equals("sexo") &&
                     !fieldName.equals("especialidade") &&
-                    !fieldName.equals("COUNT(*)")){
+                    !fieldName.equals("COUNT(*)")
+                    &&
+                    !param.equals("id") &&
+                    !param.equals("tipo") &&
+                    !param.equals("nome") &&
+                    !param.equals("cpf") &&
+                    !param.equals("data_nascimento") &&
+                    !param.equals("telefone") &&
+                    !param.equals("email") &&
+                    !param.equals("cadastro") &&
+                    !param.equals("data_cadastro") &&
+                    !param.equals("sexo") &&
+                    !param.equals("especialidade") &&
+                    !param.equals("COUNT(*)")){
                 
+                // Retorna vazio
                 return null;
             }
             else{
             
+                // Coloca os dados inseridos no SQL
                 String getUserSql = "SELECT "+fieldName+" FROM usuarios WHERE "+param+" = '"+paramValue+"';";
                 Statement getUserStatement = ConnectionClass.getStatement();
 
+                // Cria um ArrayList vazio
                 ArrayList<String> resultado = new ArrayList<>();
                 ResultSet getUserResult = getUserStatement.executeQuery(getUserSql);
                 
+                // Enquanto houver registros, avança para o próximo
                 while(getUserResult.next()){
+                    // Adiciona o registro atual na ArrayList
                     resultado.add(getUserResult.getObject(fieldName).toString());
                 }
                 
+                // Fecha a conexão com o banco
                 getUserResult.close();
                 return resultado;
             }
@@ -616,23 +690,27 @@ public class UserController {
     }
     
     /**
-     * Método para obter especialidades cadastradas no banco de dados
-     * @return ArrayList<String> - Array com as especialidades cadastradas.
+     * Método controlador para obter especialidades cadastradas no banco de dados
+     * @return ArrayList<String> - Array com as especialidades cadastradas
      */
     public static ArrayList<String> readEspecialidades(){
         
         try{
-            
+            // Obtém o nome das especialidades
             String getSpecsSql = "SELECT nome FROM especialidades WHERE 1 = 1";
             Statement getSpecsStatement = ConnectionClass.getStatement();
             
+            // Executa a query e obtém o resultado
             ResultSet getSpecsResult = getSpecsStatement.executeQuery(getSpecsSql);
             ArrayList<String> especialidades = new ArrayList<>();
             
+            // Enquanto houver registros, avança para o próximo
             while(getSpecsResult.next()){
+                // Adiciona o registro atual na ArrayList
                 especialidades.add(getSpecsResult.getString("nome"));
             }
             
+            // Fecha a conexão com o banco
             getSpecsStatement.close();
             return especialidades;
         }
@@ -643,18 +721,24 @@ public class UserController {
         }
     }
     
+    /**
+     * Sobrescrita do método controlador de obter as especialidades. Obtém o id de uma especialidade com o nome informado. Retorna -1 caso ocorra erro ou não encontre
+     * @param nome - Nome da especialidade a qual se deseja obter o ID
+     * @return int - ID da especialidade com o nome informado. Retorna -1 caso não encontre ou ocorra um erro
+     */
     public static int readEspecialidades(String nome){
         
         try{
-            
+            // Pega o id da especialidade
             String getSpecsSql = "SELECT id FROM especialidades WHERE nome = '"+nome+"';";
             Statement getSpecsStatement = ConnectionClass.getStatement();
             
+            // Executa a query e obtém o resultado
             ResultSet getSpecsResult = getSpecsStatement.executeQuery(getSpecsSql);
+            getSpecsResult.next(); // Avança para o próximo registro
+            int especialidadeId = getSpecsResult.getInt("id"); // Pega o id
+            getSpecsStatement.close(); // Fecha a conexão com o banco
             
-            getSpecsResult.next();
-            int especialidadeId = getSpecsResult.getInt("id");
-            getSpecsStatement.close();
             return especialidadeId;
         }
         catch(Exception e){
@@ -664,14 +748,22 @@ public class UserController {
         }
     }
     
+    /**
+     * Método controlador para remover um usuário do banco
+     * @param id - ID do usuário a ser deletado
+     * @return Resultado - Objeto de resultado com um boolean definindo se houve sucesso ou não, uma mensagem e um objeto
+     */
     public static Resultado delete(int id){
         
         try{
+            // Deleta o usuário com o id informado
             String deleteUserSql = "DELETE FROM usuarios WHERE id = '"+id+"'";
             Statement deleteUserStatement = ConnectionClass.getStatement();
             
+            // Executa a remoção
             deleteUserStatement.execute(deleteUserSql);
-                        
+            
+            // Retorna o resultado com sucesso
             return new Resultado(true, "Sucesso");
             
         }
@@ -679,7 +771,5 @@ public class UserController {
             System.err.println("Erro ao excluir usuário: "+e.getMessage());
             return new Resultado(false, "Erro ao excluir usuário: "+e.getMessage());
         }
-        
     }
 }
-
